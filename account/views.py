@@ -6,14 +6,14 @@ from voting.forms import VoterForm
 from django.contrib.auth import login, logout
 # Create your views here.
 
-# def homepage(request):
-#     welcome_message = "Welcome to the Voting System!"
+def homepage(request):
+    # welcome_message = "Welcome to the Voting System!"
 
-#     context = {
-#         'welcome_message': welcome_message,
-#     }
+    context = {
+        # 'welcome_message': welcome_message,
+    }
 
-#     return render(request, "voting/homepage.html", context)
+    return render(request, "voting/homepage.html", context)
 
 def account_login(request):
     if request.user.is_authenticated:
