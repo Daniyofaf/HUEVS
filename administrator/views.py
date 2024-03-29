@@ -10,6 +10,12 @@ import json  # Not used
 from django_renderpdf.views import PDFView
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import BoardMember
+from .forms import BoardMemberAccountForm
+
+
+
 def find_n_winners(data, n):
     """Read More
     https://www.geeksforgeeks.org/python-program-to-find-n-largest-elements-from-a-list/
@@ -391,3 +397,50 @@ def resetVote(request):
     Voter.objects.all().update(voted=False, verified=False, otp=None)
     messages.success(request, "All votes has been reset")
     return redirect(reverse('viewVotes'))
+
+
+
+
+
+
+
+
+
+
+
+def create_board_member_account(request):
+    if request.method == 'POST':
+        form = BoardMemberAccountForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('board_member_list')
+    else:
+        form = BoardMemberAccountForm()
+    return render(request, 'administrator/templates/BoardMember/create_board_member_account.html', {'form': form})
+
+# # Similarly, implement views for updating and deleting board members
+
+def board_member_list(request):
+    board_members = BoardMemberAccountForm.objects.all()
+    return render(request, 'administrator/templates/BoardMember/board_member_list.html', {'board_members': board_members})
+
+
+
+
+def update_board_member(request, board_member_id):
+    board_member = get_object_or_404(BoardMember, id=board_member_id)
+    if request.method == 'POST':
+        form = BoardMemberAccountForm(request.POST, instance=board_member)
+        if form.is_valid():
+            form.save()
+            return redirect('board_member_list')
+    else:
+        form = BoardMemberAccountForm(instance=board_member)
+    return render(request, 'administrator/templates/BoardMember/update_board_member.html', {'form': form})
+
+def delete_board_member(request, board_member_id):
+    board_member = get_object_or_404(BoardMember, id=board_member_id)
+    if request.method == 'POST':
+        board_member.delete()
+        return redirect('board_member_list')
+    return render(request, 'administrator/templates/BoardMember/delete_board_member_confirmation.html', {'board_member': board_member})

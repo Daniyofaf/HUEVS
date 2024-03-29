@@ -17,19 +17,19 @@
       {% if request.user.user_type == '1' %}
   
       
-      <li class="header">REPORTS</li>
+      {% comment %} <li class="header">REPORTS</li> {% endcomment %}
       <li class=""><a href="{% url 'adminDashboard' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
       <li class=""><a href="{% url 'viewVotes' %}"><span class="glyphicon glyphicon-lock"></span> <span>Votes</span></a></li>
 
-      <li class="header">MANAGE</li>
+      {% comment %} <li class="header">MANAGE</li> {% endcomment %}
       <li class=""><a href="{% url 'adminViewVoters' %}"><i class="fa fa-users"></i> <span>Users</span></a></li>
-      <li class=""><a href="{% url 'adminViewVoters' %}"><i class="fa fa-users"></i> <span>Voters</span></a></li>
+      {% comment %} <li class=""><a href="{% url 'adminViewVoters' %}"><i class="fa fa-users"></i> <span>Voters</span></a></li> {% endcomment %}
       <li class=""><a href="{% url 'viewPositions' %}"><i class="fa fa-tasks"></i> <span>Positions</span></a></li>
       <li class=""><a href="{% url 'viewCandidates' %}"><i class="fa fa-black-tie"></i> <span>Candidates</span></a></li>
       <li class=""><a href="{% url 'viewCandidates' %}"><i class="fa fa-black-tie"></i> <span>Candidate Account</span></a></li>
-      <li class=""><a href="{% url 'viewCandidates' %}"><i class="fa fa-font"></i> <span>Board Members Account</span></a></li>
+      {% comment %} <li class=""><a href="{% url 'boardMemberAccountCreate' %}"><i class="fa fa-user-plus"></i> <span>Create Board Member Account</span></a></li> <!-- New menu item for creating board member accounts --> {% endcomment %}
 
-      <li class="header">SETTINGS</li>
+      {% comment %} <li class="header">SETTINGS</li> {% endcomment %}
       <li class=""><a href="{% url 'ballot_position' %}"><i class="fa fa-file-text"></i> <span>Ballot Position</span></a></li>
       <li class=""><a href="#config" data-toggle="modal"><i class="fa fa-font"></i> <span>Election Title</span></a></li>
 

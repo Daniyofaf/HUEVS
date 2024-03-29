@@ -10,14 +10,29 @@ class FormSettings(forms.ModelForm):
             field.field.widget.attrs['class'] = 'form-control'
 
 
+# class CustomUserForm(FormSettings):
+#     email = forms.EmailField(required=True)
+#     # email = forms.EmailField(required=True)
+#     password = forms.CharField(widget=forms.PasswordInput)
+
+#     widget = {
+#         'password': forms.PasswordInput(),
+#     }
+
+
 class CustomUserForm(FormSettings):
     email = forms.EmailField(required=True)
-    # email = forms.EmailField(required=True)
     password = forms.CharField(widget=forms.PasswordInput)
+    first_name = forms.CharField(required=True)
+    middle_name = forms.CharField(required=False)
+    last_name = forms.CharField(required=True)
+    id_number = forms.CharField(required=True)
+    phone_number = forms.CharField(required=True)
+    live_camera_photo = forms.ImageField(required=False)
+    # finger_data = forms.CharField(required=False, widget=forms.HiddenInput)
+    
+    
 
-    widget = {
-        'password': forms.PasswordInput(),
-    }
 
     def __init__(self, *args, **kwargs):
         super(CustomUserForm, self).__init__(*args, **kwargs)
@@ -58,4 +73,4 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['last_name', 'first_name', 'email', 'password', ]
+        fields = ['first_name', 'middle_name', 'last_name', 'id_number', 'email', 'password', 'phone_number', 'live_camera_photo'] #, 'finger_data'

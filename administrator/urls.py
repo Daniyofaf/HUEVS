@@ -33,7 +33,13 @@ urlpatterns = [
     path('votes/reset/', views.resetVote, name='resetVote'),
     path('votes/print/', views.PrintView.as_view(), name='printResult'),
 
+    # path('create_board_member_account/', views.create_board_member_account, name='boardMemberAccountCreate'),
 
+
+    # path('board-members/create/', views.create_board_member_account, name='create_board_member_account'),
+    # path('board-members/', views.board_member_list, name='board_member_list'),
+    # path('board-members/<int:board_member_id>/update/', views.update_board_member, name='update_board_member'),
+    # path('board-members/<int:board_member_id>/delete/', views.delete_board_member, name='delete_board_member'),
 
 
 ]

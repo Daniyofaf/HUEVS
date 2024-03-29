@@ -11,11 +11,19 @@ import json
 # Create your views here.
 
 
+# def index(request):
+#     if not request.user.is_authenticated:
+#         return account_login(request)
+#     context = {}
+#     # return render(request, "voting/login.html", context)
+
+
+
 def index(request):
-    if not request.user.is_authenticated:
-        return account_login(request)
     context = {}
-    # return render(request, "voting/login.html", context)
+    return render(request, "voting/homepage.html", context)
+
+
 
 
 def generate_ballot(display_controls=False):

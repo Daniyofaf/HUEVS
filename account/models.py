@@ -1,17 +1,13 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.contrib.auth.hashers import make_password
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-# Create your models here.
 
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
         email = self.normalize_email(email)
-        user = CustomUser(email=email, **extra_fields)
-        user.password = make_password(password)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -23,7 +19,7 @@ class CustomUserManager(UserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("user_type", 1)
+        extra_fields.setdefault("user_type", 1)  # Set default user type to Admin
         extra_fields.setdefault("last_name", "System")
         extra_fields.setdefault("first_name", "Administrator")
 
@@ -33,15 +29,35 @@ class CustomUserManager(UserManager):
 
 
 class CustomUser(AbstractUser):
-    USER_TYPE = ((1, "Admin"), (2, "Voter"))
-    username = None  # Removed username, using email instead
+    USER_TYPE = ((1, "Admin"), (2, "Voter"), (3, "Board Member"), (4, "Candidate"))
+
+    username = None
+
+    # New fields
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50)
+    id_number = models.CharField(max_length=20, default="")  # Default value added
     email = models.EmailField(unique=True)
-    user_type = models.CharField(default=2, choices=USER_TYPE, max_length=1)
+    password = models.CharField(max_length=128)
+    phone_number = models.CharField(
+        max_length=15, default=""
+    )  # Provide a default value for phone_number
+    live_camera_photo = models.ImageField(
+        upload_to="live_camera_photos/", null=True, blank=True
+    )
+    # finger_data = models.BinaryField(null=True, blank=True)
+
+    # Existing fields
+    user_type = models.PositiveSmallIntegerField(default=2, choices=USER_TYPE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    cgpa = models.FloatField(null=True, blank=True)
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.last_name + " " + self.first_name
+        return f"{self.last_name} {self.first_name}"

@@ -12,8 +12,6 @@
   <table id="example1" class="table table-bordered table-hover table-striped">
     <thead style="background-color: #222D32; color:white;">
           <th>Name</th>
-          <th>Maximum Votes</th>
-          <th>Priority</th>
           <th>Action</th>
       </thead>
       <tbody>
@@ -21,8 +19,7 @@
       
     <tr>
       <td>{{ position.name }}</td>
-      <td>{{ position.max_vote }}</td>
-      <td>{{ position.priority }}</td>
+
       
       <td>
         <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ position.id }}'><i class='fa fa-edit'></i> Edit</button>
@@ -93,7 +90,7 @@
             </div>
 
             <div class="form-group">
-              <label for="max_vote" class="col-sm-3 control-label">Maximum Number of Votes</label>
+              {% comment %} <label for="max_vote" class="col-sm-3 control-label">Maximum Number of Votes</label> {% endcomment %}
 
               <div class="col-sm-9">
                 <input type="text" class="form-control" id="max_vote" name="max_vote">
@@ -174,7 +171,6 @@
           dataType: 'json',
           success: function(response) {
               $('.id').val(response.id);
-              $('#max_vote').val(response.max_vote);
               $('#name').val(response.name);
               $('.fullname').html(response.name);
           }
