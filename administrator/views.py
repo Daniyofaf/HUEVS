@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, redirect
 from voting.models import Voter, Position, Candidate, Votes
-from account.models import CustomUser
+from account.models import AdminCandidateCreationForm, CustomUser
 from account.forms import CustomUserForm
 from voting.forms import *
 from django.contrib import messages
@@ -404,83 +404,93 @@ def resetVote(request):
     return redirect(reverse('viewVotes'))
 
 
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from account.models import AdminCandidateCreationForm
+
+def candidatesaccount(request):
+    candidates = AdminCandidateCreationForm.objects.all()
+    return render(request, 'admin/candidate_account.html', {'candidates': candidates})
+
+def view_candidate_by_id(request):
+    if request.method == 'GET':
+        candidate_id = request.GET.get('id')
+        candidate = AdminCandidateCreationForm.objects.get(id=candidate_id)
+        data = {
+            'id': candidate.id,
+            'first_name': candidate.first_name,
+            'last_name': candidate.last_name,
+            'email': candidate.email,
+            'phone': candidate.phone
+        }
+        return JsonResponse(data)
+
+def delete_candidate(request):
+    if request.method == 'POST':
+        candidate_id = request.POST.get('id')
+        candidate = AdminCandidateCreationForm.objects.get(id=candidate_id)
+        candidate.delete()
+        return redirect('adminViewCandidates')
+
+def update_candidate(request):
+    if request.method == 'POST':
+        candidate_id = request.POST.get('id')
+        candidate = AdminCandidateCreationForm.objects.get(id=candidate_id)
+        candidate.first_name = request.POST.get('first_name')
+        candidate.last_name = request.POST.get('last_name')
+        candidate.email = request.POST.get('email')
+        candidate.phone = request.POST.get('phone')
+        candidate.save()
+        return redirect('adminViewCandidates')
 
 
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from account.models import BoardMember
 
+def board_members_account(request):
+    board_members = BoardMember.objects.all()
+    context = {'board_members': board_members}
+    return render(request, 'admin\BoardMemberAccount.html', context)
 
-# def register_candidate(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             Candidate.objects.create(user=user)
-#             # Redirect to a success page or login page
-#             return redirect('login')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'cadidate/register_candidate.html', {'form': form})
+def view_board_member_by_id(request):
+    if request.method == 'GET':
+        member_id = request.GET.get('id')
+        try:
+            board_member = BoardMember.objects.get(id=member_id)
+            data = {
+                'first_name': board_member.first_name,
+                'last_name': board_member.last_name,
+                'email': board_member.email,
+                'phone': board_member.phone,
+                # Add other fields as needed
+            }
+            return JsonResponse(data)
+        except BoardMember.DoesNotExist:
+            return JsonResponse({'error': 'Board Member not found'}, status=404)
 
-# def register_board_member(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             BoardMember.objects.create(user=user)
-#             # Redirect to a success page or login page
-#             return redirect('login')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'BoardMember\register_board_member.html', {'form': form})
+def delete_board_member(request):
+    if request.method == 'POST':
+        member_id = request.POST.get('id')
+        try:
+            board_member = BoardMember.objects.get(id=member_id)
+            board_member.delete()
+            return JsonResponse({'message': 'Board Member deleted successfully'})
+        except BoardMember.DoesNotExist:
+            return JsonResponse({'error': 'Board Member not found'}, status=404)
 
-
-
-# views.py
-
-# from django.shortcuts import render
-# from .models import Candidate
-
-# def candidate_list(request):
-#     candidates = Candidate.objects.all()
-#     return render(request, 'cadidate\candidate_list.html', {'candidates': candidates})
-
-# You can define other views for creating, updating, and deleting candidates as needed.
-
-
-
-# def create_board_member_account(request):
-#     if request.method == 'POST':
-#         form = BoardMemberAccountForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('board_member_list')
-#     else:
-#         form = BoardMemberAccountForm()
-#     return render(request, 'administrator/templates/BoardMember/create_board_member_account.html', {'form': form})
-
-# # # Similarly, implement views for updating and deleting board members
-
-# def board_member_list(request):
-#     board_members = BoardMemberAccountForm.objects.all()
-#     return render(request, 'administrator/templates/BoardMember/board_member_list.html', {'board_members': board_members})
-
-
-
-
-# def update_board_member(request, board_member_id):
-#     board_member = get_object_or_404(BoardMember, id=board_member_id)
-#     if request.method == 'POST':
-#         form = BoardMemberAccountForm(request.POST, instance=board_member)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('board_member_list')
-#     else:
-#         form = BoardMemberAccountForm(instance=board_member)
-#     return render(request, 'administrator/templates/BoardMember/update_board_member.html', {'form': form})
-
-# def delete_board_member(request, board_member_id):
-#     board_member = get_object_or_404(BoardMember, id=board_member_id)
-#     if request.method == 'POST':
-#         board_member.delete()
-#         return redirect('board_member_list')
-#     return render(request, 'administrator/templates/BoardMember/delete_board_member_confirmation.html', {'board_member': board_member})
+def update_board_member(request):
+    if request.method == 'POST':
+        member_id = request.POST.get('id')
+        try:
+            board_member = BoardMember.objects.get(id=member_id)
+            board_member.first_name = request.POST.get('first_name')
+            board_member.last_name = request.POST.get('last_name')
+            board_member.email = request.POST.get('email')
+            board_member.phone = request.POST.get('phone')
+            # Update other fields as needed
+            board_member.save()
+            return JsonResponse({'message': 'Board Member updated successfully'})
+        except BoardMember.DoesNotExist:
+            return JsonResponse({'error': 'Board Member not found'}, status=404)

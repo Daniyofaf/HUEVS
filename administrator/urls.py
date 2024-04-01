@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 
+
 urlpatterns = [
     path('', views.dashboard, name="adminDashboard"),
     # * Voters
@@ -34,24 +35,20 @@ urlpatterns = [
     path('votes/print/', views.PrintView.as_view(), name='printResult'),
     
     
+    # * candidate account
+    path('candidates', views.candidatesaccount, name="adminViewCandidates"),
+    path('candidates/view', views.view_candidate_by_id, name="viewCandidate"),
+    path('candidates/delete', views.delete_candidate, name='deleteCandidate'),
+    path('candidates/update', views.update_candidate, name="updateCandidate"),
     
     
-    # path('candidates/', views.candidate_list, name='candidate_list'),
+   
+ # * Board Member account
+    path('board_members/', views.board_members_account, name='board_members_account'),
+    path('board_members/view/', views.view_board_member_by_id, name='view_board_member'),
+    path('board_members/delete/', views.delete_board_member, name='delete_board_member'),
+    path('board_members/update/', views.update_board_member, name='update_board_member'),
 
-    # #candidate
-    # path('register/candidate/', views.register_candidate, name='register_candidate'),
-    
-    # # #boardmember
-    # path('register/board-member/', views.register_board_member, name='register_board_member'),
-
-
-    # path('create_board_member_account/', views.create_board_member_account, name='boardMemberAccountCreate'),
-
-
-    # path('board-members/create/', views.create_board_member_account, name='create_board_member_account'),
-    # path('board-members/', views.board_member_list, name='board_member_list'),
-    # path('board-members/<int:board_member_id>/update/', views.update_board_member, name='update_board_member'),
-    # path('board-members/<int:board_member_id>/delete/', views.delete_board_member, name='delete_board_member'),
 
 
 ]

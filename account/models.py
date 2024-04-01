@@ -184,7 +184,7 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    id_number = models.CharField(max_length=20)  
+    id_number = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)  # Provide a default value for phone_number
 
@@ -203,16 +203,23 @@ class CustomUser(AbstractUser):
         return f"{self.last_name} {self.first_name}"
 
 
-# class Candidate(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-#     # Add additional fields specific to candidates
-#     # For example:
-#     # platform = models.TextField()
+class AdminCandidateCreationForm(models.Model):
+    # Define your fields here
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    
+    # Add any other fields as needed
 
-#     def __str__(self):
-#         return self.user.get_full_name()
 
-
+class BoardMember(models.Model):
+    # Define your fields here
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    
 # class BoardMember(models.Model):
 #     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 #     # Add additional fields specific to board members

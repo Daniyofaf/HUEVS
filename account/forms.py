@@ -25,7 +25,7 @@ class CustomUserForm(FormSettings):
     email = forms.EmailField(required=True)
     password = forms.CharField(widget=forms.PasswordInput)
     first_name = forms.CharField(required=True)
-    middle_name = forms.CharField(required=False)
+    middle_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     id_number = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
