@@ -447,7 +447,7 @@ def resetVote(request):
 # You can define other views for creating, updating, and deleting candidates as needed.
 
 
-
+   
 # def create_board_member_account(request):
 #     if request.method == 'POST':
 #         form = BoardMemberAccountForm(request.POST)
