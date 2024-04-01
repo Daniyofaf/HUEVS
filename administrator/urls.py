@@ -32,6 +32,18 @@ urlpatterns = [
     path('votes/view', views.viewVotes, name='viewVotes'),
     path('votes/reset/', views.resetVote, name='resetVote'),
     path('votes/print/', views.PrintView.as_view(), name='printResult'),
+    
+    
+    
+    
+    # path('candidates/', views.candidate_list, name='candidate_list'),
+
+    # #candidate
+    # path('register/candidate/', views.register_candidate, name='register_candidate'),
+    
+    # # #boardmember
+    # path('register/board-member/', views.register_board_member, name='register_board_member'),
+
 
     # path('create_board_member_account/', views.create_board_member_account, name='boardMemberAccountCreate'),
 

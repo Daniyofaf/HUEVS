@@ -10,9 +10,14 @@ import json  # Not used
 from django_renderpdf.views import PDFView
 
 
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import BoardMember
-from .forms import BoardMemberAccountForm
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+# from account.models import Candidate, BoardMember
+
+
+# from django.shortcuts import render, redirect, get_object_or_404
+# from .models import BoardMember
+# from .forms import BoardMemberAccountForm
 
 
 
@@ -42,10 +47,10 @@ class PrintView(PDFView):
 
     @property
     def download_name(self):
-        return "result.pdf"
+        return "Election Result.pdf"
 
     def get_context_data(self, *args, **kwargs):
-        title = "E-voting"
+        title = "Hu E-voting"
         try:
             file = open(settings.ELECTION_TITLE_PATH, 'r')
             title = file.read()
@@ -404,43 +409,78 @@ def resetVote(request):
 
 
 
+# def register_candidate(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             Candidate.objects.create(user=user)
+#             # Redirect to a success page or login page
+#             return redirect('login')
+#     else:
+#         form = UserCreationForm()
+#     return render(request, 'cadidate/register_candidate.html', {'form': form})
+
+# def register_board_member(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             BoardMember.objects.create(user=user)
+#             # Redirect to a success page or login page
+#             return redirect('login')
+#     else:
+#         form = UserCreationForm()
+#     return render(request, 'BoardMember\register_board_member.html', {'form': form})
+
+
+
+# views.py
+
+# from django.shortcuts import render
+# from .models import Candidate
+
+# def candidate_list(request):
+#     candidates = Candidate.objects.all()
+#     return render(request, 'cadidate\candidate_list.html', {'candidates': candidates})
+
+# You can define other views for creating, updating, and deleting candidates as needed.
+
+
+
+# def create_board_member_account(request):
+#     if request.method == 'POST':
+#         form = BoardMemberAccountForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('board_member_list')
+#     else:
+#         form = BoardMemberAccountForm()
+#     return render(request, 'administrator/templates/BoardMember/create_board_member_account.html', {'form': form})
+
+# # # Similarly, implement views for updating and deleting board members
+
+# def board_member_list(request):
+#     board_members = BoardMemberAccountForm.objects.all()
+#     return render(request, 'administrator/templates/BoardMember/board_member_list.html', {'board_members': board_members})
 
 
 
 
-def create_board_member_account(request):
-    if request.method == 'POST':
-        form = BoardMemberAccountForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('board_member_list')
-    else:
-        form = BoardMemberAccountForm()
-    return render(request, 'administrator/templates/BoardMember/create_board_member_account.html', {'form': form})
+# def update_board_member(request, board_member_id):
+#     board_member = get_object_or_404(BoardMember, id=board_member_id)
+#     if request.method == 'POST':
+#         form = BoardMemberAccountForm(request.POST, instance=board_member)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('board_member_list')
+#     else:
+#         form = BoardMemberAccountForm(instance=board_member)
+#     return render(request, 'administrator/templates/BoardMember/update_board_member.html', {'form': form})
 
-# # Similarly, implement views for updating and deleting board members
-
-def board_member_list(request):
-    board_members = BoardMemberAccountForm.objects.all()
-    return render(request, 'administrator/templates/BoardMember/board_member_list.html', {'board_members': board_members})
-
-
-
-
-def update_board_member(request, board_member_id):
-    board_member = get_object_or_404(BoardMember, id=board_member_id)
-    if request.method == 'POST':
-        form = BoardMemberAccountForm(request.POST, instance=board_member)
-        if form.is_valid():
-            form.save()
-            return redirect('board_member_list')
-    else:
-        form = BoardMemberAccountForm(instance=board_member)
-    return render(request, 'administrator/templates/BoardMember/update_board_member.html', {'form': form})
-
-def delete_board_member(request, board_member_id):
-    board_member = get_object_or_404(BoardMember, id=board_member_id)
-    if request.method == 'POST':
-        board_member.delete()
-        return redirect('board_member_list')
-    return render(request, 'administrator/templates/BoardMember/delete_board_member_confirmation.html', {'board_member': board_member})
+# def delete_board_member(request, board_member_id):
+#     board_member = get_object_or_404(BoardMember, id=board_member_id)
+#     if request.method == 'POST':
+#         board_member.delete()
+#         return redirect('board_member_list')
+#     return render(request, 'administrator/templates/BoardMember/delete_board_member_confirmation.html', {'board_member': board_member})

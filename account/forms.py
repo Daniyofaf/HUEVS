@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from django.contrib.auth.hashers import make_password
 
 
 class FormSettings(forms.ModelForm):
@@ -28,7 +29,7 @@ class CustomUserForm(FormSettings):
     last_name = forms.CharField(required=True)
     id_number = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
-    live_camera_photo = forms.ImageField(required=False)
+    # live_camera_photo = forms.ImageField(required=False)
     # finger_data = forms.CharField(required=False, widget=forms.HiddenInput)
     
     
@@ -73,4 +74,8 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'middle_name', 'last_name', 'id_number', 'email', 'password', 'phone_number', 'live_camera_photo'] #, 'finger_data'
+        fields = ['first_name', 'middle_name', 'last_name', 'id_number', 'email', 'password', 'phone_number'] # , 'live_camera_photo' , 'finger_data'
+
+
+
+

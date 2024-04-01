@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254)),
                 ('cgpa', models.FloatField()),
                 ('face_data', models.CharField(max_length=100)),
-                ('finger_data', models.CharField(max_length=100)),
+                # ('finger_data', models.CharField(max_length=100)),
             ],
         ),
     ]

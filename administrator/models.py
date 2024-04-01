@@ -21,12 +21,46 @@
 
 
 
-from django.db import models
+# from django.db import models
 
-class BoardMember (models.Model):
-    username = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    email = models.EmailField()
-    cgpa = models.FloatField()
-    face_data = models.CharField(max_length=100)
-    # finger_data = models.CharField(max_length=100)
+# class BoardMember (models.Model):
+#     username = models.CharField(max_length=100)
+#     password = models.CharField(max_length=100)
+#     email = models.EmailField()
+#     cgpa = models.FloatField()
+#     # face_data = models.CharField(max_length=100)
+#     # finger_data = models.CharField(max_length=100)
+
+
+
+
+# from administrator import admin
+
+
+# class CandidateAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'created_at')  # Example of adding additional fields
+#     search_fields = ['user__email']  # Add search functionality
+#     list_filter = ('created_at',)  # Add filters
+#     actions = ['mark_as_verified']  # Add custom actions
+
+#     def mark_as_verified(self, request, queryset):
+#         # Custom action logic
+#         queryset.update(verified=True)
+        
+# from django.db import models
+
+# class Candidate(models.Model):
+#     user = models.OneToOneField('account.CustomUser', on_delete=models.CASCADE)
+    # Add other fields related to the candidate if needed
+
+        
+# class CandidateAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'created_at')  # Example of adding additional fields
+#     search_fields = ['user__email']  # Add search functionality
+#     list_filter = ('created_at',)  # Add filters
+#     actions = ['mark_as_verified']  # Add custom actions
+
+#     def mark_as_verified(self, request, queryset):
+#         # Custom action logic
+#         queryset.update(verified=True)
+

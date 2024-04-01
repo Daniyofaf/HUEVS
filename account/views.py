@@ -79,16 +79,26 @@ from voting.forms import VoterForm
 from django.contrib.auth import login, logout
 # Create your views here.
 
+def home(request):
+    # welcome_message = "Welcome to the Voting System!"
+
+    # context = {
+    #     # 'welcome_message': welcome_message,
+    # }
+
+    return render(request, "voting\homepage.html")
+
+
 def account_login(request):
     if request.user.is_authenticated:
         if request.user.user_type == '1':
             return redirect(reverse("adminDashboard"))
         elif request.user.user_type == '2':
-            return redirect(reverse("boardMemberDashboard"))
-        elif request.user.user_type == '3':
-            return redirect(reverse("candidateDashboard"))
-        else:
             return redirect(reverse("voterDashboard"))
+        # elif request.user.user_type == '3':
+        #     return redirect(reverse("candidateDashboard"))
+        # else:
+        #     return redirect(reverse("voterDashboard"))
 
     context = {}
     if request.method == 'POST':
@@ -98,15 +108,15 @@ def account_login(request):
             login(request, user)
             if user.user_type == '1':
                 return redirect(reverse("adminDashboard"))
-            elif user.user_type == '2':
-                return redirect(reverse("boardMemberDashboard"))
-            elif user.user_type == '3':
-                return redirect(reverse("candidateDashboard"))
+            # elif user.user_type == '2':
+            #     return redirect(reverse("boardmemberDashboard"))
+            # elif user.user_type == '3':
+            #     return redirect(reverse("candidateDashboard"))
             else:
                 return redirect(reverse("voterDashboard"))
         else:
             messages.error(request, "Invalid details")
-            return redirect("/")
+            return redirect("account_login")
 
     return render(request, "voting/login.html", context)
 
@@ -141,3 +151,6 @@ def account_logout(request):
             request, "You need to be logged in to perform this action")
 
     return redirect(reverse("account_login"))
+
+
+

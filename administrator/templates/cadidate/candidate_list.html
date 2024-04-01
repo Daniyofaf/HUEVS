@@ -1,0 +1,19 @@
+<!-- candidate_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate List</title>
+</head>
+<body>
+    <h1>Candidate List</h1>
+    <ul>
+        {% for candidate in candidates %}
+            <li>{{ candidate.user }}</li>
+            <!-- Display other candidate information as needed -->
+        {% endfor %}
+    </ul>
+</body>
+</html>

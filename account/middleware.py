@@ -55,21 +55,24 @@ class AccountCheckMiddleWare(MiddlewareMixin):
         if user.is_authenticated:
             if user.user_type == 1:  # Admin
                 if modulename == 'voting.views':
+                    error = True
                     if request.path == reverse('fetch_ballot'):
                         pass
                     else:
                         messages.error(
-                            request, "You do not have access to this resource")
+                            request, "")    #You do not have access to this resource
                         return redirect(reverse('adminDashboard'))
             elif user.user_type == 2:  # Voter
-                if modulename == 'voting.views':
+                if modulename == 'administrator.views':
+                    messages.error(
+                        request, "")
                     return redirect(reverse('voterDashboard'))
-            elif user.user_type == 2:  # Board Member
-                if modulename == 'board.views':
-                    return redirect(reverse('boardMemberDashboard'))
-            elif user.user_type == 3:  # Candidate
-                if modulename == 'candidate.views':
-                    return redirect(reverse('candidateDashboard'))
+            # elif user.user_type == 3:  # Board Member
+            #     if modulename == 'board.views':
+            #         return redirect(reverse('boardMemberDashboard'))
+            # elif user.user_type == 4:  # Candidate
+            #     if modulename == 'candidate.views':
+            #         return redirect(reverse('candidateDashboard'))
             else:  # None of the aforementioned ? Please take the user to the login page
                 return redirect(reverse('account_login'))
         else:
@@ -77,14 +80,14 @@ class AccountCheckMiddleWare(MiddlewareMixin):
             if (request.path == reverse('account_login') or 
                 request.path == reverse('account_register') or 
                 modulename == 'django.contrib.auth.views' or 
-                request.path == reverse('account_login')):
+                request.path == reverse('homepage')):
                 pass
-            elif (modulename == 'voting.views' or 
-                  modulename == 'board.views' or 
-                  modulename == 'candidate.views'):
-                # If a visitor tries to access voting, board, or candidate functions
-                messages.error(
-                    request, "You need to be logged in to perform this operation")
-                return redirect(reverse('account_login'))
+            # elif (modulename == 'voting.views' or 
+            #       modulename == 'board.views' or 
+            #       modulename == 'candidate.views'):
+            #     # If a visitor tries to access voting, board, or candidate functions
+            #     messages.error(
+            #         request, "You need to be logged in to perform this operation")
+            #     return redirect(reverse('account_login'))
             else:
                 return redirect(reverse('account_login'))

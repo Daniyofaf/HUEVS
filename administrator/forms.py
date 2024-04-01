@@ -13,4 +13,4 @@ from .models import BoardMember
 class BoardMemberAccountForm(forms.ModelForm):
     class Meta:
         model = BoardMember
-        fields = ['username', 'password', 'email', 'cgpa', 'face_data']
+        fields = ['username', 'password', 'email', 'cgpa']
