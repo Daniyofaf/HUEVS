@@ -79,6 +79,9 @@ from voting.forms import VoterForm
 from django.contrib.auth import login, logout
 # Create your views here.
 
+from django.db import transaction
+
+
 def home(request):
     # welcome_message = "Welcome to the Voting System!"
 
@@ -95,10 +98,10 @@ def account_login(request):
             return redirect(reverse("adminDashboard"))
         elif request.user.user_type == '2':
             return redirect(reverse("voterDashboard"))
-        # elif request.user.user_type == '3':
-        #     return redirect(reverse("candidateDashboard"))
-        # else:
-        #     return redirect(reverse("voterDashboard"))
+        elif request.user.user_type == '3':
+            return redirect(reverse("candidateDashboard"))
+        else:
+            return redirect(reverse("voterDashboard"))
 
     context = {}
     if request.method == 'POST':
@@ -108,10 +111,10 @@ def account_login(request):
             login(request, user)
             if user.user_type == '1':
                 return redirect(reverse("adminDashboard"))
-            # elif user.user_type == '2':
-            #     return redirect(reverse("boardmemberDashboard"))
-            # elif user.user_type == '3':
-            #     return redirect(reverse("candidateDashboard"))
+            elif user.user_type == '2':
+                return redirect(reverse("boardmemberDashboard"))
+            elif user.user_type == '3':
+                return redirect(reverse("candidateDashboard"))
             else:
                 return redirect(reverse("voterDashboard"))
         else:
@@ -119,6 +122,11 @@ def account_login(request):
             return redirect("account_login")
 
     return render(request, "voting/login.html", context)
+
+from django.contrib.auth import get_user_model
+from voting.models import Voter  # Import the Voter model
+
+User = get_user_model()
 
 def account_register(request):
     userForm = CustomUserForm(request.POST or None)
@@ -131,15 +139,18 @@ def account_register(request):
         if userForm.is_valid() and voterForm.is_valid():
             user = userForm.save(commit=False)
             voter = voterForm.save(commit=False)
-            voter.admin = user
-            user.save()
-            voter.save()
+            voter.admin = user  # Associate the voter with the user
+            user.save()  # Save the user object
+            voter.save()  # Save the voter object
             messages.success(request, "Account created. You can login now!")
             return redirect(reverse('account_login'))
         else:
-            messages.error(request, "")  # "Provided data failed validation"
+            messages.error(request, "Input the correct information")  # ""
             # return account_login(request)
     return render(request, "voting/reg.html", context)
+
+
+
 
 
 # def account_register(request):
