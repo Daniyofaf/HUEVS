@@ -148,23 +148,13 @@
 
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
-from django.contrib.auth.hashers import make_password
-
-from voting.forms import VoterForm
 
 
 class CustomUserManager(UserManager):
-    # def _create_user(self, email, password, **extra_fields):
-    #     email = self.normalize_email(email)
-    #     user = self.model(email=email, **extra_fields)
-    #     user.set_password(password)
-    #     user.save(using=self._db)
-    #     return user
-    
     def _create_user(self, email, password, **extra_fields):
         email = self.normalize_email(email)
-        user = CustomUser(email=email, **extra_fields)
-        user.password = make_password(password)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -198,10 +188,6 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)  # Provide a default value for phone_number
 
-    # Modified field with related_name
-    voter = models.OneToOneField(VoterForm, on_delete=models.CASCADE, related_name='user_profile')
-    
-    
     # Existing fields
     user_type = models.PositiveSmallIntegerField(default=2, choices=USER_TYPE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -234,13 +220,11 @@ class BoardMember(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=15)
     
+# class BoardMember(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+#     # Add additional fields specific to board members
+#     # For example:
+#     # department = models.CharField(max_length=100)
 
-
-# In the account app's models.py
-class Voter(models.Model):
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='voter_profile')
-    phone = models.CharField(max_length=11, unique=True)  # Used for OTP
-    voted = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.admin.last_name + ", " + self.admin.first_name
+#     def __str__(self):
+#         return self.user.get_full_name()

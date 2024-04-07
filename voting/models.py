@@ -12,7 +12,6 @@ class Voter(models.Model):
         return self.admin.last_name + ", " + self.admin.first_name
 
 
-
 class Position(models.Model):
     name = models.CharField(max_length=50, unique=True)
     # max_vote = models.IntegerField()

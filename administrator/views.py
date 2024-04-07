@@ -480,7 +480,6 @@ def delete_board_member(request):
         except BoardMember.DoesNotExist:
             return JsonResponse({'error': 'Board Member not found'}, status=404)
 
-<<<<<<< HEAD
 def update_board_member(request):
     if request.method == 'POST':
         member_id = request.POST.get('id')
@@ -495,56 +494,3 @@ def update_board_member(request):
             return JsonResponse({'message': 'Board Member updated successfully'})
         except BoardMember.DoesNotExist:
             return JsonResponse({'error': 'Board Member not found'}, status=404)
-=======
-
-
-# views.py
-
-# from django.shortcuts import render
-# from .models import Candidate
-
-# def candidate_list(request):
-#     candidates = Candidate.objects.all()
-#     return render(request, 'cadidate\candidate_list.html', {'candidates': candidates})
-
-# You can define other views for creating, updating, and deleting candidates as needed.
-
-
-   
-# def create_board_member_account(request):
-#     if request.method == 'POST':
-#         form = BoardMemberAccountForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('board_member_list')
-#     else:
-#         form = BoardMemberAccountForm()
-#     return render(request, 'administrator/templates/BoardMember/create_board_member_account.html', {'form': form})
-
-# # # Similarly, implement views for updating and deleting board members
-
-# def board_member_list(request):
-#     board_members = BoardMemberAccountForm.objects.all()
-#     return render(request, 'administrator/templates/BoardMember/board_member_list.html', {'board_members': board_members})
-
-
-
-
-# def update_board_member(request, board_member_id):
-#     board_member = get_object_or_404(BoardMember, id=board_member_id)
-#     if request.method == 'POST':
-#         form = BoardMemberAccountForm(request.POST, instance=board_member)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('board_member_list')
-#     else:
-#         form = BoardMemberAccountForm(instance=board_member)
-#     return render(request, 'administrator/templates/BoardMember/update_board_member.html', {'form': form})
-
-# def delete_board_member(request, board_member_id):
-#     board_member = get_object_or_404(BoardMember, id=board_member_id)
-#     if request.method == 'POST':
-#         board_member.delete()
-#         return redirect('board_member_list')
-#     return render(request, 'administrator/templates/BoardMember/delete_board_member_confirmation.html', {'board_member': board_member})
->>>>>>> 326d28ba97b6f84cc8892de007ec24512425fd28

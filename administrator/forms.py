@@ -15,4 +15,3 @@
 #         model = BoardMember
 #         fields = ['username', 'password', 'email', 'cgpa']
 
-
