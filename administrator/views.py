@@ -404,6 +404,11 @@ def resetVote(request):
     return redirect(reverse('viewVotes'))
 
 
+
+
+
+
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from account.models import AdminCandidateCreationForm
@@ -442,6 +447,9 @@ def update_candidate(request):
         candidate.phone = request.POST.get('phone')
         candidate.save()
         return redirect('adminViewCandidates')
+
+
+
 
 
 

@@ -5,11 +5,11 @@ from account.models import CustomUser
 
 class Voter(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=11, unique=True)  # Used for OTP
+    phone_number = models.CharField(max_length=11, unique=True)  # Used for OTP
     voted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.admin.last_name + ", " + self.admin.first_name
+        return f"{self.admin.last_name}, {self.admin.first_name}"
 
 
 class Position(models.Model):

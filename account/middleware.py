@@ -82,12 +82,12 @@ class AccountCheckMiddleWare(MiddlewareMixin):
                 modulename == 'django.contrib.auth.views' or 
                 request.path == reverse('homepage')):
                 pass
-            # elif (modulename == 'voting.views' or 
-            #       modulename == 'board.views' or 
-            #       modulename == 'candidate.views'):
-            #     # If a visitor tries to access voting, board, or candidate functions
-            #     messages.error(
-            #         request, "You need to be logged in to perform this operation")
-            #     return redirect(reverse('account_login'))
+            elif (modulename == 'voting.views' or 
+                  modulename == 'board.views' or 
+                  modulename == 'candidate.views'):
+                # If a visitor tries to access voting, board, or candidate functions
+                messages.error(
+                    request, "You need to be logged in to perform this operation")
+                return redirect(reverse('account_login'))
             else:
                 return redirect(reverse('account_login'))
