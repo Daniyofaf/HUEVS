@@ -348,7 +348,7 @@ def index(request):
     if not request.user.is_authenticated:
         return account_login(request)
     context = {}
-    # return render(request, "voting/login.html", context)
+    return render(request, "voting/login.html", context)
 
 
 def dashboard(request):
