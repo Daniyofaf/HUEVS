@@ -74,30 +74,19 @@ class PrintView(PDFView):
                 winner = "Position does not have candidates"
             else:
                 # Check if max_vote is more than 1
-                if position.max_vote > 1:
-                    winner = find_n_winners(candidate_data, position.max_vote)
+                winner = max(candidate_data, key=lambda x: x['votes'])
+                if winner['votes'] == 0:
+                    winner = "No one voted for this position yet."
                 else:
-
-                    winner = max(candidate_data, key=lambda x: x['votes'])
-                    if winner['votes'] == 0:
-                        winner = "No one voted for this yet position, yet."
-                    else:
-                        """
-                        https://stackoverflow.com/questions/18940540/how-can-i-count-the-occurrences-of-an-item-in-a-list-of-dictionaries
-                        """
-                        count = sum(1 for d in candidate_data if d.get(
-                            'votes') == winner['votes'])
-                        if count > 1:
-                            winner = f"There are {count} candidates with {winner['votes']} votes"
-                        else:
-                            winner = "Winner : " + winner['name']
+                    winner = "Winner : " + winner['name']
             print("Candidate Data For  ", str(
                 position.name), " = ", str(candidate_data))
             position_data[position.name] = {
-                'candidate_data': candidate_data, 'winner': winner, 'max_vote': position.max_vote}
+                'candidate_data': candidate_data, 'winner': winner}
         context['positions'] = position_data
         print(context)
         return context
+
 
 
 def dashboard(request):
@@ -166,10 +155,11 @@ def view_voter_by_id(request):
     else:
         context['code'] = 200
         voter = voter[0]
-        context['first_name'] = voter.admin.first_name
-        context['last_name'] = voter.admin.last_name
-        context['phone'] = voter.phone
         context['id'] = voter.id
+        context['first_name'] = voter.admin.first_name
+        context['middle_name'] = voter.admin.middle_name
+        context['last_name'] = voter.admin.last_name
+        context['phone'] = voter.phone_number
         context['email'] = voter.admin.email
     return JsonResponse(context)
 

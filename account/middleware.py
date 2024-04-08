@@ -85,7 +85,7 @@ class AccountCheckMiddleWare(MiddlewareMixin):
             elif (modulename == 'voting.views' or 
                   modulename == 'board.views' or 
                   modulename == 'candidate.views'):
-                # If a visitor tries to access voting, board, or candidate functions
+                # If a visitor tries to access vozting, board, or candidate functions
                 messages.error(
                     request, "You need to be logged in to perform this operation")
                 return redirect(reverse('account_login'))
