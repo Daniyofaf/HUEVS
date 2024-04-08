@@ -1,15 +1,53 @@
 {% extends 'root.html' %}
 {% block content %}
 <section class="content">
-    <div class="timer-container" style="height: 60px;">
-        <h3 class="text-center timer-label"><b>Time Remaining:</b></h3>
-        <div class="progress" style="height: 30px;">
-            <div id="progress-bar" class="progress-bar progress-bar-success" role="progressbar"
-                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="line-height: 30px;">
-                <span id="timer-text">24:00:00</span>
-            </div>
+    <br>
+    <!-- The Final Countdown -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Final Countdown</title>
+        <style>
+            @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
+            #the-final-countdown {
+                background: green; /* Change background color to green */
+                font-family: 'Lato', sans-serif;
+                text-align: center;
+                color: #eee;
+                text-shadow: 1px 1px 5px black;
+                padding: 1rem 0;
+                font-size: 3rem;
+                border: 1px solid #000;
+            }
+        </style>
+        
+    </head>
+    <body>
+        <div id="the-final-countdown">
+            <p></p>
         </div>
-    </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            setInterval(function time(){
+                var d = new Date();
+                var hours = 24 - d.getHours();
+                var min = 60 - d.getMinutes();
+                if((min + '').length == 1){
+                    min = '0' + min;
+                }
+                var sec = 60 - d.getSeconds();
+                if((sec + '').length == 1){
+                    sec = '0' + sec;
+                }
+                jQuery('#the-final-countdown p').html(hours+':'+min+':'+sec)
+            }, 1000);
+        </script>
+    </body>
+    </html>
+    
+    <!-- Your original content -->
     <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
@@ -37,55 +75,7 @@
 </section>
 {% endblock content %}
 {% block custom_js %}
-<script>
-    $(function() {
-        // Function to update timer and progress bar
-        function updateTimer() {
-            var now = new Date();
-            var midnight = new Date(now);
-            midnight.setHours(24, 0, 0, 0); // Set to midnight of the next day
-            var remainingSeconds = Math.floor((midnight - now) / 1000);
 
-            var hours = Math.floor(remainingSeconds / 3600);
-            var minutes = Math.floor((remainingSeconds % 3600) / 60);
-            var seconds = remainingSeconds % 60;
-
-            // Format the remaining time as HH:MM:SS
-            var formattedTime = hours.toString().padStart(2, '0') + ':' +
-                                minutes.toString().padStart(2, '0') + ':' +
-                                seconds.toString().padStart(2, '0');
-
-            // Calculate the progress as a percentage of the total time
-            var progress = ((24 * 3600 - remainingSeconds) / (24 * 3600)) * 100;
-
-            // Update the timer text and progress bar
-            document.getElementById('timer-text').innerHTML = formattedTime;
-            document.getElementById('progress-bar').style.width = progress.toFixed(2) + '%';
-
-            if (remainingSeconds <= 0) {
-                clearInterval(timerInterval);
-                document.getElementById('timer-text').innerHTML = '00:00:00';
-                document.getElementById('progress-bar').style.width = '100%';
-            }
-        }
-
-        // Update timer and progress bar every second
-        var timerInterval = setInterval(function() {
-            updateTimer();
-        }, 1000);
-
-        // Initial call to update timer and progress bar
-        updateTimer();
-
-        // Rest of your JavaScript code...
-        $('.content').iCheck({
-            checkboxClass: 'icheckbox_flat-green',
-            radioClass: 'iradio_flat-green'
-        });
-
-        // Your other JavaScript code...
-    });
-</script>
 {% endblock custom_js %}
 {% block modal %}
 <!-- Your modal HTML code... -->

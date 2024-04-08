@@ -21,7 +21,7 @@ urlpatterns = [
     path('candidate/', views.viewCandidates, name='viewCandidates'),
     path('candidate/update', views.updateCandidate, name="updateCandidate"),
     path('candidate/delete', views.deleteCandidate, name='deleteCandidate'),
-    path('candidate/view', views.view_candidate_by_id, name='viewCandidate'),
+    path('candidate/view', views.view_candidate_by_id, name='view_candidate_by_id'),
 
     # * Settings (Ballot Position and Election Title)
     path("settings/ballot/position", views.ballot_position, name='ballot_position'),
@@ -37,9 +37,9 @@ urlpatterns = [
     
     # * candidate account
     path('candidates', views.candidatesaccount, name="adminViewCandidates"),
-    path('candidates/view', views.view_candidate_by_id, name="viewCandidate"),
-    path('candidates/delete', views.delete_candidate, name='deleteCandidate'),
-    path('candidates/update', views.update_candidate, name="updateCandidate"),
+    path('candidates/view', views.view_candidates_by_id, name="viewCandidate"),
+    path('candidates/delete', views.delete_candidates, name='deleteCandidates'),
+    path('candidates/update', views.update_candidates, name="updateCandidates"),
     
     
    
