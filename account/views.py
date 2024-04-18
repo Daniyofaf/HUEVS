@@ -14,19 +14,22 @@ def home(request):
     #     # 'welcome_message': welcome_message,
     # }
 
-    return render(request, "voting\homepage.html")
+    return render(request, "voting/homepage.html")
 
 
 def account_login(request):
     if request.user.is_authenticated:
-        if request.user.user_type == '1':
+        if request.user.user_type == 1:
             return redirect(reverse("adminDashboard"))
-        elif request.user.user_type == '2':
+        elif request.user.user_type == 2:
             return redirect(reverse("voterDashboard"))
-        # elif request.user.user_type == '3':
-        #     return redirect(reverse("candidateDashboard"))
-        # else:
-        #     return redirect(reverse("BoardMemberDashboard"))
+        elif request.user.user_type == 3:
+            return redirect(reverse("BoardMemberDashboard"))
+        elif request.user.user_type == 4:
+            return redirect(reverse("CandidateDashboard"))
+        else:
+            return redirect(reverse("account_login"))
+
 
     context = {}
     if request.method == 'POST':
@@ -34,19 +37,26 @@ def account_login(request):
             'email'), password=request.POST.get('password'))
         if user != None:
             login(request, user)
-            if user.user_type == '1':
+            if user.user_type == 1:
                 return redirect(reverse("adminDashboard"))
-            # elif user.user_type == '2':
-            #     return redirect(reverse("BoardMemberDashboard"))
-            # elif user.user_type == '3':
-            #     return redirect(reverse("candidateDashboard"))
-            else:
+            elif user.user_type == 2:
                 return redirect(reverse("voterDashboard"))
+            elif user.user_type == 3:
+                return redirect(reverse("BoardMemberDashboard"))
+            elif user.user_type == 4:
+                return redirect(reverse("CandidateDashboard"))
         else:
             messages.error(request, "Invalid details")
             return redirect("account_login")
 
     return render(request, "voting/login.html", context)
+
+
+
+
+
+
+
 
 def account_register(request):
     if request.method == 'POST':
@@ -66,7 +76,7 @@ def account_register(request):
             messages.success(request, "Account created. You can login now!")
             return redirect(reverse('account_login'))
         else:
-            messages.error(request, "Provided data failed validation")
+            messages.error(request, "") # Provided data failed validation
             # You might want to handle the error case here
             
     else:

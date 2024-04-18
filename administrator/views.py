@@ -384,6 +384,16 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from account.models import AdminCandidateCreationForm
 
+
+
+def candidate_dashboard(request):
+    # Logic to fetch data or perform operations specific to the candidate dashboard
+    context = {
+        'dashboard_title': 'Candidate Dashboard',
+        # Add more context data as needed
+    }
+    return render(request, 'candidate_dashboard.html', context)
+
 def candidatesaccount(request):
     candidates = AdminCandidateCreationForm.objects.all()
     return render(request, 'admin/candidate_account.html', {'candidates': candidates})
@@ -427,6 +437,15 @@ def update_candidates(request):
 from django.shortcuts import render
 from django.http import JsonResponse
 from account.models import BoardMember
+
+
+def board_member_dashboard(request):
+    # Logic to fetch data or perform operations specific to the board member dashboard
+    context = {
+        'dashboard_title': 'Board Member Dashboard',
+        # Add more context data as needed
+    }
+    return render(request, 'board_member_dashboard.html', context)
 
 def board_members_account(request):
     board_members = BoardMember.objects.all()

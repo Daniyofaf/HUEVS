@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from account.views import account_login  # Import the account_login view from account/views.py
 
 
 
@@ -36,6 +37,8 @@ urlpatterns = [
     
     
     # * candidate account
+    path('candidate_dashboard/', views.candidate_dashboard, name="CandidateDashboard"),
+
     path('candidates', views.candidatesaccount, name="adminViewCandidates"),
     path('candidates/view', views.view_candidates_by_id, name="viewCandidate"),
     path('candidates/delete', views.delete_candidates, name='deleteCandidates'),
@@ -44,6 +47,8 @@ urlpatterns = [
     
    
  # * Board Member account
+    path('board_member_dashboard/', views.board_member_dashboard, name="BoardMemberDashboard"),
+ 
     path('board_members/', views.board_members_account, name='board_members_account'),
     path('board_members/view/', views.view_board_member_by_id, name='view_board_member'),
     path('board_members/delete/', views.delete_board_member, name='delete_board_member'),

@@ -1,92 +1,139 @@
 {% extends "voting/base.html" %}
 {% block content %}
-<html>
-<style>
-    /* Add your CSS styles here */
-    body {}
-    .container {
-        max-width: 700px;
-        /* Adjust the width as needed */
-        margin: 0 auto;
-        margin-top: 5%;
-        background: #F8F9FD;
-        background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
-        border-radius: 40px;
-        padding: 25px 35px;
-        border: 5px solid rgb(255, 255, 255);
-        box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
-    }
-    .heading {
-        text-align: center;
-        font-weight: 900;
-        font-size: 30px;
-        color: rgb(16, 137, 211);
-    }
-    .form {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
-    .form-field {
-        width: calc(50% - 10px);
-        /* Adjust the width as needed */
-        margin-bottom: 20px;
-    }
-    .form .input {
-        width: 100%;
-        background: white;
-        border: none;
-        padding: 15px 20px;
-        border-radius: 20px;
-        box-shadow: #cff0ff 0px 10px 10px -5px;
-        border-inline: 2px solid transparent;
-    }
-    .form .input::-moz-placeholder {
-        color: rgb(170, 170, 170);
-    }
-    .form .input::placeholder {
-        color: rgb(170, 170, 170);
-    }
-    .form .input:focus {
-        outline: none;
-        border-inline: 2px solid #12B1D1;
-    }
-    .form .login-button,
-    .form .register-button {
-        width: 100%;
-        font-weight: bold;
-        background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%);
-        color: white;
-        padding-block: 15px;
-        margin-top: 20px;
-        border-radius: 20px;
-        box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px;
-        border: none;
-        transition: all 0.2s ease-in-out;
-    }
-    .form .login-button:hover,
-    .form .register-button:hover {
-        transform: scale(1.03);
-        box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
-    }
-    .form .login-button:active,
-    .form .register-button:active {
-        transform: scale(0.95);
-        box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
-    }
-    .signin-link-container {
-        text-align: center;
-        margin-top: 20px;
-        /* Adjust as needed */
-    }
-    .error-message {
-        color: red;
-        font-size: 12px;
-        margin-top: 5px;
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            margin-top: 1%;
+            padding-top: 100px;
+            background: #F8F9FD;
+            background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
+            border-radius: 40px;
+            padding: 25px 35px;
+                {
+                % comment %
+            }
+            border: 20px solid transparent;
+            /* Adjust the border width */
+            border-top-width: 50px;
+            /* Adjust the top border width */
+                {
+                % endcomment %
+            }
+            box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
+        }
+        .camera-view-container {
+            text-align: top;
+            position: fixed;
+            top: 20px;
+            /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            /* Ensure it's above other elements */
+        }
+        .heading {
+            margin-top: 130px;
+            text-align: center;
+            font-weight: 900;
+            font-size: 30px;
+            color: rgb(16, 137, 211);
+        }
+        .form {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .form-field {
+            width: calc(50% - 10px);
+            margin-bottom: 20px;
+        }
+        .form .input {
+            width: 100%;
+            background: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: #cff0ff 0px 10px 10px -5px;
+            border-inline: 2px solid transparent;
+        }
+        .form .input::-moz-placeholder {
+            color: rgb(170, 170, 170);
+        }
+        .form .input::placeholder {
+            color: rgb(170, 170, 170);
+        }
+        .form .input:focus {
+            outline: none;
+            border-inline: 2px solid #12B1D1;
+        }
+        .form .login-button,
+        .form .register-button {
+            width: 100%;
+            font-weight: bold;
+            background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%);
+            color: white;
+            padding-block: 15px;
+            margin-top: 20px;
+            border-radius: 20px;
+            box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px;
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .form .login-button:hover,
+        .form .register-button:hover {
+            transform: scale(1.03);
+            box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
+        }
+        .form .login-button:active,
+        .form .register-button:active {
+            transform: scale(0.95);
+            box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
+        }
+        .signin-link-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .camera-view {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: auto;
+        }
+        .camera-view video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
 <body>
     <div class="container">
+        <div class="camera-view-container">
+            <div class="camera-view">
+                <video autoplay playsinline muted></video>
+            </div>
+        </div>
         <div class="heading">Sign Up</div>
         <form action="{% url 'account_register' %}" method="POST" class="form">
             {% csrf_token %}
@@ -101,6 +148,8 @@
             </div>
             {% endfor %}
             <button class="login-button" type="submit">Sign Up</button>
+            {% comment %} <button id="capture-image-button" class="login-button"
+                type="button">Capture Image</button> {% endcomment %}
         </form>
         <div class="signin-link-container">
             <a class="login-button" href="{% url 'account_login' %}"
@@ -109,6 +158,42 @@
             </a>
         </div>
     </div>
+    <script>
+        const video = document.querySelector('video');
+        const cameraViewContainer = document.querySelector(
+            '.camera-view-container');
+        // Function to toggle camera view
+        function toggleCameraView() {
+            cameraViewContainer.style.display = cameraViewContainer.style
+                .display === 'none' ? 'block' : 'none';
+        }
+        // Add event listener to the capture image button to toggle camera view
+        document.querySelector('#capture-image-button').addEventListener(
+            'click', toggleCameraView);
+        // Add code to start camera if the camera view is visible
+        document.querySelector('#capture-image-button').addEventListener(
+            'click',
+            function() {
+                if (cameraViewContainer.style.display === 'block') {
+                    if (navigator.mediaDevices && navigator.mediaDevices
+                        .getUserMedia) {
+                        navigator.mediaDevices.getUserMedia({
+                                video: true
+                            })
+                            .then(function(stream) {
+                                video.srcObject = stream;
+                            })
+                            .catch(function(error) {
+                                console.error(
+                                    'Error accessing the webcam:',
+                                    error);
+                            });
+                    } else {
+                        console.error('getUserMedia is not supported');
+                    }
+                }
+            });
+    </script>
 </body>
 </html>
 {% endblock content %}
