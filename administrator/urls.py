@@ -46,13 +46,25 @@ urlpatterns = [
     
     
    
- # * Board Member account
-    path('board_member_dashboard/', views.board_member_dashboard, name="BoardMemberDashboard"),
+   # Board Members
+    path('board-members/', views.board_members, name="adminViewBoardMembers"),
+    path('board-members/view/', views.view_board_member_by_id, name="viewBoardMember"),
+    path('board-members/delete/', views.delete_board_member, name='deleteBoardMember'),
+    path('board-members/update/', views.update_board_member, name="updateBoardMember"),
+    
+    
+    
+#  # * Board Member account
+#     path('board_member_dashboard/', views.board_member_dashboard, name="BoardMemberDashboard"),
  
-    path('board_members/', views.board_members_account, name='board_members_account'),
-    path('board_members/view/', views.view_board_member_by_id, name='view_board_member'),
-    path('board_members/delete/', views.delete_board_member, name='delete_board_member'),
-    path('board_members/update/', views.update_board_member, name='update_board_member'),
+#     path('board_members/', views.board_members_account, name='board_members_account'),
+#     path('board_members/view/', views.view_board_member_by_id, name='view_board_member'),
+#     path('board_members/delete/', views.delete_board_member, name='delete_board_member'),
+#     path('board_members/update/', views.update_board_member, name='update_board_member'),
+
+#     # path('create_board_member/', views.create_board_member, name='create_board_member'),
+
+
 
 
 

@@ -433,62 +433,109 @@ def update_candidates(request):
 
 
 
-
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, redirect, reverse
+from django.contrib import messages
+from account.forms import CustomUserForm
 from account.models import BoardMember
 
-
-def board_member_dashboard(request):
-    # Logic to fetch data or perform operations specific to the board member dashboard
-    context = {
-        'dashboard_title': 'Board Member Dashboard',
-        # Add more context data as needed
-    }
-    return render(request, 'board_member_dashboard.html', context)
-
-def board_members_account(request):
+def board_members(request):
     board_members = BoardMember.objects.all()
-    context = {'board_members': board_members}
-    return render(request, 'admin/BoardMemberAccount.html', context)
+    userForm = CustomUserForm(request.POST or None)
+    context = {
+        'form1': userForm,
+        'board_members': board_members,
+        'page_title': 'Board Members List'
+    }
+    if request.method == 'POST':
+        if userForm.is_valid():
+            user = userForm.save(commit=False)
+            user.user_type = 3  # Set user_type to Board Member
+            user.save()
+            messages.success(request, "New board member created")
+        else:
+            messages.error(request, "Form validation failed")
+    return render(request, "admin/BoardMemberAccount.html", context)
 
 def view_board_member_by_id(request):
-    if request.method == 'GET':
-        member_id = request.GET.get('id')
-        try:
-            board_member = BoardMember.objects.get(id=member_id)
-            data = {
-                'first_name': board_member.first_name,
-                'last_name': board_member.last_name,
-                'email': board_member.email,
-                'phone': board_member.phone,
-                # Add other fields as needed
-            }
-            return JsonResponse(data)
-        except BoardMember.DoesNotExist:
-            return JsonResponse({'error': 'Board Member not found'}, status=404)
+    board_member_id = request.GET.get('id', None)
+    
+    # Filter BoardMember objects based on the custom user type
+    board_member = BoardMember.objects.filter(id=board_member_id, user_type=3)
 
-def delete_board_member(request):
-    if request.method == 'POST':
-        member_id = request.POST.get('id')
-        try:
-            board_member = BoardMember.objects.get(id=member_id)
-            board_member.delete()
-            return JsonResponse({'message': 'Board Member deleted successfully'})
-        except BoardMember.DoesNotExist:
-            return JsonResponse({'error': 'Board Member not found'}, status=404)
+    context = {}
+    if not board_member.exists():
+        context['code'] = 404
+    else:
+        context['code'] = 200
+        board_member = board_member[0]
+        context['id'] = board_member.id
+        context['first_name'] = board_member.first_name
+        context['middle_name'] = board_member.middle_name
+        context['last_name'] = board_member.last_name
+        context['id_number'] = board_member.id_number
+        context['email'] = board_member.email
+        context['phone'] = board_member.phone_number  # Assuming phone_number is the correct field name
+        # Add other fields as needed
+    
+    return JsonResponse(context)
 
 def update_board_member(request):
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        instance = BoardMember.objects.get(id=request.POST.get('id'))
+        user = CustomUserForm(request.POST or None, instance=instance)
+        user.save()
+        messages.success(request, "Board member's details updated")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+    return redirect(reverse('adminViewBoardMembers'))
+
+def delete_board_member(request):
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        board_member = BoardMember.objects.get(id=request.POST.get('id'))
+        board_member.delete()
+        messages.success(request, "Board member has been deleted")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+    return redirect(reverse('adminViewBoardMembers'))
+
+        
+        
+        # administrator/views.py
+
+# from django.shortcuts import render, redirect
+# from account.forms import BoardMemberForm
+
+# def create_board_member(request):
+#     if request.method == 'POST':
+#         form = BoardMemberForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             # Redirect to the Board Member dashboard or any other appropriate page
+#             return redirect('BoardMemberDashboard')
+#     else:
+#         form = BoardMemberForm()
+#     return render(request, 'administrator/create_board_member.html', {'form': form})
+
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from account.forms import CustomUserForm  # Import the correct form
+
+@login_required
+def profile_update(request):
     if request.method == 'POST':
-        member_id = request.POST.get('id')
-        try:
-            board_member = BoardMember.objects.get(id=member_id)
-            board_member.first_name = request.POST.get('first_name')
-            board_member.last_name = request.POST.get('last_name')
-            board_member.email = request.POST.get('email')
-            board_member.phone = request.POST.get('phone')
-            # Update other fields as needed
-            board_member.save()
-            return JsonResponse({'message': 'Board Member updated successfully'})
-        except BoardMember.DoesNotExist:
-            return JsonResponse({'error': 'Board Member not found'}, status=404)
+        form = CustomUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_update_success')  # Redirect to a success page
+    else:
+        form = CustomUserForm(instance=request.user)
+    
+    return render(request, 'bio.html', {'form': form})

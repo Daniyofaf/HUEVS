@@ -1,4 +1,3 @@
-
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
 from django.shortcuts import redirect
@@ -11,40 +10,32 @@ class AccountCheckMiddleWare(MiddlewareMixin):
 
         if user.is_authenticated:
             if user.user_type == 1:  # Admin
-                if modulename == 'voting.views':
-                    error = True
-                    if request.path == reverse('fetch_ballot'):
-                        pass
-                    else:
-                        messages.error(
-                            request, "")    #You do not have access to this resource
+                if modulename.startswith('voting'):
+                    if request.path != reverse('fetch_ballot'):
+                        messages.error(request, "You do not have access to this resource")
                         return redirect(reverse('adminDashboard'))
             elif user.user_type == 2:  # Voter
-                if modulename == 'administrator.views':
-                    messages.error(
-                        request, "")
+                if modulename.startswith('administrator'):
+                    messages.error(request, "You do not have access to this resource")
                     return redirect(reverse('voterDashboard'))
             elif user.user_type == 3:  # Board Member
-                if modulename == 'administrator.views':
-                    return redirect(reverse('BoardMemberDashboard'))
+                if modulename.startswith('administrator'):
+                    messages.error(request, "You do not have access to this resource")
+                    return redirect(reverse('board_member_dashboard'))
             elif user.user_type == 4:  # Candidate
-                if modulename == 'administrator.views':
+                 if modulename.startswith('administrator'):
+                    messages.error(request, "You do not have access to this resource")
                     return redirect(reverse('CandidateDashboard'))
             else:  # None of the aforementioned ? Please take the user to the login page
                 return redirect(reverse('account_login'))
         else:
             # If the path is login or has anything to do with authentication, pass
-            if (request.path == reverse('account_login') or 
-                request.path == reverse('account_register') or 
-                modulename == 'django.contrib.auth.views' or 
-                request.path == reverse('homepage')):
+            allowed_paths = [reverse('account_login'), reverse('account_register'), reverse('homepage')]
+            if (request.path in allowed_paths or modulename.startswith('django.contrib.auth')):
                 pass
-            elif (modulename == 'voting.views' or 
-                  modulename == 'administrator.views' or 
-                  modulename == 'administrator.views'):
+            elif modulename.startswith(('voting', 'administrator', 'board_member', 'candidate')):
                 # If a visitor tries to access voting, board, or candidate functions
-                messages.error(
-                    request, "You need to be logged in to perform this operation")
+                messages.error(request, "You need to be logged in to perform this operation")
                 return redirect(reverse('account_login'))
             else:
                 return redirect(reverse('account_login'))

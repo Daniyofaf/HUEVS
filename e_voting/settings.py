@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'voting.apps.VotingConfig',
     'administrator.apps.AdministratorConfig',
+    'board_member.apps.BoardMemberConfig',
+    'candidate.apps.CandidateConfig',
 ]
 
 MIDDLEWARE = [

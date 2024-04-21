@@ -24,7 +24,7 @@ def account_login(request):
         elif request.user.user_type == 2:
             return redirect(reverse("voterDashboard"))
         elif request.user.user_type == 3:
-            return redirect(reverse("BoardMemberDashboard"))
+            return redirect(reverse("board_member_dashboard"))
         elif request.user.user_type == 4:
             return redirect(reverse("CandidateDashboard"))
         else:
@@ -42,7 +42,7 @@ def account_login(request):
             elif user.user_type == 2:
                 return redirect(reverse("voterDashboard"))
             elif user.user_type == 3:
-                return redirect(reverse("BoardMemberDashboard"))
+                return redirect(reverse("board_member_dashboard"))
             elif user.user_type == 4:
                 return redirect(reverse("CandidateDashboard"))
         else:
