@@ -58,12 +58,14 @@ class CustomUser(AbstractUser):
 
 class AdminCandidateCreationForm(models.Model):
     # Define your fields here
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15)
-    
-    # Add any other fields as needed
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    # id_number = models.CharField(max_length=20)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15)  
+    # face_image = models.ImageField(upload_to='board_member_faces/')
+
 
 
 class BoardMember(models.Model):

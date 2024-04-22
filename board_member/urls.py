@@ -1,8 +1,14 @@
-# board_member/urls.py
-
 from django.urls import path
 from . import views
+from .views import view_voters_list  # Corrected import statement
 
 urlpatterns = [
-    path('dashboard/', views.dashboard, name='board_member_dashboard'),
+    path('', views.dashboard, name="board_member_dashboard"),
+
+    path('dashboard/', views.dashboard, name='Dashboard'),  # Updated the name to match the template
+    path('voters/', views.view_voters_list, name='voters'),  # Updated the name to match the template
+    path('nominated-candidates/', views.nominated_candidates, name='Nominated_Candidates'),  # Updated the name to match the template
+    path('candidates/', views.candidates, name='Candidate'),  # Updated the name to match the template
+    path('votes/', views.votes, name='votes'),  # Updated the name to match the template
 ]
+

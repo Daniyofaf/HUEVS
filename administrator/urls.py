@@ -37,12 +37,10 @@ urlpatterns = [
     
     
     # * candidate account
-    path('candidate_dashboard/', views.candidate_dashboard, name="CandidateDashboard"),
-
-    path('candidates', views.candidatesaccount, name="adminViewCandidates"),
-    path('candidates/view', views.view_candidates_by_id, name="viewCandidate"),
-    path('candidates/delete', views.delete_candidates, name='deleteCandidates'),
-    path('candidates/update', views.update_candidates, name="updateCandidates"),
+    path('candidates-account/', views.candidate_accounts, name="adminViewCandidates"),
+    path('candidates-account/view/', views.view_candidate_account_by_id, name="viewCandidate"),
+    path('candidates-account/delete/', views.delete_candidate_account, name='deleteCandidates'),
+    path('candidates-account/update/', views.update_candidate_account, name="updateCandidates"),
     
     
    
@@ -54,16 +52,6 @@ urlpatterns = [
     
     
     
-#  # * Board Member account
-#     path('board_member_dashboard/', views.board_member_dashboard, name="BoardMemberDashboard"),
- 
-#     path('board_members/', views.board_members_account, name='board_members_account'),
-#     path('board_members/view/', views.view_board_member_by_id, name='view_board_member'),
-#     path('board_members/delete/', views.delete_board_member, name='delete_board_member'),
-#     path('board_members/update/', views.update_board_member, name='update_board_member'),
-
-#     # path('create_board_member/', views.create_board_member, name='create_board_member'),
-
 
 
 

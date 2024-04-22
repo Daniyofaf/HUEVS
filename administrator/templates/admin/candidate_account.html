@@ -1,7 +1,7 @@
 {% extends 'root.html' %}
 {% block content %}
 <section class="content">
-    <h3>Candidates Account</h3>
+    {% comment %} <h3>Candidate Accounts</h3> {% endcomment %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -30,16 +30,42 @@
                                     action="{% url 'adminViewCandidates' %}">
                                     {% csrf_token %}
                                     <!-- Add your registration form fields here -->
-                                    <input type="text" name="first_name"
-                                        placeholder="First Name">
-                                    <input type="text" name="last_name"
-                                        placeholder="Last Name">
-                                    <input type="email" name="email"
-                                        placeholder="Email">
-                                    <input type="text" name="phone"
-                                        placeholder="Phone">
-                                    <button type="submit"
-                                        class="btn btn-success">Submit</button>
+                                    <div class="form-group">
+                                        <label for="candidate_account_first_name">First Name:</label>
+                                        <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="candidate_account_middle_name">Middle
+                                            Name:</label>
+                                        <input type="text" id="middle_name"
+                                            name="middle_name" class="form-control"
+                                            placeholder="Middle Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="candidate_account_last_name">Last Name:</label>
+                                        <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="candidate_account_id_number">ID Number:</label>
+                                        <input type="text" id="candidate_account_id_number"
+                                            name="id_number" class="form-control"
+                                            placeholder="ID Number" required>
+                                    </div> 
+                                    <div class="form-group">
+                                        <label for="candidate_account_email">Email:</label>
+                                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="candidate_account_phone_number">Phone:</label>
+                                        <input type="text" id="phone" name="phone" class="form-control" placeholder="Phone" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="candidate_account_password">Password:</label>
+                                        <input type="password" id="candidate_account_password"
+                                            name="password" class="form-control"
+                                            placeholder="Password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Submit</button>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -63,21 +89,21 @@
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate_account in candidate_accounts %}
                             <tr>
-                                <td>{{ candidate.first_name }}</td>
-                                <td>{{ candidate.last_name }}</td>
-                                <td>{{ candidate.email }}</td>
-                                <td>{{ candidate.phone }}</td>
+                                <td>{{ candidate_account.first_name }}</td>
+                                <td>{{ candidate_account.last_name }}</td>
+                                <td>{{ candidate_account.email }}</td>
+                                <td>{{ candidate_account.phone_number }}</td>
                                 <td>
                                     <button
                                         class='btn btn-primary btn-sm edit btn-flat'
-                                        data-id='{{ candidate.id }}'><i
+                                        data-id='{{ candidate_account.id }}'><i
                                             class='fa fa-edit'></i>
                                         Edit</button>
                                     <button
                                         class='btn btn-danger btn-sm delete btn-flat'
-                                        data-id='{{ candidate.id }}'><i
+                                        data-id='{{ candidate_account.id }}'><i
                                             class='fa fa-trash'></i>
                                         Delete</button>
                                 </td>
@@ -91,7 +117,7 @@
     </div>
 </section>
 <!-- Candidate Login Modal -->
-<div class="modal fade" id="candidateLoginModal">
+{% comment %} <div class="modal fade" id="candidateLoginModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -105,8 +131,14 @@
                 <!-- Candidate login form goes here -->
                 <form method="POST" action="{% url 'adminViewCandidates' %}">
                     {% csrf_token %}
-                    <input type="email" name="email" placeholder="Email">
-                    <input type="password" name="password" placeholder="Password">
+                    <div class="form-group">
+                        <label for="login_email">Email:</label>
+                        <input type="email" id="login_email" name="email" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login_password">Password:</label>
+                        <input type="password" id="login_password" name="password" class="form-control" placeholder="Password" required>
+                    </div>
                     <button type="submit" class="btn btn-success">Login</button>
                 </form>
             </div>
@@ -118,14 +150,14 @@
             </div>
         </div>
     </div>
-</div>
+</div> {% endcomment %}
 {% endblock content %}
 {% block custom_js %}
 <script>
     $(function() {
         $(document).on('click', '.edit', function(e) {
             e.preventDefault();
-            $('#edit').modal('show');
+            $('#addnew').modal('show');
             var id = $(this).data('id');
             getRow(id);
         });

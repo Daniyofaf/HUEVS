@@ -20,7 +20,7 @@ class AccountCheckMiddleWare(MiddlewareMixin):
                     return redirect(reverse('voterDashboard'))
             elif user.user_type == 3:  # Board Member
                 if modulename.startswith('administrator'):
-                    messages.error(request, "You do not have access to this resource")
+                    messages.error(request, "")
                     return redirect(reverse('board_member_dashboard'))
             elif user.user_type == 4:  # Candidate
                  if modulename.startswith('administrator'):
