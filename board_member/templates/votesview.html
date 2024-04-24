@@ -2,5 +2,86 @@
 
 {% block content %}
 
+<section class="content">
+    {% include "bmaside.html" %}
 
-{% endblock content %}
+    <div class="row">
+  <div class="col-xs-12">
+  <div class="box">
+    <div class="box-header with-border">
+      {% comment %} <a href="#reset" data-toggle="modal" class="btn btn-danger btn-sm btn-flat"><i class="fa fa-refresh"></i> Reset</a> {% endcomment %}
+    </div>
+  <div class="box-body">
+    <table id="example1" class="table table-bordered table-hover table-striped">
+        <thead style="background-color: #222D32; color:white;">
+            <th>Voter's Name</th>
+            <th>Candidate Voted For</th>
+            <th>Position</th>
+        </thead>
+        <tbody>
+      {% for vote in votes %}
+        
+      <tr>
+        <td>{{ vote.voter }}</td>
+        <td>{{ vote.candidate }}</td>
+        <td>{{ vote.position }}</td>
+        
+       
+      </tr>
+      {% endfor %}      
+  
+                              </tbody>
+    </table>
+  </div>
+  </div>
+  </div>
+  </div>
+  </section>
+  
+  {% endblock content %}
+  
+  
+  
+  
+  
+  {% block custom_js %}
+    
+  <script>
+    $(function() {
+        $(document).on('click', '.edit', function(e) {
+            e.preventDefault();
+            $('#edit').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
+  
+        $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+            $('#delete').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
+  
+  
+    });
+  
+    function getRow(id) {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "viewCandidate" %}',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+              $('.id').val(id),
+                $('.display_form').html(response.form);
+                $('.fullname').html(response.fullname);
+            },
+           
+        });
+    }
+    </script>
+  {% endblock custom_js %}
+    
+  

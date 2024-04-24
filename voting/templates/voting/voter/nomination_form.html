@@ -1,0 +1,13 @@
+<!-- nomination_form.html -->
+{% extends 'votingroot.html' %}
+{% include 'votingsidebar.html' %}
+{% block content %}
+<section class="content">
+    <h2>Nominate a Candidate</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Nomination</button>
+    </form>
+</section>
+{% endblock %}

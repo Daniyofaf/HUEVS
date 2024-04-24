@@ -1,112 +1,98 @@
 {% extends 'bmroot.html' %}
-
-{% include "sidebar.html" %}
-
+{% comment %} {% include "sidebar.html" %} {% endcomment %}
 {% load static %}
 {% block content %}
 <!-- Main content -->
-<section class="content">
+<section class="">
     <!-- Sidebar -->
-    <aside class="main-sidebar">
-        <!-- Sidebar content -->
-        <section class="sidebar">
-            <!-- Sidebar menu -->
-            <ul class="sidebar-menu" data-widget="tree">
-                <li class="header">MAIN NAVIGATION</li>
-                <li class="active"><a href="{% url 'Dashboard' %}"><i class="fa fa-dashboard"></i>
-                        <span>Dashboard</span></a></li>
-                <li><a href="{% url 'voters' %}"><i class="fa fa-users"></i>
-                        <span>Voters</span></a></li>
-                <li><a href="{% url 'Nominated_Candidates' %}"><i class="fa fa-tasks"></i> <span>Nominated
-                            Candidates</span></a></li>
-                <li><a href="{% url 'Candidate' %}"><i class="fa fa-black-tie"></i>
-                        <span>Candidates</span></a></li>
-                <li><a href="{% url 'votes' %}"><i class="fa fa-edit"></i>
-                        <span>Votes</span></a></li>
-            </ul>
-        </section>
-        <!-- /.sidebar -->
-    </aside>
-    <!-- Content Wrapper. Contains page content -->
-    {% comment %} <div class="content-wrapper">
-        <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3>{{ position_count }}</h3>
-                        <p>No. of Positions</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-tasks"></i>
-                    </div>
-                    <a href="{% url 'viewPositions' %}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+   {% include "bmaside.html" %}
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>{{ voters_count }}</h3>
+                    <p>Total Voters</p>
                 </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>{{ candidate_count }}</h3>
-                        <p>No. of Candidates</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-black-tie"></i>
-                    </div>
-                    <a href="{% url 'viewCandidates' %}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+                <div class="icon">
+                    <i class="fa fa-users"></i>
                 </div>
+                <a href="{% url 'voters' %}" class="small-box-footer">More Info
+                    <i class="fa fa-arrow-circle-right"></i></a>
             </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3>{{ voters_count }}</h3>
-                        <p>Total Voters</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-users"></i>
-                    </div>
-                    <a href="{% url 'adminViewVoters' %}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>{{ candidate_count }}</h3>
+                    <p>No. of Candidates</p>
                 </div>
+                <div class="icon">
+                    <i class="fa fa-black-tie"></i>
+                </div>
+                <a href="{% url 'Candidate' %}" class="small-box-footer">More
+                    Info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-maroon">
-                    <div class="inner">
-                        <h3>{{ voted_voters_count }}</h3>
-                        <p>Voters Voted</p>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-maroon">
+                <div class="inner">
+                    <h3>{{ voted_voters_count }}</h3>
+                    <p>Voters Voted</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-edit"></i>
+                </div>
+                <a href="{% url 'votes' %}" class="small-box-footer">More Info
+                    <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Votes Tally</h3>
+            <div class="pull-right">
+                <a href="{% url 'printResult' %}"
+                    class="btn btn-success btn-sm btn-flat">
+                    <span class="glyphicon glyphicon-print"></span>
+                    Print/Download PDF <i class="fa fa-download"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% for position in positions %}
+    {% if not forloop.counter|divisibleby:2 %}
+    <div class='row'>
+        {% endif %}
+        <div class='col-sm-6'>
+            <div class='box box-solid'>
+                <div class='box-header with-border'>
+                    <h4 class='box-title'><b>{{ position.name }}</b></h4>
+                </div>
+                <div class='box-body'>
+                    <div class='chart'>
+                        <canvas id='{{ position.name|slugify }}'
+                            style='height:200px'></canvas>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-edit"></i>
-                    </div>
-                    <a href="{% url 'viewVotes' %}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h3>Votes Tally</h3>
-                <div class="pull-right">
-                    <a href="{% url 'printResult' %}" class="btn btn-success btn-sm btn-flat">
-                        <span class="glyphicon glyphicon-print"></span> Print/Download PDF <i class="fa fa-download"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            {% for position in positions %}
-            <div class="col-sm-6">
-                <div class="box box-solid">
-                    <div class="box-header with-border">
-                        <h4 class="box-title"><b>{{ position.name }}</b></h4>
-                    </div>
-                    <div class="box-body">
-                        <div class="chart">
-                            <canvas id="{{ position.name|slugify }}" style="height:200px"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div> {% endcomment %}
-    
+        {% if forloop.counter|divisibleby:2 %}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% if not forloop.counter|divisibleby:2 %}
+    </div>
+    {% endif %}
 </section>
 <!-- /.content -->
 {% endblock content %}

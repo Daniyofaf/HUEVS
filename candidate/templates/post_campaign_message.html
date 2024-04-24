@@ -1,0 +1,30 @@
+{% extends 'croot.html' %}
+{% block content %}
+<section class="content">
+    {% include "caside.html" %}
+    {% load static %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    {% if existing_message %}
+                        <h2>Update Your Campaign Message</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit">Update Message</button>
+                        </form>
+                    {% else %}
+                        <h2>Post Your Campaign Message</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit">Post Message</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

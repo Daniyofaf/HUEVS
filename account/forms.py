@@ -78,13 +78,13 @@ class CustomUserForm(FormSettings):
 
 
 
-# from django import forms
-# from .models import CustomUser
-
-# class CandidateRegistrationForm(forms.ModelForm):
-#     class Meta:
-#         model = CustomUser
-#         fields = ['first_name', 'last_name', 'email', 'phone_number', 'password']  # Include 'password' if needed
-#         widgets = {
-#             'password': forms.PasswordInput(),
-#         }
+class BoardMemberForm(FormSettings):
+    class Meta:
+        model = BoardMember
+        fields = ['phone_number', 'email']
+        
+        
+class AdminCandidateCreationform(FormSettings):
+    class Meta:
+        model = AdminCandidateCreation
+        fields = ['phone_number', 'email']

@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from .import views
 from account.views import account_login  # Import the account_login view from account/views.py
 
 
@@ -18,11 +18,14 @@ urlpatterns = [
     path('position/delete', views.deletePosition, name='deletePosition'),
     path('positions/view', views.viewPositions, name='viewPositions'),
 
+    # Nominated Candidates
+    path('nominatedcandidate/', views.viewNominatedCandidates, name='viewNominatedCandidates'),
+    
     # * Candidate
     path('candidate/', views.viewCandidates, name='viewCandidates'),
+    path('candidate/view', views.view_candidate_by_id, name='view_candidate_by_id'),
     path('candidate/update', views.updateCandidate, name="updateCandidate"),
     path('candidate/delete', views.deleteCandidate, name='deleteCandidate'),
-    path('candidate/view', views.view_candidate_by_id, name='view_candidate_by_id'),
 
     # * Settings (Ballot Position and Election Title)
     path("settings/ballot/position", views.ballot_position, name='ballot_position'),

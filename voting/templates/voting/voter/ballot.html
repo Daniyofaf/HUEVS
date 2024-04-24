@@ -1,4 +1,5 @@
-{% extends 'root.html' %}
+{% extends 'votingroot.html' %}
+{% include 'votingsidebar.html' %}
 {% block content %}
 <section class="content">
     <br>
@@ -12,7 +13,8 @@
         <style>
             @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
             #the-final-countdown {
-                background: green; /* Change background color to green */
+                background: green;
+                /* Change background color to green */
                 font-family: 'Lato', sans-serif;
                 text-align: center;
                 color: #eee;
@@ -22,31 +24,32 @@
                 border: 1px solid #000;
             }
         </style>
-        
     </head>
     <body>
         <div id="the-final-countdown">
             <p></p>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+        </script>
         <script>
-            setInterval(function time(){
+            setInterval(function time() {
                 var d = new Date();
                 var hours = 24 - d.getHours();
                 var min = 60 - d.getMinutes();
-                if((min + '').length == 1){
+                if ((min + '').length == 1) {
                     min = '0' + min;
                 }
                 var sec = 60 - d.getSeconds();
-                if((sec + '').length == 1){
+                if ((sec + '').length == 1) {
                     sec = '0' + sec;
                 }
-                jQuery('#the-final-countdown p').html(hours+':'+min+':'+sec)
+                jQuery('#the-final-countdown p').html(hours + ':' +
+                    min + ':' + sec)
             }, 1000);
         </script>
     </body>
     </html>
-    
     <!-- Your original content -->
     <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
     <div class="row">
@@ -75,7 +78,6 @@
 </section>
 {% endblock content %}
 {% block custom_js %}
-
 {% endblock custom_js %}
 {% block modal %}
 <!-- Your modal HTML code... -->

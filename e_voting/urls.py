@@ -26,5 +26,8 @@ urlpatterns = [
     path('administrator/', include('administrator.urls')),
     path('voting/', include('voting.urls')),
     path('board_member/', include('board_member.urls')),
+    path('candidate/', include('candidate.urls')),
+
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

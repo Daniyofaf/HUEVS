@@ -23,11 +23,11 @@ def dashboard(request):
     user = request.user
     if user.voter.voted:  # User has voted
         context = {
-            'my_votes': Votes.objects.filter(voter=user.voter),
+            "my_votes": Votes.objects.filter(voter=user.voter),
         }
         return render(request, "voting/voter/result.html", context)
     else:
-        return redirect(reverse('show_ballot'))
+        return redirect(reverse("show_ballot"))
 
 
 def generate_ballot(display_controls=False):
@@ -156,8 +156,8 @@ def submit_ballot(request):
         return redirect(reverse("voterDashboard"))
 
     form = dict(request.POST)
-    form.pop("csrfmiddlewaretoken", None)  
-    form.pop("submit_vote", None)  
+    form.pop("csrfmiddlewaretoken", None)
+    form.pop("submit_vote", None)
 
     if len(form.keys()) < 1:
         messages.error(request, "Please select at least one candidate")
@@ -183,3 +183,22 @@ def submit_ballot(request):
         voter.save()
         messages.success(request, "Thanks for voting")
         return redirect(reverse("voterDashboard"))
+
+
+from django.shortcuts import render, redirect
+from .forms import NomineeForm
+
+
+def nominate_candidate(request):
+    if request.method == "POST":
+        form = NomineeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("confirmation")
+    else:
+        form = NomineeForm()
+    return render(request, "voting/voter/nomination_form.html", {"form": form})
+
+
+def confirmation(request):
+    return render(request, "voting/voter/confirmation.html")

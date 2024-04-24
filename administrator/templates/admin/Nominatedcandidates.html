@@ -1,0 +1,55 @@
+{% extends 'root.html' %}
+{% block content %}
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat">
+                        <i class="fa fa-plus"></i> Add New
+                    </a>
+                </div>
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-hover table-striped">
+                        <thead style="background-color: #222D32; color:white;">
+                            <th>Full Name</th>
+                            <th>Position</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            {% for nominated_candidate in nominated_candidates %}
+                            <tr>
+                                <td>{{ nominated_candidate.fullname }}</td>
+                                <td>{{ nominated_candidate.position }}</td>
+                                <td>{{ nominated_candidate.bio }}</td>
+                                <td>
+                                    <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ candidate.id }}'>
+                                        <i class='fa fa-edit'></i> Edit
+                                    </button>
+                                    <button class='btn btn-danger btn-sm delete btn-flat' data-id='{{ candidate.id }}'>
+                                        <i class='fa fa-trash'></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+<!-- Modal -->
+{% block modal %}
+<div class="modal fade" id="addnew">
+    <!-- Modal content for adding new nominated candidate -->
+</div>
+<!-- Other modals for edit and delete -->
+{% endblock modal %}
+
+{% block custom_js %}
+<!-- Custom JavaScript code -->
+{% endblock custom_js %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, redirect
 from voting.models import Voter, Position, Candidate, Votes
-from account.models import AdminCandidateCreationForm, CustomUser
+from account.models import AdminCandidateCreation, CustomUser
 from account.forms import CustomUserForm
 from voting.forms import *
 from django.contrib import messages
@@ -213,21 +213,6 @@ def viewPositions(request):
             messages.error(request, "Form errors")
     return render(request, "admin/positions.html", context)
 
-def view_position_by_id(request):
-    pos_id = request.GET.get('id', None)
-    pos = Position.objects.filter(id=pos_id)
-    context = {}
-    if not pos.exists():
-        context['code'] = 404
-    else:
-        context['code'] = 200
-        pos = pos[0]
-        context['name'] = pos.name
-        context['max_vote'] = pos.max_vote
-        context['id'] = pos.id
-    return JsonResponse(context)
-
-
 
 def updatePosition(request):
     if request.method != 'POST':
@@ -255,13 +240,53 @@ def deletePosition(request):
 
     return redirect(reverse('viewPositions'))
 
+def view_position_by_id(request):
+    pos_id = request.GET.get('id', None)
+    pos = Position.objects.filter(id=pos_id)
+    context = {}
+    if not pos.exists():
+        context['code'] = 404
+    else:
+        context['code'] = 200
+        pos = pos[0]
+        context['name'] = pos.name
+        context['id'] = pos.id
+    return JsonResponse(context)
 
+
+
+# def viewNominatedCandidates(request):
+#     nominatedcandidates = Nominee.objects.all()
+#     return render(request, 'admin/Nominatedcandidates.html', {'nominatedcandidates': nominatedcandidates})
+
+# views.py
+from django.shortcuts import render
+from voting.models import Nominee
+
+def viewNominatedCandidates(request):
+    nominated_candidates = Nominee.objects.all()
+    return render(request, 'admin/Nominatedcandidates.html', {'nominated_candidates': nominated_candidates})
 
 
 def viewCandidates(request):
     candidates = Candidate.objects.all()
     return render(request, 'admin/candidates.html', {'candidates': candidates})
 
+
+def view_candidate_by_id(request):
+    candidate_id = request.GET.get('id')
+    candidate = Candidate.objects.filter(id=candidate_id).first()
+    if candidate:
+        return JsonResponse({
+            'id': candidate.id,
+            'fullname': candidate.fullname,
+            'position': candidate.position,
+            'bio': candidate.bio
+        })
+    else:
+        return JsonResponse({'error': 'Candidate not found'})
+    
+    
 def updateCandidate(request):
     if request.method == 'POST':
         candidate_id = request.POST.get('id')
@@ -284,18 +309,7 @@ def deleteCandidate(request):
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
-def view_candidate_by_id(request):
-    candidate_id = request.GET.get('id')
-    candidate = Candidate.objects.filter(id=candidate_id).first()
-    if candidate:
-        return JsonResponse({
-            'id': candidate.id,
-            'fullname': candidate.fullname,
-            'position': candidate.position,
-            'bio': candidate.bio
-        })
-    else:
-        return JsonResponse({'error': 'Candidate not found'})
+
 
 
 
@@ -380,22 +394,27 @@ def resetVote(request):
 
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
-from account.forms import CustomUserForm
-from account.models import AdminCandidateCreationForm
+from account.forms import CustomUserForm, AdminCandidateCreationform
+from account.models import *
 
 def candidate_accounts(request):
-    candidate_accounts = AdminCandidateCreationForm.objects.all()
+    candidate_account = AdminCandidateCreation.objects.all()
     userForm = CustomUserForm(request.POST or None)
+    candidate_accountsForm = AdminCandidateCreationform(request.POST or None)
+
     context = {
         'form1': userForm,
-        'candidate_account': candidate_accounts,
+        'candidate_account': candidate_accountsForm,
         'page_title': 'Candidate Accounts'
     }
     if request.method == 'POST':
         if userForm.is_valid():
             user = userForm.save(commit=False)
+            candidate_account = candidate_accountsForm.save(commit=False)
+            candidate_account.admin = user
             user.user_type = 4  # Set user_type to candidate account creation
             user.save()
+            candidate_account.save()
             messages.success(request, "New candidate account created")
         else:
             messages.error(request, "Form validation failed")
@@ -404,7 +423,7 @@ def candidate_accounts(request):
 def view_candidate_account_by_id(request):
     candidate_account_id = request.GET.get('id', None)
     
-    candidate_account = AdminCandidateCreationForm.objects.filter(id=candidate_account_id, user_type=4)
+    candidate_account = AdminCandidateCreation.objects.filter(id=candidate_account_id, user_type=4)
 
     context = {}
     if not candidate_account.exists():
@@ -426,7 +445,7 @@ def view_candidate_account_by_id(request):
 def update_candidate_account(request):
     if request.method == 'POST':
         candidate_account_id = request.POST.get('id')
-        candidate_account = AdminCandidateCreationForm.objects.get(id=candidate_account_id)
+        candidate_account = AdminCandidateCreation.objects.get(id=candidate_account_id)
         candidate_account.first_name = request.POST.get('first_name')
         candidate_account.last_name = request.POST.get('last_name')
         candidate_account.email = request.POST.get('email')
@@ -439,7 +458,7 @@ def delete_candidate_account(request):
     if request.method != 'POST':
         messages.error(request, "Access Denied")
     try:
-        candidate_account = BoardMember.objects.get(id=request.POST.get('id'))
+        candidate_account = AdminCandidateCreation.objects.get(id=request.POST.get('id'))
         candidate_account.delete()
         messages.success(request, "candidate account has been deleted")
     except:
@@ -453,22 +472,27 @@ def delete_candidate_account(request):
 
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
-from account.forms import CustomUserForm
-from account.models import BoardMember
+from account.forms import * 
+from account.models import *
 
-def board_members(request):
-    board_members = BoardMember.objects.all()
+def board_members(request):  
+    board_member = BoardMember.objects.all()
     userForm = CustomUserForm(request.POST or None)
+    board_memberForm = BoardMemberForm(request.POST or None)
+    
     context = {
         'form1': userForm,
-        'board_members': board_members,
-        'page_title': 'Board Members'
+        'board_member': board_memberForm,
+        'page_title': 'Board Member Account'
     }
     if request.method == 'POST':
         if userForm.is_valid():
             user = userForm.save(commit=False)
-            user.user_type = 3  # Set user_type to Board Member
+            board_member = board_memberForm.save(commit=False)
+            board_member.admin = user
+            user.user_type = 3  # Set user_type to Voter
             user.save()
+            board_member.save()
             messages.success(request, "New board member created")
         else:
             messages.error(request, "Form validation failed")
@@ -476,10 +500,8 @@ def board_members(request):
 
 def view_board_member_by_id(request):
     board_member_id = request.GET.get('id', None)
-    
     # Filter BoardMember objects based on the custom user type
-    board_member = BoardMember.objects.filter(id=board_member_id, user_type=3)
-
+    board_member = BoardMember.objects.filter(id=board_member_id)
     context = {}
     if not board_member.exists():
         context['code'] = 404
@@ -487,12 +509,11 @@ def view_board_member_by_id(request):
         context['code'] = 200
         board_member = board_member[0]
         context['id'] = board_member.id
-        context['first_name'] = board_member.first_name
-        context['middle_name'] = board_member.middle_name
-        context['last_name'] = board_member.last_name
-        context['id_number'] = board_member.id_number
-        context['email'] = board_member.email
-        context['phone'] = board_member.phone_number  # Assuming phone_number is the correct field name
+        context['first_name'] = board_member.admin.first_name
+        context['middle_name'] = board_member.admin.middle_name
+        context['last_name'] = board_member.admin.last_name
+        context['email'] = board_member.admin.email
+        context['phone'] = board_member.admin.phone_number  
         # Add other fields as needed
     
     return JsonResponse(context)
@@ -502,8 +523,10 @@ def update_board_member(request):
         messages.error(request, "Access Denied")
     try:
         instance = BoardMember.objects.get(id=request.POST.get('id'))
-        user = CustomUserForm(request.POST or None, instance=instance)
+        user = CustomUserForm(request.POST or None, instance=instance.admin)
+        board_member = BoardMemberForm(request.POST or None, instance=instance)
         user.save()
+        board_member.save()
         messages.success(request, "Board member's details updated")
     except:
         messages.error(request, "Access To This Resource Denied")
@@ -513,8 +536,8 @@ def delete_board_member(request):
     if request.method != 'POST':
         messages.error(request, "Access Denied")
     try:
-        board_member = BoardMember.objects.get(id=request.POST.get('id'))
-        board_member.delete()
+        admin = BoardMember.objects.get(id=request.POST.get('id')).admin
+        admin.delete()
         messages.success(request, "Board member has been deleted")
     except:
         messages.error(request, "Access To This Resource Denied")

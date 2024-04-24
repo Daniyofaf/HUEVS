@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'administrator.apps.AdministratorConfig',
     'board_member.apps.BoardMemberConfig',
     'candidate.apps.CandidateConfig',
+
 ]
 
 MIDDLEWARE = [

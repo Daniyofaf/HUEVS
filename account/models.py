@@ -20,8 +20,8 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("user_type", 1)  # Set default user type to Admin
-        extra_fields.setdefault("last_name", "System")
-        extra_fields.setdefault("first_name", "Administrator")
+        extra_fields.setdefault("last_name", "Administrator")
+        extra_fields.setdefault("first_name", "System")
 
         assert extra_fields["is_staff"]
         assert extra_fields["is_superuser"]
@@ -46,7 +46,8 @@ class CustomUser(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     cgpa = models.FloatField(null=True, blank=True)
-
+    # face_id = models.IntegerField()
+    
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -56,25 +57,38 @@ class CustomUser(AbstractUser):
         return f"{self.last_name} {self.first_name}"
 
 
-class AdminCandidateCreationForm(models.Model):
+class AdminCandidateCreation(models.Model):
     # Define your fields here
-    first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    # first_name = models.CharField(max_length=50)
+    # middle_name = models.CharField(max_length=50)
+    # last_name = models.CharField(max_length=50)
     # id_number = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)  
     # face_image = models.ImageField(upload_to='board_member_faces/')
+    def __str__(self):
+        return f"{self.admin.last_name}, {self.admin.first_name}"
 
 
+# class BoardMember(models.Model):
+#     # Define your fields here
+#     first_name = models.CharField(max_length=50)
+#     middle_name = models.CharField(max_length=50)
+#     last_name = models.CharField(max_length=50)
+#     # id_number = models.CharField(max_length=20)
+#     email = models.EmailField(unique=True)
+#     phone_number = models.CharField(max_length=15)  
+#     # face_image = models.ImageField(upload_to='board_member_faces/')
 
 class BoardMember(models.Model):
-    # Define your fields here
-    first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    # first_name = models.CharField(max_length=50)
+    # middle_name = models.CharField(max_length=50)
+    # last_name = models.CharField(max_length=50)
     # id_number = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)  
     # face_image = models.ImageField(upload_to='board_member_faces/')
-
+    def __str__(self):
+        return f"{self.admin.last_name}, {self.admin.first_name}"

@@ -1,0 +1,23 @@
+{% extends 'croot.html' %}
+{% block content %}
+<section class="content">
+    {% include "caside.html" %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    {% for message in messages %}
+                    <div>
+                        <h3>{{ message.candidate }}:</h3>
+                        <p>{{ message.message }}</p>
+                        {% comment %} <p>Posted at: {{ message.created_at }}</p> {% endcomment %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</section><!-- /.content -->
+{% endblock %}
