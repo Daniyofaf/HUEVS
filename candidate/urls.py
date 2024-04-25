@@ -8,6 +8,8 @@ urlpatterns = [
 
     path('post/', post_campaign_message, name='post_campaign_message'),
     path('view/', view_campaign_messages, name='view_campaign_messages'),
+    path('edit_message/<int:message_id>/', views.edit_message, name='edit_message'),
+
 ]
 
 

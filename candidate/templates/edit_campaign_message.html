@@ -1,0 +1,63 @@
+{% extends 'croot.html' %}
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    {% include "caside.html" %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    {% for message in messages %}
+                    <div>
+                        <h3>{{ message.candidate }}:</h3>
+                        <p>{{ message.message }}</p>
+                        <p>Posted at: {{ message.created_at }}</p>
+                        <!-- Button trigger modal for editing message -->
+                        <button type="button" class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#editMessageModal{{ message.id }}">
+                            Edit Message
+                        </button>
+                    </div>
+                    <!-- Modal for editing message -->
+                    <div class="modal fade"
+                        id="editMessageModal{{ message.id }}" tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="editMessageModalLabel{{ message.id }}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title"
+                                        id="editMessageModalLabel{{ message.id }}">
+                                        Edit Message</h4>
+                                    <button type="button" class="close"
+                                        data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post" action="{% url 'edit_message' message.id %}">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="editMessageContent{{ message.id }}">Message Content:</label>
+                                            <textarea class="form-control" id="editMessageContent{{ message.id }}" name="message" rows="5">{{ message.message }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</section><!-- /.content -->
+{% endblock %}

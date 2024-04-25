@@ -3,16 +3,18 @@
     <section class="sidebar">
         <!-- Sidebar menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            {% comment %} <li class="header">MAIN NAVIGATION</li>
-            <li class="active"><a href="{% url 'candidatedashboard' %}"><i
-                        class="fa fa-dashboard"></i> {% endcomment %}
+        <li class="header">MAIN NAVIGATION</li>
+            {% comment %} <li class="active"><a href="{% url 'candidatedashboard' %}"><i
+                        class="fa fa-dashboard"></i>  {% endcomment %}
                     <span>Dashboard</span></a></li>
-            <li><a href="{% url 'post_campaign_message' %}"><i class="fa fa-users"></i>
+            <li><a href=""><i class="fa fa-users"></i>
+                    <span>Result</span></a></li>
+            <li><a href="{% url 'post_campaign_message' %}"><i
+                        class="fa fa-users"></i>
                     <span>Campaign Post</span></a></li>
-            <li><a href="{% url 'view_campaign_messages' %}"><i class="fa fa-users"></i>
+            <li><a href="{% url 'view_campaign_messages' %}"><i
+                        class="fa fa-users"></i>
                     <span>View Campaign</span></a></li>
-           
-           
         </ul>
     </section>
     <!-- /.sidebar -->

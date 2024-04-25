@@ -1,30 +1,46 @@
 {% extends 'croot.html' %}
 {% block content %}
+<!-- Main content -->
 <section class="content">
-    {% include "caside.html" %}
-    {% load static %}
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header with-border">
-                    {% if existing_message %}
-                        <h2>Update Your Campaign Message</h2>
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit">Update Message</button>
-                        </form>
-                    {% else %}
-                        <h2>Post Your Campaign Message</h2>
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit">Post Message</button>
-                        </form>
-                    {% endif %}
+    {% include 'caside.html' %}
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- Message form -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Post Your Campaign Message</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form id="messageForm" method="post" action="{% url 'post_campaign_message' %}">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <!-- Your form fields here -->
+                            <div class="form-group">
+                                <label for="messageContent">Message Content</label>
+                                <textarea name="message" class="form-control" id="messageContent" rows="5" placeholder="Enter your Campaign here"></textarea>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Post Message</button>
+                        </div>
+                    </form>
+                    
                 </div>
+                <!-- /.card -->
             </div>
+            <!--/.col (left) -->
+            <!-- right column -->
+            <div class="col-md-6">
+            </div>
+            <!--/.col (right) -->
         </div>
-    </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
 </section>
+<!-- /.content -->
 {% endblock %}

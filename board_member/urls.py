@@ -7,8 +7,11 @@ urlpatterns = [
 
     path('dashboard/', views.dashboard, name='Dashboard'),  # Updated the name to match the template
     path('voters/', views.view_voters_list, name='voters'),  # Updated the name to match the template
-    path('nominated-candidates/', views.nominated_candidates, name='Nominated_Candidates'),  # Updated the name to match the template
+    path('NominatedCandidates/', views.viewnominatedcandidate, name='viewnominatedcandidate'),
     path('candidates/', views.candidates, name='Candidate'),  # Updated the name to match the template
     path('votes/', views.votes, name='votes'),  # Updated the name to match the template
+
+
+
 ]
 

@@ -48,3 +48,10 @@ def votes(request):
     
     # Render template with votes data
     return render(request, 'votesview.html', context)
+
+from django.shortcuts import render
+from voting.models import Nominee
+
+def viewnominatedcandidate(request):
+    nominatedcandidates = Nominee.objects.all()
+    return render(request, 'nominatedcandidates.html', {'nominated_candidates': nominatedcandidates})

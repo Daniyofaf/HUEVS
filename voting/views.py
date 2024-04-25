@@ -27,6 +27,16 @@ def dashboard(request):
         }
         return render(request, "voting/voter/result.html", context)
     else:
+        return redirect(reverse("nominate_candidate"))
+    
+def vote(request):
+    user = request.user
+    if user.voter.voted:  # User has voted
+        context = {
+            "my_votes": Votes.objects.filter(voter=user.voter),
+        }
+        return render(request, "voting/voter/result.html", context)
+    else:
         return redirect(reverse("show_ballot"))
 
 
@@ -202,3 +212,5 @@ def nominate_candidate(request):
 
 def confirmation(request):
     return render(request, "voting/voter/confirmation.html")
+
+
