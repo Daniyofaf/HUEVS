@@ -1,4 +1,7 @@
+from django.http import JsonResponse
 from django.shortcuts import render
+from administrator.models import SenateMembers
+from administrator.views import senate_members
 from e_voting import settings
 from voting.models import Candidate, Position, Voter, Votes
 
@@ -131,3 +134,12 @@ class PrintView(PDFView):
         return context
 
 
+def view_senate_member_by_id(request):
+     # Retrieve all registered voters
+    senate_members = SenateMembers.objects.all()
+    
+    # Pass voter data to template
+    context = {'senate_membera': senate_members}
+    
+    # Render template with voter data
+    return render(request, 'senatemembers.html', context)

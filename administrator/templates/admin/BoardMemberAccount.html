@@ -66,36 +66,38 @@
             <div class="modal-body">
                 <!-- Add Board Member form goes here -->
                 <!-- Add Board Member form goes here -->
-                <form id="addSenateMemberForm" method="POST" action="{% url 'adminViewSenateMembers' %}">
+                <form id="addBoardMemberForm" method="POST" action="{% url 'adminViewBoardMembers' %}">
                     {% csrf_token %}
                     <!-- Add your Senate Member form fields here -->
                     <div class="form-group">
-                        <label for="senate_member_first_name">First Name:</label>
-                        <input type="text" id="senate_member_first_name" name="first_name" class="form-control" placeholder="First Name" required>
+                        <label for="board_member_first_name">First Name:</label>
+                        <input type="text" id="board_member_first_name" name="first_name" class="form-control" placeholder="First Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="senate_member_middle_name">Middle Name:</label>
-                        <input type="text" id="senate_member_middle_name" name="middle_name" class="form-control" placeholder="Middle Name" required>
+                        <label for="board_member_middle_name">Middle Name:</label>
+                        <input type="text" id="board_member_middle_name" name="middle_name" class="form-control" placeholder="Middle Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="senate_member_last_name">Last Name:</label>
-                        <input type="text" id="senate_member_last_name" name="last_name" class="form-control" placeholder="Last Name" required>
+                        <label for="board_member_last_name">Last Name:</label>
+                        <input type="text" id="board_member_last_name" name="last_name" class="form-control" placeholder="Last Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="senate_member_id_number">ID Number:</label>
-                        <input type="text" id="senate_member_id_number" name="id_number" class="form-control" placeholder="ID Number" required>
+                        <label for="board_member_id_number">ID Number:</label>
+                        <input type="text" id="board_member_id_number" name="id_number" class="form-control" placeholder="ID Number" >
                     </div>
                     <div class="form-group">
-                        <label for="senate_member_email">Email:</label>
-                        <input type="email" id="senate_member_email" name="email" class="form-control" placeholder="Email" required>
+                        <label for="board_member_email">Email:</label>
+                        <input type="email" id="board_member_email" name="email" class="form-control" placeholder="Email" required>
                     </div>
                     <div class="form-group">
-                        <label for="senate_member_phone">Phone:</label>
-                        <input type="text" id="senate_member_phone" name="phone_number" class="form-control" placeholder="Phone" required>
+                        <label for="board_member_phone">Phone:</label>
+                        <input type="text" id="board_member_phone" name="phone_number" class="form-control" placeholder="Phone" required>
                     </div>
                     <div class="form-group">
-                        <label for="senate_member_cgpa">CGPA:</label>
-                        <input type="text" id="senate_member_cgpa" name="cgpa" class="form-control" placeholder="CGPA" required>
+                        <label for="board_member_password">Password:</label>
+                        <input type="password" id="board_member_password"
+                            name="password" class="form-control"
+                            placeholder="Password" required>
                     </div>
                     <button type="submit" class="btn btn-success">Submit</button>
                 </form>

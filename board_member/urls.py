@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('votes/print/', views.PrintView.as_view(), name='printResult'),
     
-    
+    path('senate-member/', views.view_senate_member_by_id, name="viewSenateMembers"),
+
 ]
 

@@ -40,8 +40,8 @@ from django.db import models
 class Nominee(models.Model):
     POSITIONS = (
         ('President', 'President'),
-        # ('Vice President', 'Vice President'),
-        # ('Secretary', 'Secretary'),
+        ('Vice President', 'Vice President'),
+        ('Secretary', 'Secretary'),
         # Add more positions as needed
     )
 

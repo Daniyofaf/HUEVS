@@ -71,15 +71,7 @@ class AdminCandidateCreation(models.Model):
         return f"{self.admin.last_name}, {self.admin.first_name}"
 
 
-# class BoardMember(models.Model):
-#     # Define your fields here
-#     first_name = models.CharField(max_length=50)
-#     middle_name = models.CharField(max_length=50)
-#     last_name = models.CharField(max_length=50)
-#     # id_number = models.CharField(max_length=20)
-#     email = models.EmailField(unique=True)
-#     phone_number = models.CharField(max_length=15)  
-#     # face_image = models.ImageField(upload_to='board_member_faces/')
+
 
 class BoardMember(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

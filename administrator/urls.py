@@ -55,7 +55,7 @@ urlpatterns = [
     
     # Senate Members
     path('senate-members/', views.senate_members, name="adminViewSenateMembers"),
-    path('senate-members/view/', views.view_senate_members_by_id, name="viewBoardMember"),
+    path('senate-members/view/', views.view_senate_members_by_id, name="viewSenateMember"),
     path('senate-members/delete/', views.delete_senate_members, name='deleteSenateMember'),
     path('senate-members/update/', views.update_senate_members, name="updateSenateMember"),
 

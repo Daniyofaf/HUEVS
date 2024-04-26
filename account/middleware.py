@@ -15,15 +15,15 @@ class AccountCheckMiddleWare(MiddlewareMixin):
                         messages.error(request, "You do not have access to this resource")
                         return redirect(reverse('adminDashboard'))
             elif user.user_type == 2:  # Voter
-                if modulename.startswith('administrator'):
+                if modulename.startswith(('administrator', 'board_member', 'candidate')):
                     messages.error(request, "")
                     return redirect(reverse('voterDashboard'))
             elif user.user_type == 3:  # Board Member
-                if modulename.startswith('administrator'):
+                if modulename.startswith(('administrator', 'voting', 'candidate')):
                     messages.error(request, "")
                     return redirect(reverse('board_member_dashboard'))
             elif user.user_type == 4:  # Candidate
-                 if modulename.startswith('administrator'):
+                if modulename.startswith(('administrator', 'voting', 'board_member')):
                     messages.error(request, "")
                     return redirect(reverse('candidatedashboard'))
             else:  # None of the aforementioned ? Please take the user to the login page
