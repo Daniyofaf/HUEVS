@@ -1,85 +1,80 @@
 {% extends 'bmroot.html' %}
-
 {% block content %}
 <section class="content">
     {% include "bmaside.html" %}
-
+    <h3>Nominated Candidates</h3>
     <div class="row">
-  <div class="col-xs-12">
-  <div class="box">
+        <div class="col-xs-12">
+            <div class="box">
+                <br>
+                <div class="box-body">
+                    <table id="example1"
+                        class="table table-bordered table-hover table-striped">
+                        <thead style="background-color: #222D32; color:white;">
+                            <th>Full Name</th>
+                            <th>Position</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            {% for nominated_candidate in nominated_candidates %}
+                            <tr>
+                                <td>{{ nominated_candidate.fullname }}</td>
+                                <td>{{ nominated_candidate.position }}</td>
+                                <td>{{ nominated_candidate.bio }}</td>
+                                <td>
+                                    <button class='btn btn-primary btn-sm edit btn-flat approve-btn'
+                                        data-id='{{ nominated_candidate.id }}'>
+                                        <i class='fa fa-check'></i> Approve
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block custom_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const approveButtons = document.querySelectorAll('.approve-btn');
+        approveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const nominatedCandidateId = this.dataset.id;
+                const buttonElement = this;
 
-  <div class="box-body">
-    <table id="example1" class="table table-bordered table-hover table-striped">
-      <thead style="background-color: #222D32; color:white;">
-            <th>Full Name</th>
-            <th>Position</th>
-            <th>Bio</th>
-            <th>Avatar</th>
-        </thead>
-        <tbody>
-      {% for candidate in candidates %}
-        
-      <tr>
-        <td>{{ candidate.fullname }}</td>
-        <td>{{ candidate.position }}</td>
-        <td>{{ candidate.bio }}</td>
-        <td><img src="/media/{{ candidate.photo }}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
-        
-      
-      </tr>
-      {% endfor %}      
-  
-                              </tbody>
-    </table>
-  </div>
-  </div>
-  </div>
-  </div>
-  </section>
-  
-  {% endblock content %}
-  
- 
-  
-  
-  
-  
-  {% block custom_js %}
-    
-  <script>
-    $(function() {
-        $(document).on('click', '.edit', function(e) {
-            e.preventDefault();
-            $('#edit').modal('show');
-            var id = $(this).data('id');
-            getRow(id);
+                // Send an AJAX request to submit the nominated candidate
+                fetch(`/submit_nomination/${nominatedCandidateId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({}),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Handle success
+                        buttonElement.textContent = 'Approved';
+                        buttonElement.classList.remove('btn-primary');
+                        buttonElement.classList.add('btn-success');
+                        // Optionally, reload the page to reflect changes
+                        // location.reload();
+                    } else {
+                        // Handle errors
+                        alert('Failed to approve candidate.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing the request.');
+                });
+            });
         });
-  
-        $(document).on('click', '.delete', function(e) {
-            e.preventDefault();
-            $('#delete').modal('show');
-            var id = $(this).data('id');
-            getRow(id);
-        });
-  
-  
     });
-  
-    function getRow(id) {
-        $.ajax({
-            type: 'GET',
-            url: '{% url "viewCandidate" %}',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-              $('.id').val(id),
-                $('.display_form').html(response.form);
-                $('.fullname').html(response.fullname);
-            },
-           
-        });
-    }
-    </script>
-  {% endblock custom_js %}
+</script>
+{% endblock custom_js %}

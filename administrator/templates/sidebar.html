@@ -31,13 +31,15 @@
       <li class=""><a href="{% url 'adminViewCandidates' %}"><i class="fa fa-black-tie"></i> <span>Candidate Account</span></a></li>
 
       <li class="header">MANAGE BOARDMEMBER</li>
-<li class=""><a href="{% url 'adminViewBoardMembers' %}"><i class="fa fa-user-plus"></i> <span>Board Member Account</span></a></li>
+      <li class=""><a href="{% url 'adminViewBoardMembers' %}"><i class="fa fa-users"></i> <span>Board Member Account</span></a></li>
 
+      <li class="header">MANAGE SENATE MEMBER</li>
+      <li class=""><a href="{% url 'adminViewSenateMembers' %}"><i class="fa fa-users"></i> <span>Senate Members</span></a></li>
 
 
       <li class="header">SETTINGS</li>
       <li class=""><a href="{% url 'viewPositions' %}"><i class="fa fa-tasks"></i> <span>Positions</span></a></li>
-      <li class=""><a href="{% url 'ballot_position' %}"><i class="fa fa-file-text"></i> <span>Ballot Position</span></a></li>
+      {% comment %} <li class=""><a href="{% url 'ballot_position' %}"><i class="fa fa-file-text"></i> <span>Ballot Position</span></a></li> {% endcomment %}
       <li class=""><a href="#config" data-toggle="modal"><i class="fa fa-font"></i> <span>Election Title</span></a></li>
 
             

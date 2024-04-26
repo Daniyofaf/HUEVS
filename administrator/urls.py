@@ -28,10 +28,10 @@ urlpatterns = [
     path('candidate/delete', views.deleteCandidate, name='deleteCandidate'),
 
     # * Settings (Ballot Position and Election Title)
-    path("settings/ballot/position", views.ballot_position, name='ballot_position'),
-    path("settings/ballot/title/", views.ballot_title, name='ballot_title'),
-    path("settings/ballot/position/update/<int:position_id>/<str:up_or_down>/",
-         views.update_ballot_position, name='update_ballot_position'),
+    # path("settings/ballot/position", views.ballot_position, name='ballot_position'),
+    # path("settings/ballot/title/", views.ballot_title, name='ballot_title'),
+    # path("settings/ballot/position/update/<int:position_id>/<str:up_or_down>/",
+    #      views.update_ballot_position, name='update_ballot_position'),
 
     # * Votes
     path('votes/view', views.viewVotes, name='viewVotes'),
@@ -53,8 +53,11 @@ urlpatterns = [
     path('board-members/delete/', views.delete_board_member, name='deleteBoardMember'),
     path('board-members/update/', views.update_board_member, name="updateBoardMember"),
     
-    
-    
+    # Senate Members
+    path('senate-members/', views.senate_members, name="adminViewSenateMembers"),
+    path('senate-members/view/', views.view_senate_members_by_id, name="viewBoardMember"),
+    path('senate-members/delete/', views.delete_senate_members, name='deleteSenateMember'),
+    path('senate-members/update/', views.update_senate_members, name="updateSenateMember"),
 
 
 

@@ -66,67 +66,40 @@
             <div class="modal-body">
                 <!-- Add Board Member form goes here -->
                 <!-- Add Board Member form goes here -->
-                <form id="addBoardMemberForm" method="POST"
-                    action="{% url 'adminViewBoardMembers' %}">
+                <form id="addSenateMemberForm" method="POST" action="{% url 'adminViewSenateMembers' %}">
                     {% csrf_token %}
-                    <!-- Add your Board Member form fields here -->
+                    <!-- Add your Senate Member form fields here -->
                     <div class="form-group">
-                        <label for="board_member_first_name">First Name:</label>
-                        <input type="text" id="board_member_first_name"
-                            name="first_name" class="form-control"
-                            placeholder="First Name" required>
+                        <label for="senate_member_first_name">First Name:</label>
+                        <input type="text" id="senate_member_first_name" name="first_name" class="form-control" placeholder="First Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="board_member_middle_name">Middle
-                            Name:</label>
-                        <input type="text" id="board_member_middle_name"
-                            name="middle_name" class="form-control"
-                            placeholder="Middle Name" required>
+                        <label for="senate_member_middle_name">Middle Name:</label>
+                        <input type="text" id="senate_member_middle_name" name="middle_name" class="form-control" placeholder="Middle Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="board_member_last_name">Last Name:</label>
-                        <input type="text" id="board_member_last_name"
-                            name="last_name" class="form-control"
-                            placeholder="Last Name" required>
-                    </div>
-                  <div class="form-group">
-                        <label for="board_member_id_number">ID Number:</label>
-                        <input type="text" id="board_member_id_number"
-                            name="id_number" class="form-control"
-                            placeholder="ID Number" required>
-                    </div> 
-                    <div class="form-group">
-                        <label for="board_member_email">Email:</label>
-                        <input type="email" id="board_member_email"
-                            name="email" class="form-control"
-                            placeholder="Email" required>
+                        <label for="senate_member_last_name">Last Name:</label>
+                        <input type="text" id="senate_member_last_name" name="last_name" class="form-control" placeholder="Last Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="board_member_phone">Phone:</label>
-                        <input type="text" id="board_member_phone"
-                            name="phone_number" class="form-control"
-                            placeholder="Phone" required>
+                        <label for="senate_member_id_number">ID Number:</label>
+                        <input type="text" id="senate_member_id_number" name="id_number" class="form-control" placeholder="ID Number" required>
                     </div>
                     <div class="form-group">
-                        <label for="board_member_password">Password:</label>
-                        <input type="password" id="board_member_password"
-                            name="password" class="form-control"
-                            placeholder="Password" required>
+                        <label for="senate_member_email">Email:</label>
+                        <input type="email" id="senate_member_email" name="email" class="form-control" placeholder="Email" required>
                     </div>
-                    {% comment %} <div class="form-group">
-                        <label for="board_member_face_image">Face Image:</label>
-                        <video id="live-camera" width="100%" height="auto"
-                            style="display: none;"></video>
-                        <button id="start-camera" class="btn btn-primary">Start
-                            Camera</button>
-                        <button id="capture-button" class="btn btn-primary"
-                            style="display: none;">Capture Image</button>
-                        <input type="hidden" id="captured-image"
-                            name="board_member_face_image">
-                    </div> {% endcomment %}
-                    <button type="submit"
-                        class="btn btn-success">Submit</button>
+                    <div class="form-group">
+                        <label for="senate_member_phone">Phone:</label>
+                        <input type="text" id="senate_member_phone" name="phone_number" class="form-control" placeholder="Phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="senate_member_cgpa">CGPA:</label>
+                        <input type="text" id="senate_member_cgpa" name="cgpa" class="form-control" placeholder="CGPA" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit</button>
                 </form>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-flat pull-left"

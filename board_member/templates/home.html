@@ -1,6 +1,5 @@
 {% extends 'bmroot.html' %}
 {% load static %}
-
 {% block content %}
 <!-- Main content -->
 <section class="content">
@@ -16,7 +15,9 @@
                 <div class="icon">
                     <i class="fa fa-users"></i>
                 </div>
-                <a href="{% url 'adminViewVoters' %}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{% url 'view_voters_list' %}"
+                    class="small-box-footer">More Info <i
+                        class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -25,12 +26,13 @@
             <div class="small-box bg-green">
                 <div class="inner">
                     <h3>{{ candidate_count }}</h3>
-                    <p>No. of Candidates</p>
+                    <p>No of Candidates</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-black-tie"></i>
                 </div>
-                <a href="{% url 'viewCandidates' %}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{% url 'candidates' %}" class="small-box-footer">More
+                    Info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -44,7 +46,24 @@
                 <div class="icon">
                     <i class="fa fa-edit"></i>
                 </div>
-                <a href="{% url 'viewVotes' %}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{% url 'votes' %}" class="small-box-footer">More Info
+                    <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-maroon">
+                <div class="inner">
+                    <h3>{{ voted_voters_count }}</h3>
+                    <p>Nominated Candidates</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-edit"></i>
+                </div>
+                <a href="{% url 'votes' %}" class="small-box-footer">More Info
+                    <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -52,31 +71,39 @@
 </section>
 <!-- /.content -->
 {% endblock content %}
-
 <!-- New Block -->
 {% block custom_js %}
 <script src="{% static 'bower_components/chart.js/Chart.js' %}"></script>
 <!-- ChartJS Horizontal Bar -->
-<script src="{% static 'bower_components/chart.js/Chart.HorizontalBar.js' %}"></script>
-
+<script src="{% static 'bower_components/chart.js/Chart.HorizontalBar.js' %}">
+</script>
 {% for key, value in chart_data.items  %}
 <script>
     $(function() {
         var rowid = '{{ value.pos_id }}';
         var description = '{{ key|safe|slugify }}';
-        var barChartCanvas = $('#' + description).get(0).getContext('2d');
+        var barChartCanvas = $('#' + description).get(0).getContext(
+            '2d');
         var barChart = new Chart(barChartCanvas);
         var barChartData = {
-            labels: {{ value.candidates|safe }},
+            labels: {
+                {
+                    value.candidates | safe
+                }
+            },
             datasets: [{
                 label: 'Votes',
-                fillColor: 'rgba(60,141,188,0.9)',  
+                fillColor: 'rgba(60,141,188,0.9)',
                 strokeColor: 'rgba(60,141,188,0.8)',
                 pointColor: '#3b8bba',
                 pointStrokeColor: 'rgba(60,141,188,1)',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: {{ value.votes|safe }}
+                data: {
+                    {
+                        value.votes | safe
+                    }
+                }
             }]
         };
         var barChartOptions = {
@@ -104,9 +131,9 @@
             responsive: true,
             maintainAspectRatio: true
         };
-
         barChartOptions.datasetFill = false;
-        var myChart = barChart.HorizontalBar(barChartData, barChartOptions);
+        var myChart = barChart.HorizontalBar(barChartData,
+            barChartOptions);
     });
 </script>
 {% endfor %}
