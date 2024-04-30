@@ -27,49 +27,81 @@
                             <div class="modal-body">
                                 <!-- Registration form goes here -->
                                 <form method="POST"
-                                    action="{% url 'adminViewCandidates' %}">
+                                    action="{% url 'adminViewCandidates' %}"
+                                    enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <!-- Add your registration form fields here -->
                                     <div class="form-group">
-                                        <label for="candidate_account_first_name">First Name:</label>
-                                        <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name" required>
+                                        <label
+                                            for="candidate_account_first_name">First
+                                            Name:</label>
+                                        <input type="text" id="first_name"
+                                            name="first_name"
+                                            class="form-control"
+                                            placeholder="First Name" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="candidate_account_middle_name">Middle
+                                        <label
+                                            for="candidate_account_middle_name">Middle
                                             Name:</label>
                                         <input type="text" id="middle_name"
-                                            name="middle_name" class="form-control"
+                                            name="middle_name"
+                                            class="form-control"
                                             placeholder="Middle Name" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="candidate_account_last_name">Last Name:</label>
-                                        <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name" required>
+                                        <label
+                                            for="candidate_account_last_name">Last
+                                            Name:</label>
+                                        <input type="text" id="last_name"
+                                            name="last_name"
+                                            class="form-control"
+                                            placeholder="Last Name" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="candidate_account_id_number">ID Number:</label>
-                                        <input type="text" id="candidate_account_id_number"
-                                            name="id_number" class="form-control"
+                                        <label
+                                            for="candidate_account_id_number">ID
+                                            Number:</label>
+                                        <input type="text"
+                                            id="candidate_account_id_number"
+                                            name="id_number"
+                                            class="form-control"
                                             placeholder="ID Number" required>
-                                    </div> 
-                                    <div class="form-group">
-                                        <label for="candidate_account_email">Email:</label>
-                                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="candidate_account_phone_number">Phone:</label>
-                                        <input type="text" id="phone" name="phone_number" class="form-control" placeholder="Phone" required>
+                                        <label
+                                            for="candidate_account_email">Email:</label>
+                                        <input type="email" id="email"
+                                            name="email" class="form-control"
+                                            placeholder="Email" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="candidate_account_password">Password:</label>
-                                        <input type="password" id="candidate_account_password"
+                                        <label
+                                            for="candidate_account_phone_number">Phone:</label>
+                                        <input type="text" id="phone"
+                                            name="phone_number"
+                                            class="form-control"
+                                            placeholder="Phone" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            for="candidate_account_password">Password:</label>
+                                        <input type="password"
+                                            id="candidate_account_password"
                                             name="password" class="form-control"
                                             placeholder="Password" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="candidate_account_image">Upload Image:</label>
-                                        <input type="file" id="candidate_account_image" name="photo" class="form-control-file" required>
-                                    </div>                                    
-                                    <button type="submit" class="btn btn-success">Submit</button>
+                                        <label
+                                            for="candidate_account_image">Upload
+                                            Image:</label>
+                                        <input type="file"
+                                            id="candidate_account_image"
+                                            name="photo"
+                                            class="form-control-file" required>
+                                    </div>
+                                    <button type="submit"
+                                        class="btn btn-success">Submit</button>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -82,12 +114,15 @@
                         </div>
                     </div>
                 </div>
+                <!-- Candidate Accounts Table -->
                 <div class="box-body">
                     <table id="example1"
                         class="table table-bordered table-hover table-striped">
                         <thead style="background-color: #222D32; color:white;">
-                            <th>Firstname</th>
-                            <th>Lastname</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>ID Number</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Action</th>
@@ -96,20 +131,22 @@
                             {% for candidate_account in candidate_accounts %}
                             <tr>
                                 <td>{{ candidate_account.first_name }}</td>
+                                <td>{{ candidate_account.middle_name }}</td>
                                 <td>{{ candidate_account.last_name }}</td>
+                                <td>{{ candidate_account.id_number }}</td>
                                 <td>{{ candidate_account.email }}</td>
                                 <td>{{ candidate_account.phone_number }}</td>
                                 <td>
                                     <button
                                         class='btn btn-primary btn-sm edit btn-flat'
-                                        data-id='{{ candidate_account.id }}'><i
-                                            class='fa fa-edit'></i>
-                                        Edit</button>
+                                        data-id='{{ candidate_account.id }}'>
+                                        <i class='fa fa-edit'></i> Edit
+                                    </button>
                                     <button
                                         class='btn btn-danger btn-sm delete btn-flat'
-                                        data-id='{{ candidate_account.id }}'><i
-                                            class='fa fa-trash'></i>
-                                        Delete</button>
+                                        data-id='{{ candidate_account.id }}'>
+                                        <i class='fa fa-trash'></i> Delete
+                                    </button>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -121,69 +158,34 @@
     </div>
 </section>
 <!-- Candidate Login Modal -->
-{% comment %} <div class="modal fade" id="candidateLoginModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close"
-                    data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title"><b>Candidate Login</b></h4>
-            </div>
-            <div class="modal-body">
-                <!-- Candidate login form goes here -->
-                <form method="POST" action="{% url 'adminViewCandidates' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="login_email">Email:</label>
-                        <input type="email" id="login_email" name="email" class="form-control" placeholder="Email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login_password">Password:</label>
-                        <input type="password" id="login_password" name="password" class="form-control" placeholder="Password" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Login</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-flat pull-left"
-                    data-dismiss="modal">
-                    <i class="fa fa-close"></i> Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div> {% endcomment %}
 {% endblock content %}
 {% block custom_js %}
 <script>
-    $(function() {
-        $(document).on('click', '.edit', function(e) {
-            e.preventDefault();
-            $('#addnew').modal('show');
-            var id = $(this).data('id');
-            getRow(id);
-        });
-        $(document).on('click', '.delete', function(e) {
-            e.preventDefault();
-            $('#delete').modal('show');
-            var id = $(this).data('id');
-            getRow(id);
-        });
-        function getRow(id) {
-            $.ajax({
-                type: 'GET',
-                url: '{% url "viewCandidate" %}',
-                data: {
-                    id: id
-                },
-                dataType: 'json',
-                success: function(response) {
-                    // Populate edit/delete modals with candidate data
-                }
-            });
-        }
+    $(document).on('click', '.edit', function(e) {
+        e.preventDefault();
+        $('#addnew').modal('show');
+        var id = $(this).data('id');
+        getRow(id);
     });
+    function getRow(id) {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "viewCandidate" %}',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                // Populate edit modal fields with candidate data
+                $('#first_name').val(response.first_name);
+                $('#middle_name').val(response.middle_name);
+                $('#last_name').val(response.last_name);
+                $('#candidate_account_id_number').val(response
+                    .id_number);
+                $('#email').val(response.email);
+                $('#phone_number').val(response.phone_number);
+            }
+        });
+    }
 </script>
 {% endblock custom_js %}

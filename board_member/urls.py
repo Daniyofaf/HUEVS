@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import add_nomination_post
 
 # from .views import submit_nomination  # Corrected import statement
 
@@ -10,8 +9,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='Dashboard'),  # Updated the name to match the template
     
     path('nominationposts/', views.nominationposts, name='nominationposts'),  # Updated the name to match the template
-    path('add_nomination_post/', add_nomination_post, name='add_nomination_post'),
-
+   
     path('electionpost/', views.electionpost, name='electionpost'),  # Updated the name to match the template
     
     path('voters/', views.view_voters_list, name='voters'),  # Updated the name to match the template

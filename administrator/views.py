@@ -406,13 +406,13 @@ from account.models import *
 
 
 def candidate_accounts(request):
-    candidate_account = AdminCandidateCreation.objects.all()
-    userForm = CustomUserForm(request.POST or None)
-    candidate_accountsForm = AdminCandidateCreationform(request.POST or None)
+    candidate_accounts = AdminCandidateCreation.objects.all()
+    userForm = CustomUserForm(request.POST , request.FILES)
+    candidate_accountsForm = AdminCandidateCreationform(request.POST , request.FILES)
 
     context = {
         "form1": userForm,
-        "candidate_account": candidate_accountsForm,
+        "candidate_accounts": candidate_accounts,
         "page_title": "Candidate Accounts",
     }
     if request.method == "POST":

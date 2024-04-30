@@ -203,9 +203,11 @@ def submit_ballot(request):
 
 from django.shortcuts import render, redirect
 from .forms import NomineeForm
-
+from board_member.forms import NominationPost
 
 def nominate_candidate(request):
+    nominationposts = NominationPost.objects.filter(is_posted=True)
+    falsenominationposts = NominationPost.objects.filter(is_posted=False)
     if request.method == "POST":
         form = NomineeForm(request.POST)
         if form.is_valid():
@@ -214,7 +216,7 @@ def nominate_candidate(request):
             return redirect('nominate_candidate')
     else:
         form = NomineeForm()
-    return render(request, "voting/voter/nomination_form.html", {"form": form})
+    return render(request, "voting/voter/nomination_form.html", {"form": form,'nominationposts':nominationposts})
 
 
 def confirmation(request):

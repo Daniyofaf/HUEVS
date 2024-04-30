@@ -4,26 +4,70 @@ from administrator.models import SenateMembers
 from administrator.views import senate_members
 from e_voting import settings
 from voting.models import Candidate, Position, Voter, Votes
-
+from .models import NominationPost 
 # Dashboard view
 def dashboard(request):
     return render(request, 'dashboard.html')
 
 def nominationposts(request):
-    return render(request, 'NominationPost.html')
+    nominationposts = NominationPost.objects.all()
+    if request.method == 'POST':
+        form = NominationPostForm(request.POST)
+        posted = request.POST.get('post')
+        unpost = request.POST.get('unpost')
+        if  posted:
+            posted_nomination = NominationPost.objects.get(pk=posted)
+            posted_nomination.is_posted=True
+            posted_nomination.save()
+        elif unpost:
+            unposted_nomination = NominationPost.objects.get(pk=unpost)
+            unposted_nomination.is_posted=False
+            unposted_nomination.save()
+        if form.is_valid():
+            form.save()  # This will save the form data to the database
+            # messages.success(request,"success!")
+            print('added')
+            return redirect('nominationposts')  # Redirect to a success page or any other page
+    else:
+        form = NominationPostForm()
+   
+    
+    return render(request, 'NominationPost.html', {'form': form,'nominationposts':nominationposts})
+
+from django.shortcuts import render
+from voting.models import Nominee
+
+def viewnominatedcandidate(request):
+    nominatedcandidates = Nominee.objects.all()
+    
+    if request.method =='POST':
+        candidate_approved = request.POST.get('approve_candidate')
+        candidate_dispproved = request.POST.get('candidate_dispproved')
+        if  candidate_approved:
+            approved_candidate = Nominee.objects.get(pk=candidate_approved)
+            approved_candidate.is_approved=True
+            approved_candidate.save()
+        elif candidate_dispproved:
+            approved_candidate = Nominee.objects.get(pk=candidate_dispproved)
+            approved_candidate.is_approved=False
+            approved_candidate.save()
+         
+            
+       
+    return render(request, 'nominatedcandidates.html', {'nominated_candidates': nominatedcandidates})
 
 from django.shortcuts import render, redirect
 from .forms import NominationPostForm
 
-def add_nomination_post(request):
-    if request.method == 'POST':
-        form = NominationPostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('nomination_post_list') # Redirect to a page listing all nomination posts
-    else:
-        form = NominationPostForm()
-    return render(request, 'NominationPost.html', {'form': form})
+# def add_nomination_post(request):
+#     if request.method == 'POST':
+#         form = NominationPostForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('nomination_post_list') # Redirect to a page listing all nomination posts
+#     else:
+#         form = NominationPostForm()
+#     return render(request, 'NominationPost.html', {'form': form})
 
 
 def electionpost(request):

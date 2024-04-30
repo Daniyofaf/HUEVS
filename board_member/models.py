@@ -5,6 +5,7 @@ class NominationPost(models.Model):
     start_time = models.TimeField()
     end_date = models.DateField()
     end_time = models.TimeField()
+    is_posted = models.BooleanField('Posted', default=False)
     # Add any other fields as necessary
 
     def __str__(self):
