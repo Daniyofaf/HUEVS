@@ -9,6 +9,26 @@ from voting.models import Candidate, Position, Voter, Votes
 def dashboard(request):
     return render(request, 'dashboard.html')
 
+def nominationposts(request):
+    return render(request, 'NominationPost.html')
+
+from django.shortcuts import render, redirect
+from .forms import NominationPostForm
+
+def add_nomination_post(request):
+    if request.method == 'POST':
+        form = NominationPostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('nomination_post_list') # Redirect to a page listing all nomination posts
+    else:
+        form = NominationPostForm()
+    return render(request, 'NominationPost.html', {'form': form})
+
+
+def electionpost(request):
+    return render(request, 'ElectionPost.html')
+
 # View for displaying list of voters
 def view_voters_list(request):
     # Retrieve all registered voters
@@ -32,26 +52,43 @@ def nominated_candidates(request):
     return render(request, 'nominatedcandidates.html', context)
 
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from voting.models import Nominee
+import json
+
+@csrf_exempt
+def approve_nomination(request, nominated_candidate_id):
+    if request.method == "POST":
+        post_data = json.loads(request.body.decode("utf-8"))
+        approved = post_data.get('approved', False)
+        nominated_candidate = Nominee.objects.get(id=nominated_candidate_id)
+        nominated_candidate.is_approved = approved
+        nominated_candidate.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'})
+
+
 # views.py
 
-from django.shortcuts import get_object_or_404, HttpResponse
-from voting.models import Nominee, Candidate
+# from django.shortcuts import get_object_or_404, HttpResponse
+# from voting.models import Nominee, Candidate
 
-def submit_nomination(request, nominated_candidate_id):
-    nominated_candidate = get_object_or_404(Nominee, id=nominated_candidate_id)
+# def submit_nomination(request, nominated_candidate_id):
+#     nominated_candidate = get_object_or_404(Nominee, id=nominated_candidate_id)
 
-    # Create a new candidate with the data from the nominated candidate
-    new_candidate = Candidate.objects.create(
-        fullname=nominated_candidate.fullname,
-        position=nominated_candidate.position,
-        # bio=nominated_candidate.bio,
-        # photo=nominated_candidate.photo
-    )
+#     # Create a new candidate with the data from the nominated candidate
+#     Candidate = Candidate.objects.create(
+#         fullname=nominated_candidate.fullname,
+#         position=nominated_candidate.position,
+#         # bio=nominated_candidate.bio,
+#         # photo=nominated_candidate.photo
+#     )
 
-    # Optionally, you can delete the nominated candidate after transferring the data
-    # nominated_candidate.delete()
+#     # Optionally, you can delete the nominated candidate after transferring the data
+#     # nominated_candidate.delete()
 
-    return HttpResponse("Candidate submitted successfully")
+#     return HttpResponse("Candidate submitted successfully")
 
 
 
@@ -59,12 +96,11 @@ def submit_nomination(request, nominated_candidate_id):
 def candidates(request):
     # Add logic here to retrieve candidates data
     # Example: candidates = Candidate.objects.all()
-    
+    approved_candidates = Nominee.objects.filter(is_approved=True)
     # Pass candidates data to template
-    context = {}  # Add your data to pass to the template
     
     # Render template with candidates data
-    return render(request, 'candidatesview.html', context)
+    return render(request, 'candidatesview.html', {'approved_candidates':approved_candidates})
 
 # View for displaying votes
 def votes(request):
@@ -82,6 +118,21 @@ from voting.models import Nominee
 
 def viewnominatedcandidate(request):
     nominatedcandidates = Nominee.objects.all()
+    
+    if request.method =='POST':
+        candidate_approved = request.POST.get('approve_candidate')
+        candidate_dispproved = request.POST.get('candidate_dispproved')
+        if  candidate_approved:
+            approved_candidate = Nominee.objects.get(pk=candidate_approved)
+            approved_candidate.is_approved=True
+            approved_candidate.save()
+        elif candidate_dispproved:
+            approved_candidate = Nominee.objects.get(pk=candidate_dispproved)
+            approved_candidate.is_approved=False
+            approved_candidate.save()
+         
+            
+       
     return render(request, 'nominatedcandidates.html', {'nominated_candidates': nominatedcandidates})
 
 
@@ -143,3 +194,5 @@ def view_senate_member_by_id(request):
     
     # Render template with voter data
     return render(request, 'senatemembers.html', context)
+
+

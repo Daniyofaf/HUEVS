@@ -46,12 +46,16 @@ def account_login(request):
         if user is not None:
             login(request, user)
             if user.user_type == 1:
+                messages.success(request, "Welcome Back!")
                 return redirect(reverse("adminDashboard"))
             elif user.user_type == 2:
+                # messages.success(request, "Welcome Back!")
                 return redirect(reverse("voterDashboard"))
             elif user.user_type == 3:
+                messages.success(request, "Welcome Back!")
                 return redirect(reverse("board_member_dashboard"))
             elif user.user_type == 4:
+                messages.success(request, "Welcome Back!")
                 return redirect(reverse("candidatedashboard"))
         else:
             messages.error(request, "Invalid details")

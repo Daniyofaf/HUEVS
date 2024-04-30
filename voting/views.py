@@ -27,7 +27,13 @@ def dashboard(request):
         }
         return render(request, "voting/voter/result.html", context)
     else:
-        return redirect(reverse("nominate_candidate"))
+        return redirect(reverse("electionpage"))
+    
+def electionpage(request):
+    return render(request, "voting/voter/votingandnominatingpage.html")
+
+
+
     
 def vote(request):
     user = request.user
@@ -204,7 +210,8 @@ def nominate_candidate(request):
         form = NomineeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("confirmation")
+            messages.success(request, "Nomination Successful!")
+            return redirect('nominate_candidate')
     else:
         form = NomineeForm()
     return render(request, "voting/voter/nomination_form.html", {"form": form})

@@ -88,3 +88,4 @@ class AdminCandidateCreationform(FormSettings):
     class Meta:
         model = AdminCandidateCreation
         fields = ['phone_number', 'email']
+        

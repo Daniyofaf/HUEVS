@@ -56,13 +56,13 @@
             <!-- small box -->
             <div class="small-box bg-maroon">
                 <div class="inner">
-                    <h3>{{ voted_voters_count }}</h3>
+                    <h3>{{ nominated_candidates_count }}</h3>
                     <p>Nominated Candidates</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-edit"></i>
+                    <i class="fa fa-users"></i>
                 </div>
-                <a href="{% url 'votes' %}" class="small-box-footer">More Info
+                <a href="{% url 'viewnominatedcandidate' %}" class="small-box-footer">More Info
                     <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>

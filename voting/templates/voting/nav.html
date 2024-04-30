@@ -1,0 +1,57 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
+    <div class="container-fluid">
+        <!-- Add the logo and text -->
+        <a class="navbar-brand" href="{% url 'homepage' %}">
+            <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                alt="HUEVS Logo" width="30" height="50"
+                class="d-inline-block align-top">
+            <a href="" style="color:white;"> HUEVS </a>
+        </a>
+        <!-- Add the toggle button for small screens -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Add the navigation links -->
+        <div class="collapse navbar-collapse justify-content-between"
+            id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <!-- Navigation items -->
+            </ul>
+            <!-- Add the buttons -->
+            <div class="navbar-buttons mbr-section-btn">
+                <a class="btn btn-primary" href=""
+                    style="border-radius: 15px;">Home</a>
+                <a class="btn btn-primary" href="{% url 'nominate_candidate' %}"
+                    style="border-radius: 15px;">Nominate</a>
+                <a class="btn btn-primary" href="{% url 'show_ballot' %}"
+                    style="border-radius: 15px;">Vote</a>
+                <a class="btn btn-primary" href=""
+                    style="border-radius: 15px;">Result</a>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle"
+                        data-toggle="dropdown">
+                        <span>Profile</span> <i
+                            class="bi bi-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if user.is_authenticated %}
+                        <li><a href="">Profile</a></li>
+                        <li><a href="{% url 'account_logout' %}">Log Out</a>
+                        </li>
+                        {% else %}
+                        <li><a href="{% url 'account_login' %}">Log In</a>
+                        </li>
+                        <li><a
+                                href="{% url 'account_register' %}">Register</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -46,6 +46,7 @@ class CustomUser(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     cgpa = models.FloatField(null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
     # face_id = models.IntegerField()
     
     USERNAME_FIELD = "email"
@@ -66,7 +67,7 @@ class AdminCandidateCreation(models.Model):
     # id_number = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)  
-    # face_image = models.ImageField(upload_to='board_member_faces/')
+    photo = models.ImageField(upload_to='Candidate_Photo/')
     def __str__(self):
         return f"{self.admin.last_name}, {self.admin.first_name}"
 

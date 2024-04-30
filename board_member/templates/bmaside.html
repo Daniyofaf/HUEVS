@@ -9,17 +9,22 @@
                     <span>Dashboard</span></a></li>
             <li><a href="{% url 'voters' %}"><i class="fa fa-users"></i>
                     <span>Voters</span></a></li>
-            <li><a href="{% url 'viewSenateMembers' %}"><i class="fa fa-users"></i>
-                    <span>Senate Members</span></a></li>
+            <li><a href="{% url 'nominationposts' %}"><i
+                        class="fa fa-black-tie"></i>
+                    <span>Post Nomination</span></a></li>
             <li><a href="{% url 'viewnominatedcandidate' %}"><i
                         class="fa fa-tasks"></i> <span>Nominated
                         Candidates</span></a></li>
-            <li><a href="{% url 'Candidate' %}"><i
-                        class="fa fa-black-tie"></i>
+            <li><a href="{% url 'viewSenateMembers' %}"><i
+                        class="fa fa-users"></i>
+                    <span>Senate Members</span></a></li>
+            <li><a href="{% url 'Candidate' %}"><i class="fa fa-black-tie"></i>
                     <span>Candidates</span></a></li>
+            <li><a href="{% url 'electionpost' %}"><i
+                        class="fa fa-black-tie"></i>
+                    <span>Post Election</span></a></li>
             <li><a href="{% url 'votes' %}"><i class="fa fa-edit"></i>
                     <span>Votes</span></a></li>
-           
         </ul>
     </section>
     <!-- /.sidebar -->

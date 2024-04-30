@@ -2,7 +2,7 @@
 {% block content %}
 <section class="content">
     {% include "bmaside.html" %}
-    <h3>Nominated Candidates</h3>
+    <h3>Candidates</h3>
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -14,20 +14,22 @@
                             <th>Full Name</th>
                             <th>Position</th>
                             <th>Description</th>
-                            <th>Action</th>
+                            <th>Photo</th>
+                            {% comment %} <th>Action</th> {% endcomment %}
                         </thead>
                         <tbody>
-                            {% for nominated_candidate in nominated_candidates %}
+                            {% for nominated_candidate in approved_candidates %}
                             <tr>
                                 <td>{{ nominated_candidate.fullname }}</td>
                                 <td>{{ nominated_candidate.position }}</td>
-                                <td>{{ nominated_candidate.bio }}</td>
-                                <td>
+                                <td>{{ candidate.bio }}</td>
+                                <td><img src="/static/uploads/images/{{candidate.photo}}" height=50px width=auto></td>
+                                {% comment %} <td>
                                     <button class='btn btn-primary btn-sm edit btn-flat approve-btn'
                                         data-id='{{ nominated_candidate.id }}'>
-                                        <i class='fa fa-check'></i> Approve
+                                        <i class='fa fa-check'></i> Edit
                                     </button>
-                                </td>
+                                </td> {% endcomment %}
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -38,43 +40,3 @@
     </div>
 </section>
 {% endblock content %}
-{% block custom_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const approveButtons = document.querySelectorAll('.approve-btn');
-        approveButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const nominatedCandidateId = this.dataset.id;
-                const buttonElement = this;
-
-                // Send an AJAX request to submit the nominated candidate
-                fetch(`/submit_nomination/${nominatedCandidateId}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({}),
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Handle success
-                        buttonElement.textContent = 'Approved';
-                        buttonElement.classList.remove('btn-primary');
-                        buttonElement.classList.add('btn-success');
-                        // Optionally, reload the page to reflect changes
-                        // location.reload();
-                    } else {
-                        // Handle errors
-                        alert('Failed to approve candidate.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while processing the request.');
-                });
-            });
-        });
-    });
-</script>
-{% endblock custom_js %}

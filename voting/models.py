@@ -40,14 +40,15 @@ from django.db import models
 class Nominee(models.Model):
     POSITIONS = (
         ('President', 'President'),
-        ('Vice President', 'Vice President'),
-        ('Secretary', 'Secretary'),
+        # ('Vice President', 'Vice President'),
+        # ('Secretary', 'Secretary'),
         # Add more positions as needed
     )
 
     fullname = models.CharField(max_length=50)
     bio = models.TextField()
     position = models.CharField(max_length=50, choices=POSITIONS, default='President')
+    is_approved = models.BooleanField('Approved', default=False)
 
     def __str__(self):
         return self.fullname

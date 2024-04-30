@@ -1,0 +1,114 @@
+{% block content %}
+{% load static %}
+<head>
+   
+    <meta name="description"
+        content="Revolutionizing the voting experience with cutting-edge technology. Say goodbye to long queues and hello to convenience.">
+    <title>Haramaya University Student Union Election</title>
+   
+    <link rel="stylesheet"
+        href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+   
+    
+    <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+ 
+ 
+</head>
+<body style="background-color: white;">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
+        <div class="container-fluid">
+            <!-- Add the logo and text -->
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                    alt="HUEVS Logo" width="30" height="50"
+                    class="d-inline-block align-top">
+                <a href="" style="color:white;"> HUEVS </a>
+            </a>
+            <!-- Add the toggle button for small screens -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Add the navigation links -->
+            <div class="collapse navbar-collapse justify-content-between"
+                id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <!-- Navigation items -->
+                </ul>
+                <!-- Add the buttons -->
+                <div class="navbar-buttons mbr-section-btn">
+                    <a class="btn btn-primary" href="{% url 'electionpage' %}"
+                        style="border-radius: 15px;">Home</a>
+                    <a class="btn btn-primary"
+                        href="{% url 'nominate_candidate' %}"
+                        style="border-radius: 15px;">Nominate</a>
+                    <a class="btn btn-primary" href="{% url 'show_ballot' %}"
+                        style="border-radius: 15px;">Vote</a>
+                    <a class="btn btn-primary" href=""
+                        style="border-radius: 15px;">Result</a>
+                    <a class="btn btn-primary" href="{% url 'account_logout' %}"
+                        style="border-radius: 15px;">Logout</a>
+                    {% comment %} <li class="dropdown"> {% endcomment %}
+                        {% comment %} <a href="" class="dropdown-toggle"
+                            data-toggle="dropdown">
+                            <span>Profile</span> <i
+                                class="bi bi-chevron-down"></i>
+                        </a> {% endcomment %}
+                        {% comment %} <ul class="dropdown-menu">
+                            {% if user.is_authenticated %}
+                            <li><a href="">Profile</a></li>
+                            <li><a href="{% url 'account_logout' %}">Log
+                                    Out</a>
+                            </li>
+                            {% else %}
+                            <li><a href="{% url 'account_login' %}">Log
+                                    In</a>
+                            </li>
+                            <li><a
+                                    href="{% url 'account_register' %}">Register</a>
+                            </li>
+                            {% endif %}
+                        </ul> {% endcomment %}
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section data-bs-version="5.1"
+        class="header18 cid-u6OHFo3iOj mbr-fullscreen"
+        data-bg-video=""
+        id="hero-16-u6OHFo3iOj">
+        
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="content-wrap col-12 col-md-12 text-center">
+                    <div class="mbr-section-btn">
+                        <a class="btn btn-primary btn-lg"
+                            href="{% url 'nominate_candidate' %}"
+                            style="border-radius: 15px;">Nominate</a>
+                    </div>
+                    <div class="mbr-section-btn">
+                        <a class="btn btn-primary btn-lg"
+                            href="{% url 'show_ballot' %}"
+                            style="border-radius: 15px;">Vote</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section data-bs-version="5.1" class="footer2 cid-u6OHFo9wSS" once="footers"
+        id="footer-5-u6OHFo9wSS">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-6 center mt-2 mb-3">
+                    <p class="mbr-fonts-style copyright mb-0 display-7">© 2024
+                        Haramaya University. All Rights Reserved.</p>
+                </div>
+                <div class="col-12 col-lg-6 center">
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endblock content %}

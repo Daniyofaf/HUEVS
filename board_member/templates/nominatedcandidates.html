@@ -14,7 +14,7 @@
                             <th>Full Name</th>
                             <th>Position</th>
                             <th>Description</th>
-                            <th>Action</th>
+                            <th>Status</th>
                         </thead>
                         <tbody>
                             {% for nominated_candidate in nominated_candidates %}
@@ -24,11 +24,32 @@
                                 <td>{{ nominated_candidate.bio }}</td>
                                 <td>
                                     <!-- Add a data-id attribute to store the nominated candidate's ID -->
-                                    <button
-                                        class='btn btn-primary btn-sm edit btn-flat approve-btn'
-                                        data-id='{{ nominated_candidate.id }}'>
-                                        <i class='fa fa-edit'></i> Approve
+
+
+                               {% if not nominated_candidate.is_approved %}
+                               <form method="post" class="me-3">
+                                        {% csrf_token %}
+                                    <input type="hidden" name="approve_candidate" value="{{ nominated_candidate.id }}">
+                                    <button type="submit" class="btn btn-success me-4">
+                                        <i class="fas fa-edit"></i> Approve
                                     </button>
+                                </form>
+
+                                {%else%}
+                               
+                               
+                                <form method="post" class="me-3">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="candidate_dispproved" value="{{ nominated_candidate.id }}">
+                                    <button type="submit" class="btn btn-danger me-4">
+                                        <i class="fas fa-edit"></i> Disapprove
+                                    </button>
+                                </form>
+                               {% endif %}
+                                
+              
+             
+
                                 </td>
                             </tr>
                             {% endfor %}
@@ -40,52 +61,52 @@
     </div>
 </section>
 {% endblock content %}
-{% block modal %}
-<!-- Modal -->
-<div class="modal fade" id="addnew">
-    <!-- Modal content for adding new nominated candidate -->
-</div>
-<!-- Other modals for edit and delete -->
-{% endblock modal %}
+
 {% block custom_js %}
 <!-- Custom JavaScript code -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const approveButtons = document.querySelectorAll('.approve-btn');
+        const approveButtons = document.querySelectorAll(
+        '.approve-btn');
         approveButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const nominatedCandidateId = this.dataset.id;
+                const nominatedCandidateId = this
+                    .dataset.id;
                 const buttonElement = this;
-
-                // Send an AJAX request to submit the nominated candidate
-                fetch(`/submit_nomination/${nominatedCandidateId}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({}),
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Handle success
-                        buttonElement.textContent = 'Disapprove';
-                        buttonElement.classList.remove('btn-primary');
-                        buttonElement.classList.add('btn-danger');
-                        // Optionally, reload the page to reflect changes
-                        // location.reload();
-                    } else {
-                        // Handle errors
-                        alert('Failed to approve candidate.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while processing the request.');
-                });
+                fetch(`/approve_nomination/${nominatedCandidateId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            approved: true
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            buttonElement
+                                .textContent =
+                                'Disapprove';
+                            buttonElement.classList
+                                .remove(
+                                    'btn-primary');
+                            buttonElement.classList
+                                .add('btn-danger');
+                            location.reload();
+                        } else {
+                            alert(
+                                'Failed to approve candidate.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:',
+                            error);
+                        alert(
+                            'An error occurred while processing the request.');
+                    });
             });
         });
     });
 </script>
-
 {% endblock custom_js %}

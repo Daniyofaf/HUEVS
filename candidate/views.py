@@ -19,11 +19,12 @@ def post_campaign_message(request):
             message = form.save(commit=False)
             message.candidate = request.user
             message.save()
-            return view_campaign_messages
+            return redirect('view_campaign_messages')
     else:
         form = CampaignMessageForm()
 
     return render(request, 'post_campaign_message.html', {'form': form})
+
 
 
 def view_campaign_messages(request):

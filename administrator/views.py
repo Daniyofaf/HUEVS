@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, redirect
 from administrator.models import SenateMembers
-from voting.models import Voter, Position, Candidate, Votes
+from voting.models import Voter, Position, Candidate, Votes, Nominee
 from account.models import AdminCandidateCreation, CustomUser
 from account.forms import CustomUserForm
 from voting.forms import *
@@ -270,9 +270,20 @@ def viewNominatedCandidates(request):
     )
 
 
+# def viewCandidates(request):
+#     candidates = Candidate.objects.all()
+#     return render(request, "admin/candidates.html", {"candidates": candidates})
+
+
 def viewCandidates(request):
-    candidates = Candidate.objects.all()
-    return render(request, "admin/candidates.html", {"candidates": candidates})
+    # Add logic here to retrieve candidates data
+    # Example: candidates = Candidate.objects.all()
+    approved_candidates = Nominee.objects.filter(is_approved=True)
+    # Pass candidates data to template
+    
+    # Render template with candidates data
+    return render(request, 'admin/candidates.html', {'approved_candidates':approved_candidates})
+
 
 
 def view_candidate_by_id(request):

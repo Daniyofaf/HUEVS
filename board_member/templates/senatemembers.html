@@ -16,9 +16,9 @@
                             <th>Firstname</th>
                             <th>Middlename</th>
                             <th>Lastname</th>
+                            <th>Cgpa</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Cgpa</th>
                             {% comment %} <th>Action</th> {% endcomment %}
                         </thead>
                         <tbody>
@@ -28,9 +28,9 @@
                                 <td>{{ senate_member.first_name }}</td>
                                 <td>{{ senate_member.middle_name }}</td>
                                 <td>{{ senate_member.last_name }}</td>
+                                <td>{{ senate_member.cgpa }}</td>
                                 <td>{{ senate_member.email }}</td>
                                 <td>{{ senate_member.phone_number }}</td>
-                                <td>{{ senate_member.cgpa }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
