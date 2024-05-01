@@ -13,7 +13,7 @@
                         <thead style="background-color: #222D32; color:white;">
                             <th>Full Name</th>
                             <th>Position</th>
-                            <th>Description</th>
+                            <th>Campaign Message</th>
                             <th>Photo</th>
                             {% comment %} <th>Action</th> {% endcomment %}
                         </thead>
@@ -22,8 +22,8 @@
                             <tr>
                                 <td>{{ nominated_candidate.fullname }}</td>
                                 <td>{{ nominated_candidate.position }}</td>
-                                <td>{{ candidate.bio }}</td>
-                                <td><img src="/static/uploads/images/{{candidate.photo}}" height=50px width=auto></td>
+                                <td>{{ candidate.campaign_message }}</td>
+                                <td><img src="/media/uploads/images/{{candidate.photo}}" height=50px width=auto></td>
                                 {% comment %} <td>
                                     <button class='btn btn-primary btn-sm edit btn-flat approve-btn'
                                         data-id='{{ nominated_candidate.id }}'>

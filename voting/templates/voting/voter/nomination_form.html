@@ -107,37 +107,89 @@
             </div>
         </nav>
         <br> <br>
-        <br> <br>
-        {%if nominationposts %}
-        <section
-            style="margin: 0 auto; max-width: 600px; padding: 20px; border: 1px solid #ccc; border-radius: 30px;">
-            <h2>Nominate a Candidate</h2>
-            <form method="post" class="form-group">
-                {% csrf_token %}
-                <div class="form-group">
-                    {{ form.fullname.label_tag }}
-                    {{ form.fullname }}
+        <section class="content">
+            <br>
+            <style>
+                @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
+                #the-final-countdown {
+                        {
+                        % comment %
+                    }
+                    background: blue;
+                        {
+                        % endcomment %
+                    }
+                    font-family: 'Lato',
+                    sans-serif;
+                    text-align: center;
+                    color: black;
+                    text-shadow: 1px 1px 5px black;
+                    font-size: 3rem;
+                    border-radius: 45px;
+                    width: 1200px;
+                    margin-left: 70px;
+                }
+            </style>
+            </head>
+            <body>
+                <div id="the-final-countdown">
+                    <p></p>
                 </div>
-                <div class="form-group">
-                    {{ form.bio.label_tag }}
-                    {{ form.bio }}
-                </div>
-                <button type="submit" class="btn btn-primary">Submit
-                    Nomination</button>
-            </form>
-        </section>
-        {%else%}
-        <section
-            style="margin: 100 auto; max-width: 1600px; padding: 20px; ">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <h2 class="card-title">Sorry, It's Not Nomination Time</h2>
+                <script
+                    src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+                </script>
+                <script>
+                    setInterval(function time() {
+                        var d = new Date();
+                        var hours = 24 - d.getHours();
+                        var min = 60 - d.getMinutes();
+                        if ((min + '').length == 1) {
+                            min = '0' + min;
+                        }
+                        var sec = 60 - d.getSeconds();
+                        if ((sec + '').length == 1) {
+                            sec = '0' + sec;
+                        }
+                        jQuery('#the-final-countdown p').html(hours +
+                            ':' +
+                            min + ':' + sec)
+                    }, 1000);
+                </script>
+            </body>
+            </html>
+            {%if nominationposts %}
+            <section
+                style="margin: 0 auto; max-width: 900px; padding: 20px; border: 1px solid #ccc; border-radius: 30px;">
+                <h1 class="page-header text-center title"><b>Nominate a Candidate</b></h1>
+
+                <form method="post" class="form-group">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.fullname.label_tag }}
+                        {{ form.fullname }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.bio.label_tag }}
+                        {{ form.bio }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit
+                        Nomination</button>
+                </form>
+            </section>
+            {%else%}
+            <section
+                style="margin: 100 auto; max-width: 1600px; padding: 20px; ">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h2 class="card-title">Sorry, It's Not
+                                    Nomination Time</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>        </section>
-        {%endif%}
-        {% endblock content %}
-</section>
+            </section>
+            {%endif%}
+            {% endblock content %}
+        </section>

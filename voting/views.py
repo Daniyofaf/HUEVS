@@ -28,13 +28,13 @@ def dashboard(request):
         return render(request, "voting/voter/result.html", context)
     else:
         return redirect(reverse("electionpage"))
-    
+
+
 def electionpage(request):
-    return render(request, "voting/voter/votingandnominatingpage.html")
+    # return render(request, "voting/voter/votingandnominatingpage.html")
+    return redirect(reverse("show_ballot"))
 
 
-
-    
 def vote(request):
     user = request.user
     if user.voter.voted:  # User has voted
@@ -205,6 +205,7 @@ from django.shortcuts import render, redirect
 from .forms import NomineeForm
 from board_member.forms import NominationPost
 
+
 def nominate_candidate(request):
     nominationposts = NominationPost.objects.filter(is_posted=True)
     falsenominationposts = NominationPost.objects.filter(is_posted=False)
@@ -213,13 +214,15 @@ def nominate_candidate(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Nomination Successful!")
-            return redirect('nominate_candidate')
+            return redirect("nominate_candidate")
     else:
         form = NomineeForm()
-    return render(request, "voting/voter/nomination_form.html", {"form": form,'nominationposts':nominationposts})
+    return render(
+        request,
+        "voting/voter/nomination_form.html",
+        {"form": form, "nominationposts": nominationposts},
+    )
 
 
-def confirmation(request):
-    return render(request, "voting/voter/confirmation.html")
-
-
+# def confirmation(request):
+#     return render(request, "voting/voter/confirmation.html")

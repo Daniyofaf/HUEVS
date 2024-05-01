@@ -22,6 +22,7 @@
                             <th>Start Date</th>
                             <th>Ending Time</th>
                             <th>Ending Date</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -38,7 +39,7 @@
                                         {% csrf_token %}
                                     <input type="hidden" name="post" value="{{ nomination_post.id }}">
                                     <button type="submit" class="btn btn-success me-4">
-                                        <i class="fas fa-edit"></i> post
+                                        <i class="fas fa-edit"></i> POST
                                     </button>
                                 </form>
 
@@ -49,11 +50,19 @@
                                     {% csrf_token %}
                                     <input type="hidden" name="unpost" value="{{ nomination_post.id }}">
                                     <button type="submit" class="btn btn-danger me-4">
-                                        <i class="fas fa-edit"></i> unpost
+                                        <i class="fas fa-edit"></i> UNPOST
                                     </button>
                                 </form>
                                {% endif %}
+                               <td>
+                                <button type="submit" class="btn btn-danger me-4">
+                                    <i class="fas fa-edit"></i> Delete
+                                </button>
+                               </td>
                                 </td>
+                                <td>
+
+                            </td>
                             </tr>
                             {% endfor %}
                         </tbody>

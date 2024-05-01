@@ -3,8 +3,8 @@
 {% block content %}
 <section class="content">
   {% include "bmaside.html" %}
-      <h3>Senate Members List</h3>
-<section class="content">
+  <h3>Senate Members List</h3>
+  <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -19,7 +19,6 @@
                             <th>Cgpa</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            {% comment %} <th>Action</th> {% endcomment %}
                         </thead>
                         <tbody>
                             {% for senate_member in senate_members %}

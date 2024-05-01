@@ -1,7 +1,6 @@
 {% extends 'bmroot.html' %}
 {% block content %}
 {% include "bmaside.html" %}
-
 <section class="content">
     <h3>Election Post</h3>
     <div class="row">
@@ -23,26 +22,46 @@
                             <th>Start Date</th>
                             <th>Ending Time</th>
                             <th>Ending Date</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            {% for nomination_post in nomination_posts %}
+                            {% for election_post in electionposts %}
                             <tr>
                                 <td>{{ election_post.start_time}}</td>
                                 <td>{{ election_post.start_date }}</td>
                                 <td>{{ election_post.end_time }}</td>
                                 <td>{{ election_post.end_date }}</td>
                                 <td>
-                                    <button
-                                        class='btn btn-primary btn-sm editElectionPost btn-flat'
-                                        data-id='{{ election_post.id }}'>
-                                        <i class='fa fa-edit'></i> Post
+                                    {% if not election_post.is_posted %}
+                                    <form method="post" class="me-3">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="post"
+                                            value="{{ election_post.id }}">
+                                        <button type="submit"
+                                            class="btn btn-success me-4">
+                                            <i class="fas fa-edit"></i> POST
+                                        </button>
+                                    </form>
+                                    {%else%}
+                                    <form method="post" class="me-3">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="unpost"
+                                            value="{{ election_post.id }}">
+                                        <button type="submit"
+                                            class="btn btn-danger me-4">
+                                            <i class="fas fa-edit"></i> UNPOST
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                <td>
+                                    <button type="submit"
+                                        class="btn btn-danger me-4">
+                                        <i class="fas fa-edit"></i> Delete
                                     </button>
-                                    <button
-                                        class='btn btn-danger btn-sm deleteElectionPost btn-flat'
-                                        data-id='{{ election_post.id }}'>
-                                        <i class='fa fa-trash'></i> Unpost
-                                    </button>
+                                </td>
+                                </td>
+                                <td>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -65,41 +84,13 @@
                 <h4 class="modal-title"><b>Add an Election Post</b></h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="{% url 'electionpost' %}">
+                <form id="addnewElectionPost" method="post"
+                    action="{% url 'electionposts' %}">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="start_date">Start Date:</label>
-                        <input type="date" id="start_date" name="start_date"
-                            class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="start_time">Start Time:</label>
-                        <input type="time" id="start_time" name="start_time"
-                            class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="end_date">End Date:</label>
-                        <input type="date" id="end_date" name="end_date"
-                            class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="end_time">End Time:</label>
-                        <input type="time" id="end_time" name="end_time"
-                            class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="candidates">Select Candidates:</label>
-                        <select id="candidates" name="candidates" class="form-control" multiple required>
-                            {% for candidate in candidates %}
-                            <option value="{{ candidate.id }}">{{ candidate.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    
+                    {{ form.as_p }}
                     <button type="submit"
                         class="btn btn-primary">Submit</button>
                 </form>
-                </section>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-flat pull-left"

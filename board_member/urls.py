@@ -10,7 +10,7 @@ urlpatterns = [
     
     path('nominationposts/', views.nominationposts, name='nominationposts'),  # Updated the name to match the template
    
-    path('electionpost/', views.electionpost, name='electionpost'),  # Updated the name to match the template
+    path('electionposts/', views.electionposts, name='electionposts'),  # Updated the name to match the template
     
     path('voters/', views.view_voters_list, name='voters'),  # Updated the name to match the template
     path('NominatedCandidates/', views.viewnominatedcandidate, name='viewnominatedcandidate'),
