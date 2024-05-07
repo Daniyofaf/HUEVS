@@ -22,7 +22,13 @@
                             <tr>
                                 <td>{{ nominated_candidate.fullname }}</td>
                                 <td>{{ nominated_candidate.position }}</td>
-                                <td>{{ candidate.campaign_message }}</td>
+                                <td>
+                                    {% for message in nominated_candidate.campaignmessage_set.all %}
+                                        {% if message.candidate.fullname == nominated_candidate.fullname %}
+                                            {{ message.message }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>              
                                 <td><img src="/media/uploads/images/{{candidate.photo}}" height=50px width=auto></td>
                                 {% comment %} <td>
                                     <button class='btn btn-primary btn-sm edit btn-flat approve-btn'

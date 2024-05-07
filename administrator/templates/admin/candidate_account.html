@@ -32,32 +32,15 @@
                                     {% csrf_token %}
                                     <!-- Add your registration form fields here -->
                                     <div class="form-group">
-                                        <label
-                                            for="candidate_account_first_name">First
-                                            Name:</label>
-                                        <input type="text" id="first_name"
-                                            name="first_name"
-                                            class="form-control"
-                                            placeholder="First Name" required>
+                                        <label for="candidate_account_name">Candidate Name:</label>
+                                        <select id="candidate_account_name" name="candidate_name" class="form-control" required>
+                                            <option value="">Select Candidate</option>
+                                            {% for nominated_candidate in approved_candidates %}
+                                                <option value="{{ nominated_candidate.fullname }}">{{ nominated_candidate.fullname }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label
-                                            for="candidate_account_middle_name">Middle
-                                            Name:</label>
-                                        <input type="text" id="middle_name"
-                                            name="middle_name"
-                                            class="form-control"
-                                            placeholder="Middle Name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label
-                                            for="candidate_account_last_name">Last
-                                            Name:</label>
-                                        <input type="text" id="last_name"
-                                            name="last_name"
-                                            class="form-control"
-                                            placeholder="Last Name" required>
-                                    </div>
+                                    
                                     <div class="form-group">
                                         <label
                                             for="candidate_account_id_number">ID
@@ -130,12 +113,12 @@
                         <tbody>
                             {% for candidate_account in candidate_accounts %}
                             <tr>
-                                <td>{{ candidate_account.first_name }}</td>
-                                <td>{{ candidate_account.middle_name }}</td>
-                                <td>{{ candidate_account.last_name }}</td>
-                                <td>{{ candidate_account.id_number }}</td>
-                                <td>{{ candidate_account.email }}</td>
-                                <td>{{ candidate_account.phone_number }}</td>
+                                <td>{{ candidate_account.admin.first_name }}</td>
+                                <td>{{ candidate_account.admin.middle_name }}</td>
+                                <td>{{ candidate_account.admin.last_name }}</td>
+                                <td>{{ candidate_account.admin.id_number }}</td>
+                                <td>{{ candidate_account.admin.email }}</td>
+                                <td>{{ candidate_account.admin.phone_number }}</td>
                                 <td>
                                     <button
                                         class='btn btn-primary btn-sm edit btn-flat'
@@ -161,29 +144,37 @@
 {% endblock content %}
 {% block custom_js %}
 <script>
-    $(document).on('click', '.edit', function(e) {
-        e.preventDefault();
-        $('#addnew').modal('show');
-        var id = $(this).data('id');
-        getRow(id);
+    $(function() {
+        $(document).on('click', '.edit', function(e) {
+            e.preventDefault();
+            $('#edit').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
+        $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+            $('#delete').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
     });
     function getRow(id) {
         $.ajax({
             type: 'GET',
-            url: '{% url "viewCandidate" %}',
+            url: '{% url "adminViewCandidates" %}',
             data: {
                 id: id
             },
             dataType: 'json',
             success: function(response) {
-                // Populate edit modal fields with candidate data
-                $('#first_name').val(response.first_name);
-                $('#middle_name').val(response.middle_name);
-                $('#last_name').val(response.last_name);
-                $('#candidate_account_id_number').val(response
-                    .id_number);
-                $('#email').val(response.email);
-                $('#phone_number').val(response.phone_number);
+                $('.id').val(response.id);
+                $('#edit_first_name').val(response.first_name);
+                $('#edit_middle_name').val(response.middle_name);
+                $('#edit_last_name').val(response.last_name);
+                $('#edit_phone_number').val(response.phone_number);
+                $('#edit_email').val(response.email);
+                $('.fullname').html(response.first_name + ' ' +
+                    response.last_name);
             }
         });
     }

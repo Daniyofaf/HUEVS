@@ -394,7 +394,7 @@ def viewVotes(request):
 
 def resetVote(request):
     Votes.objects.all().delete()
-    Voter.objects.all().update(voted=False, verified=False, otp=None)
+    Voter.objects.all().update(voted=False)
     messages.success(request, "All votes has been reset")
     return redirect(reverse("viewVotes"))
 
@@ -472,14 +472,22 @@ def delete_candidate_account(request):
     if request.method != "POST":
         messages.error(request, "Access Denied")
     try:
-        candidate_account = AdminCandidateCreation.objects.get(
-            id=request.POST.get("id")
-        )
-        candidate_account.delete()
+        # candidate_account = AdminCandidateCreation.objects.get(
+        #     id=request.POST.get("id")
+        # )
+        
+        admin = AdminCandidateCreation.objects.get("id").admin
+        admin.delete()
+        
+        # candidate_account.delete()
         messages.success(request, "candidate account has been deleted")
     except:
         messages.error(request, "Access To This Resource Denied")
     return redirect(reverse("adminViewCandidates"))
+
+    
+    
+
 
 
 from django.shortcuts import render, redirect, reverse

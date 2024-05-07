@@ -8,6 +8,7 @@ from django.contrib.auth import login, logout
 # from .detection import FaceRecognition
 from .forms import *
 
+
 # Create your views here.
 
 # faceRecognition = FaceRecognition()
@@ -73,7 +74,6 @@ def account_login(request):
     return render(request, "voting/login.html", context)
 
 
-
 # def account_register(request):
 #     if request.method == "POST":
 #         userForm = CustomUserForm(request.POST)
@@ -103,9 +103,9 @@ def account_login(request):
 #     return render(request, "voting/reg.html", context)
 
 
+# from Face_Detection.detection import addFace  # Import the function to add face data
+# from Face_Detection.detection import FaceRecognition
 
-# from .detection import addFace  # Import the function to add face data
-# from .detection import FaceRecognition
 
 def account_register(request):
     if request.method == "POST":
@@ -117,25 +117,20 @@ def account_register(request):
             user.save()
 
             # Optionally, create a Voter instance and associate it with the user
-            # Adjust this part based on your Voter model
             voter = voterForm.save(commit=False)
             voter.admin = user
             voter.save()
 
             # Add face registration
-            # face_id = request.POST.get('face_id')  # Assuming 'face_id' is the field in your form containing face data
-            # if face_id:
-            #     addFace(face_id)  # Add the face data to the system
-            #     # Assuming faceRecognition object is already instantiated
-            #     faceRecognition = FaceRecognition()
-            #     faceRecognition.faceDetect(face_id)
-            #     faceRecognition.trainFace()
+        #     face_id = request.POST.get('face_id')  # Assuming 'face_id' is the field in your form containing face data
+        #     if face_id:
+        #         addFace(face_id)  # Add the face data to the system
 
-            messages.success(request, "Account created. You can login now!")
-            return redirect(reverse("account_login"))
-        else:
-            messages.error(request, "Failed to create account. Please check your input.")  # Provided data failed validation
-            # You might want to handle the error case here
+        #     messages.success(request, "Account created. You can login now!")
+        #     return redirect(reverse("account_login"))
+        # else:
+        #     messages.error(request,
+        #                    "Failed to create account. Please check your input.")  # Provided data failed validation
 
     else:
         userForm = CustomUserForm()
@@ -143,7 +138,6 @@ def account_register(request):
 
     context = {"form1": userForm, "form2": voterForm}
     return render(request, "voting/reg.html", context)
-
 
 
 # def account_register(request):
@@ -185,3 +179,37 @@ def account_logout(request):
         messages.error(request, "You need to be logged in to perform this action")
 
     return redirect(reverse("account_login"))
+
+
+
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
+from django.shortcuts import render
+
+# View for rendering the password reset form
+def password_reset(request):
+    return auth_views.PasswordResetView.as_view(
+        template_name='accounts/password_reset_form.html',
+        email_template_name='accounts/password_reset_email.html',
+        subject_template_name='accounts/password_reset_subject.txt',
+        success_url=reverse_lazy('password_reset_done')
+    )(request)
+
+# View for rendering the password reset done page
+def password_reset_done(request):
+    return auth_views.PasswordResetDoneView.as_view(
+        template_name='accounts/password_reset_done.html'
+    )(request)
+
+# View for rendering the password reset confirm form
+def password_reset_confirm(request, uidb64=None, token=None):
+    return auth_views.PasswordResetConfirmView.as_view(
+        template_name='accounts/password_reset_confirm.html',
+        success_url=reverse_lazy('password_reset_complete')
+    )(request, uidb64=uidb64, token=token)
+
+# View for rendering the password reset complete page
+def password_reset_complete(request):
+    return auth_views.PasswordResetCompleteView.as_view(
+        template_name='accounts/password_reset_complete.html'
+    )(request)

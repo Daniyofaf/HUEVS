@@ -18,8 +18,8 @@
                     <table id="example1"
                         class="table table-bordered table-hover table-striped">
                         <thead style="background-color: #222D32; color:white;">
-                            <th>Start Time</th>
-                            <th>Start Date</th>
+                            {% comment %} <th>Start Time</th>
+                            <th>Start Date</th> {% endcomment %}
                             <th>Ending Time</th>
                             <th>Ending Date</th>
                             <th>Status</th>
@@ -28,8 +28,8 @@
                         <tbody>
                             {% for nomination_post in nominationposts %}
                             <tr>
-                                <td>{{ nomination_post.start_time}}</td>
-                                <td>{{ nomination_post.start_date }}</td>
+                                {% comment %} <td>{{ nomination_post.start_time}}</td>
+                                <td>{{ nomination_post.start_date }}</td> {% endcomment %}
                                 <td>{{ nomination_post.end_time }}</td>
                                 <td>{{ nomination_post.end_date }}</td>
                                 <td>
@@ -60,9 +60,7 @@
                                 </button>
                                </td>
                                 </td>
-                                <td>
-
-                            </td>
+                               
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -101,3 +99,30 @@
     </div>
 </div>
 {% endblock content %}
+{% block custom_js %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="></script>
+<script>
+    {% comment %} $(document).ready(function() {
+                setInterval(functional() {
+                            $.ajax({
+                                type: 'GET',
+                                url: "{%url 'get_ajax' %}",
+                                success: function(response) {
+                                    var temp = response.live_counter
+                                    $('.counter').empty()
+                                    if (temp <= 0) {
+                                        $(".counter").append(
+                                            "Time is over")
+                                    } else {
+                                        $(".counter").append(temp)
+                                    },
+                                    error: function(response) {
+                                        alert("error")
+                                    }
+                                }
+                            })
+                        }, 1000
+                    }); {% endcomment %}
+</script>
+{% endblock custom_js %}

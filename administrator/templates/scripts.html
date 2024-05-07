@@ -23,11 +23,11 @@
         $('#example1').DataTable()
         var bookTable = $('#booklist').DataTable({
           'paging'      : true,
-          'lengthChange': false,
+          'lengthChange': true,
           'searching'   : true,
           'ordering'    : true,
-          'info'        : false,
-          'autoWidth'   : false
+          'info'        : true,
+          'autoWidth'   : true
         })
     
         $('#searchBox').on('keyup', function(){

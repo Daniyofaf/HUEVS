@@ -28,14 +28,12 @@
           </tr>
         {% endfor %}
       </table>
-      {% if value.winner %}
-        {% if forloop.first %}
-          <p>Winner: {{ value.winner }}</p>
-        {% elif forloop.counter == 2 %}
-          <p>Vice President: {{ value.winner }}</p>
-        {% elif forloop.counter == 3 %}
-          <p>Secretary: {{ value.winner }}</p>
-        {% endif %}
+      {% if value.candidate_data %}
+        {% with value.candidate_data|dictsort:"votes" as sorted_candidates %}
+          {% with sorted_candidates|last as winner %}
+            <p>Winner: {{ winner.name }}</p>
+          {% endwith %}
+        {% endwith %}
       {% endif %}
     {% endif %}
   {% endfor %}

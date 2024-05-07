@@ -19,6 +19,7 @@ urlpatterns = [
     path('votes/', views.votes, name='votes'),  # Updated the name to match the template
     path('votes/print/', views.PrintView.as_view(), name='printResult'), 
     path('senate-member/', views.view_senate_member_by_id, name="viewSenateMembers"),
+    path('result/', views.result, name='result')
 
 ]
 

@@ -46,9 +46,9 @@
             <div class="container-fluid">
                 <!-- Add the logo and text -->
                 <a class="navbar-brand" href="#">
-                    <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                    {% comment %} <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
                         alt="HUEVS Logo" width="30" height="50"
-                        class="d-inline-block align-top">
+                        class="d-inline-block align-top"> {% endcomment %}
                     <a href="" style="color:black;"> HUEVS </a>
                 </a>
                 <!-- Add the toggle button for small screens -->
@@ -66,16 +66,16 @@
                     </ul>
                     <!-- Add the buttons -->
                     <div class="navbar-buttons mbr-section-btn">
-                        <a class="btn btn-primary"
+                        {% comment %} <a class="btn btn-primary"
                             href="{% url 'electionpage' %}"
-                            style="border-radius: 15px;">Home</a>
+                            style="border-radius: 15px;">Home</a> {% endcomment %}
                         <a class="btn btn-primary"
                             href="{% url 'nominate_candidate' %}"
                             style="border-radius: 15px;">Nominate</a>
                         <a class="btn btn-primary"
                             href="{% url 'show_ballot' %}"
                             style="border-radius: 15px;">Vote</a>
-                        <a class="btn btn-primary" href=""
+                            <a class="btn btn-primary" href="{% url 'result' %}"
                             style="border-radius: 15px;">Result</a>
                         <a class="btn btn-primary"
                             href="{% url 'account_logout' %}"
@@ -107,6 +107,12 @@
             </div>
         </nav>
         <br> <br>
+        <br>
+
+
+        {%if nominationposts %}
+        <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
+
         <section class="content">
             <br>
             <style>
@@ -157,24 +163,23 @@
                 </script>
             </body>
             </html>
-            {%if nominationposts %}
             <section
-                style="margin: 0 auto; max-width: 900px; padding: 20px; border: 1px solid #ccc; border-radius: 30px;">
-                <h1 class="page-header text-center title"><b>Nominate a Candidate</b></h1>
-
-                <form method="post" class="form-group">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ form.fullname.label_tag }}
-                        {{ form.fullname }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.bio.label_tag }}
-                        {{ form.bio }}
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit
-                        Nomination</button>
-                </form>
+                style="margin: 0 auto; height: 450px; max-width: 900px; padding-left: 30px; padding-right: 30px; border: 2px solid #ccc; border-radius: 30px;">
+                <h1 class="page-header text-center title"><b>Nominate a
+                        Candidate</b></h1>
+                        <form method="post" class="form-group">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_fullname" class="form-label">Full Name</label>
+                                <input type="text" name="fullname" id="id_fullname" class="form-control" placeholder="Enter full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_bio" class="form-label">Bio</label>
+                                <textarea name="bio" id="id_bio" class="form-control" placeholder="Enter bio" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Nomination</button>
+                        </form>
+                        
             </section>
             {%else%}
             <section

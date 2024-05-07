@@ -33,14 +33,14 @@
                 </ul>
                 <!-- Add the buttons -->
                 <div class="navbar-buttons mbr-section-btn">
-                    <a class="btn btn-primary" href="{% url 'electionpage' %}"
-                        style="border-radius: 15px;">Home</a>
+                    {% comment %} <a class="btn btn-primary" href="{% url 'electionpage' %}"
+                        style="border-radius: 15px;">Home</a> {% endcomment %}
                     <a class="btn btn-primary"
                         href="{% url 'nominate_candidate' %}"
                         style="border-radius: 15px;">Nominate</a>
                     <a class="btn btn-primary" href="{% url 'show_ballot' %}"
                         style="border-radius: 15px;">Vote</a>
-                    <a class="btn btn-primary" href=""
+                    <a class="btn btn-primary" href="{% url 'result' %}"
                         style="border-radius: 15px;">Result</a>
                     <a class="btn btn-primary" href="{% url 'account_logout' %}"
                         style="border-radius: 15px;">Logout</a>

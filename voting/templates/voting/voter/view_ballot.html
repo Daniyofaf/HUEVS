@@ -1,0 +1,136 @@
+{% load static %}
+{% block content %}
+<section>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1, minimum-scale=1">
+        <link rel="shortcut icon"
+            href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+            type="image/x-icon">
+        <meta name="description"
+            content="Revolutionizing the voting experience with cutting-edge technology. Say goodbye to long queues and hello to convenience.">
+        <title>Haramaya University Student Union Election</title>
+        <link rel="stylesheet"
+            href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/parallax/jarallax.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/dropdown/css/style.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/socicon/css/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+        <link rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap"
+            as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript>
+            <link rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
+        </noscript>
+        <link rel="preload" as="style"
+            href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}"
+            type="text/css">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
+            <div class="container-fluid">
+                <!-- Add the logo and text -->
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                        alt="HUEVS Logo" width="30" height="50"
+                        class="d-inline-block align-top">
+                    <a href="" style="color:black;"> HUEVS </a>
+                </a>
+                <!-- Add the toggle button for small screens -->
+                <button class="navbar-toggler" type="button"
+                    data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Add the navigation links -->
+                <div class="collapse navbar-collapse justify-content-between"
+                    id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <!-- Navigation items -->
+                    </ul>
+                    <!-- Add the buttons -->
+                    <div class="navbar-buttons mbr-section-btn">
+                        {% comment %} <a class="btn btn-primary"
+                            href="{% url 'electionpage' %}"
+                            style="border-radius: 15px;">Home</a>
+                        {% endcomment %}
+                        <a class="btn btn-primary"
+                            href="{% url 'nominate_candidate' %}"
+                            style="border-radius: 15px;">Nominate</a>
+                        <a class="btn btn-primary"
+                            href="{% url 'show_ballot' %}"
+                            style="border-radius: 15px;">Vote</a>
+                            <a class="btn btn-primary" href="{% url 'result' %}"
+                            style="border-radius: 15px;">Result</a>
+                        <a class="btn btn-primary"
+                            href="{% url 'account_logout' %}"
+                            style="border-radius: 15px;">Logout</a>
+                        {% comment %} <li class="dropdown"> {% endcomment %}
+                            {% comment %} <a href="" class="dropdown-toggle"
+                                data-toggle="dropdown">
+                                <span>Profile</span> <i
+                                    class="bi bi-chevron-down"></i>
+                            </a> {% endcomment %}
+                            {% comment %} <ul class="dropdown-menu">
+                                {% if user.is_authenticated %}
+                                <li><a href="">Profile</a></li>
+                                <li><a href="{% url 'account_logout' %}">Log
+                                        Out</a>
+                                </li>
+                                {% else %}
+                                <li><a href="{% url 'account_login' %}">Log
+                                        In</a>
+                                </li>
+                                <li><a
+                                        href="{% url 'account_register' %}">Register</a>
+                                </li>
+                                {% endif %}
+                            </ul> {% endcomment %}
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <br> <br>
+        <br> <br>
+        <br> <br>
+        <section class="content">
+            <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title text-center">Vote Details
+                                </h2>
+                                <div class="center">
+                                    <div class="col-sm-10 offset-sm-2">
+                                        <!-- Display ballot details here -->
+                                       <h3> <p><strong>Position:</strong>
+                                            {{ vote.position }}</p> </h3>
+                                    <h3>    <p><strong>Candidate:</strong>
+                                            {{ vote.candidate }}</p>  </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock content %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from account.views import account_login
-from .models import Position, Candidate, Voter, Votes
+from board_member.forms import ElectionPost
+from .models import Nominee, Position, Candidate, Voter, Votes
 from django.http import JsonResponse
 from django.utils.text import slugify
 from django.contrib import messages
@@ -36,17 +37,28 @@ def electionpage(request):
 
 
 def vote(request):
-    user = request.user
-    if user.voter.voted:  # User has voted
-        context = {
-            "my_votes": Votes.objects.filter(voter=user.voter),
-        }
-        return render(request, "voting/voter/result.html", context)
+    return render(request, "voting/voter/myvote.html")
+
+
+
+def view_ballot(request):
+    if request.user.is_authenticated:
+        voter = request.user.voter
+        try:
+            vote = Votes.objects.get(voter=voter)
+            context = {
+                'vote': vote
+            }
+            return render(request, 'voting/voter/view_ballot.html', context)
+        except Votes.DoesNotExist:
+            return render(request, 'voting/voter/no_vote.html')
     else:
-        return redirect(reverse("show_ballot"))
-
-
+        return redirect('login')  # Redirect to login page if user is not authenticated 
+    
+    
 def generate_ballot(display_controls=False):
+    electionposts = ElectionPost.objects.filter(is_posted=True)
+    falseelectionposts = ElectionPost.objects.filter(is_posted=False)
     positions = Position.objects.order_by("priority").all()
     output = ""
     candidates_data = ""
@@ -126,15 +138,20 @@ def fetch_ballot(request):
 
 
 def show_ballot(request):
+    electionposts = ElectionPost.objects.filter(is_posted=True)
+    falseelectionposts = ElectionPost.objects.filter(is_posted=False)
+    sewoch = Nominee.objects.filter(is_approved=True)
     if request.user.voter.voted:
         messages.error(request, "You have voted already")
         return redirect(reverse("voterDashboard"))
     ballot = generate_ballot(display_controls=False)
-    context = {"ballot": ballot}
+    context = {"ballot": ballot, 'electionposts' : electionposts,'sewoch':sewoch}
     return render(request, "voting/voter/ballot.html", context)
 
 
 def preview_vote(request):
+    electionposts = ElectionPost.objects.filter(is_posted=True)
+    falseelectionposts = ElectionPost.objects.filter(is_posted=False)
     if request.method != "POST":
         error = True
         response = "Please browse the system properly"
@@ -160,45 +177,79 @@ def preview_vote(request):
     context = {"error": error, "list": output}
     return JsonResponse(context, safe=False)
 
+from django.shortcuts import render, redirect
+from .models import Votes, Nominee  # Import your models here
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import Votes, Nominee
+from django.contrib import messages
 
 def submit_ballot(request):
-    if request.method != "POST":
-        messages.error(request, "Please, browse the system properly")
-        return redirect(reverse("show_ballot"))
-
-    voter = request.user.voter
-    if voter.voted:
-        messages.error(request, "You have voted already")
-        return redirect(reverse("voterDashboard"))
-
-    form = dict(request.POST)
-    form.pop("csrfmiddlewaretoken", None)
-    form.pop("submit_vote", None)
-
-    if len(form.keys()) < 1:
-        messages.error(request, "Please select at least one candidate")
-        return redirect(reverse("show_ballot"))
-
-    for pos, form_position in form.items():
-        position = Position.objects.get(name=pos)
-        form_position = form_position[0]
-        candidate = Candidate.objects.get(position=position, id=form_position)
-        vote = Votes()
-        vote.candidate = candidate
-        vote.voter = voter
-        vote.position = position
-        vote.save()
-
-    inserted_votes = Votes.objects.filter(voter=voter)
-    if inserted_votes.count() != len(form):
-        inserted_votes.delete()
-        messages.error(request, "Please try voting again!")
-        return redirect(reverse("show_ballot"))
+    if request.method == 'POST':
+        selected_candidate_id = request.POST.get('selected_candidate')
+        if selected_candidate_id:
+            try:
+                selected_candidate = Nominee.objects.get(pk=selected_candidate_id)
+                candidate_name = selected_candidate.fullname
+                
+                if request.user.is_authenticated:
+                    voter = request.user.voter
+                    # Check if the voter has already voted
+                    if Votes.objects.filter(voter=voter).exists():
+                        return redirect('vote')
+                    else:
+                        position = selected_candidate.position  # Access the position ID directly
+                        vote = Votes.objects.create(voter=voter, position=position, candidate=candidate_name)
+                        vote.save()
+                        messages.success(request, f'Vote submitted successfully for {candidate_name}.')
+                else:
+                    messages.error(request, 'User is not authenticated.')
+            except Nominee.DoesNotExist:
+                messages.error(request, 'Selected candidate does not exist.')
+        else:
+            messages.error(request, 'No candidate selected.')
+        return redirect('electionpage')
     else:
-        voter.voted = True
-        voter.save()
-        messages.success(request, "Thanks for voting")
-        return redirect(reverse("voterDashboard"))
+        return redirect('electionpage')
+
+# def submit_ballot(request):
+#     if request.method != "POST":
+#         messages.error(request, "Please, browse the system properly")
+#         return redirect(reverse("show_ballot"))
+
+#     voter = request.user.voter
+#     if voter.voted:
+#         messages.error(request, "You have voted already")
+#         return redirect(reverse("voterDashboard"))
+
+#     form = dict(request.POST)
+#     form.pop("csrfmiddlewaretoken", None)
+#     form.pop("submit_vote", None)
+
+#     if len(form.keys()) < 1:
+#         messages.error(request, "Please select at least one candidate")
+#         return redirect(reverse("show_ballot"))
+
+#     for pos, form_position in form.items():
+#         position = Position.objects.get(name=pos)
+#         form_position = form_position[0]
+#         candidate = Candidate.objects.get(position=position, id=form_position)
+#         vote = Votes()
+#         vote.candidate = candidate
+#         vote.voter = voter
+#         vote.position = position
+#         vote.save()
+
+#     inserted_votes = Votes.objects.filter(voter=voter)
+#     if inserted_votes.count() != len(form):
+#         inserted_votes.delete()
+#         messages.error(request, "Please try voting again!")
+#         return redirect(reverse("show_ballot"))
+#     else:
+#         voter.voted = True
+#         voter.save()
+#         messages.success(request, "Thanks for voting")
+#         return redirect(reverse("voterDashboard"))
 
 
 from django.shortcuts import render, redirect

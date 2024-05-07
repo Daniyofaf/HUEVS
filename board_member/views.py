@@ -1,3 +1,4 @@
+import datetime
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from administrator.models import SenateMembers
@@ -5,6 +6,8 @@ from administrator.views import senate_members
 from e_voting import settings
 from voting.models import Candidate, Position, Voter, Votes
 from .models import ElectionPost, NominationPost
+from datetime import datetime, time
+from django.utils import timezone
 
 
 # Dashboard view
@@ -14,6 +17,7 @@ def dashboard(request):
 
 def nominationposts(request):
     nominationposts = NominationPost.objects.all()
+
     if request.method == "POST":
         form = NominationPostForm(request.POST)
         posted = request.POST.get("post")
@@ -35,12 +39,25 @@ def nominationposts(request):
             )  # Redirect to a success page or any other page
     else:
         form = NominationPostForm()
+        
 
-    return render(
-        request,
-        "NominationPost.html",
-        {"form": form, "nominationposts": nominationposts},
-    )
+# Calculate remaining time for each nomination post
+    # now = timezone.localtime(timezone.now())  # Make now timezone-aware
+    # for nomination_post in nominationposts:
+    #     # If the nomination post is not posted yet, calculate the remaining time
+    #     if not nomination_post.is_posted:
+    #         end_time = nomination_post.end_time
+    #         # Create a datetime object combining the date portion of now with the time portion of end_time
+    #         end_datetime = timezone.make_aware(datetime.combine(now.date(), end_time))
+    #         remaining_time = end_datetime - now
+    #         nomination_post.remaining_time = remaining_time
+
+    context = {
+        "form": form,
+        "nominationposts": nominationposts,
+    }
+
+    return render(request, "NominationPost.html", context)
 
 
 from django.shortcuts import render
@@ -56,6 +73,19 @@ def viewnominatedcandidate(request):
         if candidate_approved:
             approved_candidate = Nominee.objects.get(pk=candidate_approved)
             approved_candidate.is_approved = True
+            try:
+                approved_nominee = Candidate.objects.create(
+                    fullname=approved_candidate.fullname,
+                    bio=approved_candidate.bio,
+                    position_id = approved_candidate.id
+                )
+                # Optionally, you might need to save the image if it's uploaded
+                # approved_nominee.photo = nominated_candidate.photo
+                approved_nominee.save()
+                print("Candidate created successfully:", approved_nominee)
+            except Exception as e:
+                print("Error creating candidate:", e)
+            
             approved_candidate.save()
         elif candidate_dispproved:
             approved_candidate = Nominee.objects.get(pk=candidate_dispproved)
@@ -87,11 +117,20 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ElectionPostForm
 from .models import ElectionPost
+import datetime
+from django.utils import timezone
 
 def electionposts(request):
-    electionposts = NominationPost.objects.all()
+    # Fetch all election posts
+    electionposts = ElectionPost.objects.all()
+
     if request.method == "POST":
         form = ElectionPostForm(request.POST)
+        if form.is_valid():
+            form.save()  # This will save the form data to the database
+            return redirect("electionposts")
+
+        # Check if a post or unpost action was submitted
         posted = request.POST.get("post")
         unpost = request.POST.get("unpost")
         if posted:
@@ -102,14 +141,19 @@ def electionposts(request):
             unposted_election = ElectionPost.objects.get(pk=unpost)
             unposted_election.is_posted = False
             unposted_election.save()
-        if form.is_valid():
-            form.save()  # This will save the form data to the database
-            # print("added")
-            return redirect("electionposts")
     else:
         form = ElectionPostForm()
-    # Fetch all election posts
-    electionposts = ElectionPost.objects.all()
+    
+    # Calculate the remaining time for each election post
+    now = timezone.now()
+    for post in electionposts:
+        end_datetime = timezone.make_aware(datetime.datetime.combine(post.end_date, post.end_time))
+        if now < end_datetime:
+            time_diff = end_datetime - now
+            post.remaining_time = time_diff
+        else:
+            post.remaining_time = datetime.timedelta(seconds=0)
+
     return render(request, 'ElectionPost.html', {'form': form, 'electionposts': electionposts})
 
     # else:
@@ -157,6 +201,17 @@ def approve_nomination(request, nominated_candidate_id):
         nominated_candidate = Nominee.objects.get(id=nominated_candidate_id)
         nominated_candidate.is_approved = approved
         nominated_candidate.save()
+        
+        if approved:
+            approved_nominee = Candidate.objects.create(
+                fullname=nominated_candidate.fullname,
+                bio=nominated_candidate.bio,
+                position=nominated_candidate.position
+            )
+            # Optionally, you might need to save the image if it's uploaded
+            # approved_nominee.photo = nominated_candidate.photo
+            # approved_nominee.save()
+            
         return JsonResponse({"status": "success"})
     return JsonResponse({"status": "error"})
 
@@ -212,26 +267,26 @@ from django.shortcuts import render
 from voting.models import Nominee
 
 
-def viewnominatedcandidate(request):
-    nominatedcandidates = Nominee.objects.all()
+# def viewnominatedcandidate(request):
+#     nominatedcandidates = Nominee.objects.all()
 
-    if request.method == "POST":
-        candidate_approved = request.POST.get("approve_candidate")
-        candidate_dispproved = request.POST.get("candidate_dispproved")
-        if candidate_approved:
-            approved_candidate = Nominee.objects.get(pk=candidate_approved)
-            approved_candidate.is_approved = True
-            approved_candidate.save()
-        elif candidate_dispproved:
-            approved_candidate = Nominee.objects.get(pk=candidate_dispproved)
-            approved_candidate.is_approved = False
-            approved_candidate.save()
+#     if request.method == "POST":
+#         candidate_approved = request.POST.get("approve_candidate")
+#         candidate_dispproved = request.POST.get("candidate_dispproved")
+#         if candidate_approved:
+#             approved_candidate = Nominee.objects.get(pk=candidate_approved)
+#             approved_candidate.is_approved = True
+#             approved_candidate.save()
+#         elif candidate_dispproved:
+#             approved_candidate = Nominee.objects.get(pk=candidate_dispproved)
+#             approved_candidate.is_approved = False
+#             approved_candidate.save()
 
-    return render(
-        request,
-        "nominatedcandidates.html",
-        {"nominated_candidates": nominatedcandidates},
-    )
+#     return render(
+#         request,
+#         "nominatedcandidates.html",
+#         {"nominated_candidates": nominatedcandidates},
+#     )
 
 
 from django_renderpdf.views import PDFView
@@ -296,3 +351,7 @@ def view_senate_member_by_id(request):
 
     # Render template with voter data
     return render(request, "senatemembers.html", {'senate_members': senate_members})
+
+
+def result(request):
+    return render(request, "AnnounceResult.html")

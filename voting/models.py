@@ -32,10 +32,8 @@ class Candidate(models.Model):
 
 class Votes(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
-    position = models.ForeignKey(Position, on_delete=models.CASCADE)
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    
-from django.db import models
+    position = models.CharField(max_length=100)  # Assuming max length for position names
+    candidate = models.CharField(max_length=100)  # Assuming max length for candidate names
 
 class Nominee(models.Model):
     POSITIONS = (

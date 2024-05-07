@@ -29,6 +29,9 @@ class CustomUserForm(FormSettings):
     last_name = forms.CharField(required=True)
     id_number = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
+    # face_id = models.IntegerField()
+
+    
     # live_camera_photo = forms.ImageField(required=False)
     # finger_data = forms.CharField(required=False, widget=forms.HiddenInput)
     

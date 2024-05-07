@@ -1,6 +1,6 @@
-{% block content %}
 {% load static %}
-<section style="background-color: ;">
+{% block content %}
+<section>
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +9,8 @@
         <link rel="shortcut icon"
             href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
             type="image/x-icon">
+        <meta name="description"
+            content="Revolutionizing the voting experience with cutting-edge technology. Say goodbye to long queues and hello to convenience.">
         <title>Haramaya University Student Union Election</title>
         <link rel="stylesheet"
             href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
@@ -42,10 +44,10 @@
         <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
             <div class="container-fluid">
                 <!-- Add the logo and text -->
-                <a class="navbar-brand" href="#">
+                {% comment %} <a class="navbar-brand" href="#">
                     <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
                         alt="HUEVS Logo" width="30" height="50"
-                        class="d-inline-block align-top">
+                        class="d-inline-block align-top"> {% endcomment %}
                     <a href="" style="color:black;"> HUEVS </a>
                 </a>
                 <!-- Add the toggle button for small screens -->
@@ -63,9 +65,9 @@
                     </ul>
                     <!-- Add the buttons -->
                     <div class="navbar-buttons mbr-section-btn">
-                        <a class="btn btn-primary"
+                        {% comment %} <a class="btn btn-primary"
                             href="{% url 'electionpage' %}"
-                            style="border-radius: 15px;">Home</a>
+                            style="border-radius: 15px;">Home</a> {% endcomment %}
                         <a class="btn btn-primary"
                             href="{% url 'nominate_candidate' %}"
                             style="border-radius: 15px;">Nominate</a>
@@ -104,9 +106,12 @@
             </div>
         </nav>
         <br> <br>
+        {%if electionposts %}
         <br> <br>
+
+        <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
+
         <section class="content">
-            <br>
             <style>
                 @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
                 #the-final-countdown {
@@ -123,10 +128,19 @@
                     color: black;
                     text-shadow: 1px 1px 5px black;
                     font-size: 3rem;
-                    border-radius: 45px;
-                    width: 1200px;
+                    border-radius: 35px;
+                    width: 1100px;
                     margin-left: 70px;
                 }
+                    .custom-card {
+                        height: 300px; /* Adjust the height as needed */
+                    }
+                    #candidateForm {
+                        padding-left: 100px;
+                        padding-right: 100px;
+                        border: black;
+                        boarder-size: 10px;
+                    }
             </style>
             </head>
             <body>
@@ -156,287 +170,368 @@
             </body>
             </html>
             <!-- Your original content -->
-         
             <section class="content">
-                <h1 class="page-header text-center title"><b>Vote Your Choice</b></h1>
-                <div class="row">
+                <h2 class="page-header text-center title"><b>Vote Your
+                        Choice</b></h2>
+                {% comment %} <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
-                        <div class="alert alert-danger alert-dismissible" id="alert" style="display:none;">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <div class="alert alert-danger alert-dismissible"
+                            id="alert" style="display:none;">
+                            <button type="button" class="close"
+                                data-dismiss="alert"
+                                aria-hidden="true">&times;</button>
                             <span class="message"></span>
                         </div>
-                        <form method="POST" id="ballotForm" action="{% url 'submit_ballot' %}" style="margin-left: 500px;">
+                        <form method="POST" id="ballotForm"
+                            action="{% url 'submit_ballot' %}"
+                            style="margin-left: 500px;">
                             {% csrf_token %}
                             <!-- Render the ballot form -->
                             {{ ballot|safe }}
-                            <div class="text-center" style="margin-left: -400px;">
-                                <button type="button" class="btn btn-success btn-flat" id="preview"><i class="fa fa-file-text"></i> Preview</button>
-                                <button type="submit" class="btn btn-primary btn-flat" name="submit_vote"><i class="fa fa-check-square-o"></i> Submit</button>
+                            <div class="text-center"
+                                style="margin-left: -400px;">
+                                <button type="button"
+                                    class="btn btn-success btn-flat"
+                                    id="preview"><i class="fa fa-file-text"></i>
+                                    Preview</button>
+                                <button type="submit"
+                                    class="btn btn-primary btn-flat"
+                                    name="submit_vote"><i
+                                        class="fa fa-check-square-o"></i>
+                                    Submit</button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> {% endcomment %}
                 <!-- Display candidates -->
                 <div class="row">
-                    {% for candidate in candidates %}
-                    <div class="col-md-4">
-                        <div class="card">
-                            <img src="{{ candidate.photo.url }}" class="card-img-top" alt="{{ candidate.fullname }}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ candidate.fullname }}</h5>
-                                <p class="card-text">{{ candidate.bio }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-        {% endblock content %}
-        {% block custom_js %}
-        {% endblock custom_js %}
-        {% block modal %}
-        <!-- Your modal HTML code... -->
-        {% endblock modal %}
-        {% comment %} {% block content %}
-        {% load static %}
-        <section style="background-color: ;">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport"
-                    content="width=device-width, initial-scale=1, minimum-scale=1">
-                <link rel="shortcut icon"
-                    href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
-                    type="image/x-icon">
-                <title>Haramaya University Student Union Election</title>
-                <link rel="stylesheet"
-                    href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/parallax/jarallax.css' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/dropdown/css/style.css' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/socicon/css/styles.css' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/theme/css/style.css' %}">
-                <link rel="preload"
-                    href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap"
-                    as="style" onload="this.onload=null;this.rel='stylesheet'">
-                <noscript>
-                    <link rel="stylesheet"
-                        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
-                </noscript>
-                <link rel="preload" as="style"
-                    href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
-                <link rel="stylesheet"
-                    href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}"
-                    type="text/css">
-            </head>
-            <body>
-                <nav class="navbar navbar-expand-lg navbar-light fixed-top"
-                    style="">
-                    <div class="container-fluid">
-                        <!-- Add the logo and text -->
-                        <a class="navbar-brand" href="#">
-                            <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
-                                alt="HUEVS Logo" width="30" height="50"
-                                class="d-inline-block align-top">
-                            <a href="" style="color:black;"> HUEVS </a>
-                        </a>
-                        <!-- Add the toggle button for small screens -->
-                        <button class="navbar-toggler" type="button"
-                            data-toggle="collapse"
-                            data-target="#navbarSupportedContent"
-                            aria-controls="navbarSupportedContent"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <!-- Add the navigation links -->
-                        <div class="collapse navbar-collapse justify-content-between"
-                            id="navbarSupportedContent">
-                            <ul class="navbar-nav">
-                                <!-- Navigation items -->
-                            </ul>
-                            <!-- Add the buttons -->
-                            <div class="navbar-buttons mbr-section-btn">
-                                <a class="btn btn-primary"
-                                    href="{% url 'electionpage' %}"
-                                    style="border-radius: 15px;">Home</a>
-                                <a class="btn btn-primary"
-                                    href="{% url 'nominate_candidate' %}"
-                                    style="border-radius: 15px;">Nominate</a>
-                                <a class="btn btn-primary"
-                                    href="{% url 'show_ballot' %}"
-                                    style="border-radius: 15px;">Vote</a>
-                                <a class="btn btn-primary" href=""
-                                    style="border-radius: 15px;">Result</a>
-                                <a class="btn btn-primary"
-                                    href="{% url 'account_logout' %}"
-                                    style="border-radius: 15px;">Logout</a>
-                                {% comment %} <li class="dropdown">
-                                    {% endcomment %}
-                                    {% comment %} <a href=""
-                                        class="dropdown-toggle"
-                                        data-toggle="dropdown">
-                                        <span>Profile</span> <i
-                                            class="bi bi-chevron-down"></i>
-                                    </a> {% endcomment %}
-                                    {% comment %} <ul class="dropdown-menu">
-                                        {% if user.is_authenticated %}
-                                        <li><a href="">Profile</a></li>
-                                        <li><a
-                                                href="{% url 'account_logout' %}">Log
-                                                Out</a>
-                                        </li>
-                                        {% else %}
-                                        <li><a href="{% url 'account_login' %}">Log
-                                                In</a>
-                                        </li>
-                                        <li><a
-                                                href="{% url 'account_register' %}">Register</a>
-                                        </li>
-                                        {% endif %}
-                                    </ul> {% endcomment %}
-                                    {% comment %} </li>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-                <br> <br>
-                <br> <br>
-                <section class="content">
-                    <br>
-                    <style>
-                        @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
-                        #the-final-countdown {
-                                {
-                                % comment %
-                            }
-                            background: blue;
-                                {
-                                % endcomment %
-                            }
-                            font-family: 'Lato',
-                            sans-serif;
-                            text-align: center;
-                            color: black;
-                            text-shadow: 1px 1px 5px black;
-                            font-size: 3rem;
-                            border-radius: 45px;
-                            width: 1200px;
-                            margin-left: 70px;
-                        }
-                    </style>
-                    </head>
-                    <body>
-                        <div id="the-final-countdown">
-                            <p></p>
-                        </div>
-                        <script
-                            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
-                        </script>
-                        <script>
-                            setInterval(function time() {
-                                var d = new Date();
-                                var hours = 24 - d.getHours();
-                                var min = 60 - d.getMinutes();
-                                if ((min + '').length == 1) {
-                                    min = '0' + min;
-                                }
-                                var sec = 60 - d.getSeconds();
-                                if ((sec + '').length == 1) {
-                                    sec = '0' + sec;
-                                }
-                                jQuery('#the-final-countdown p').html(
-                                    hours +
-                                    ':' +
-                                    min + ':' + sec)
-                            }, 1000);
-                        </script>
-                    </body>
-                    </html> {% endcomment %}
-                    <!-- Your original content -->
-                    {% comment %} <h1 class="page-header text-center title">
-                        <b>{{ TITLE }}</b>
-                    </h1>
-                    <div class="row">
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="alert alert-danger alert-dismissible"
-                                id="alert" style="display:none;">
-                                <button type="button" class="close"
-                                    data-dismiss="alert"
-                                    aria-hidden="true">&times;</button>
-                                <span class="message"></span>
-                            </div>
-                            <form method="POST" id="ballotForm"
-                                action="{% url 'submit_ballot' %}">
-                                {% csrf_token %} {% endcomment %}
-                                {% comment %} {{ ballot|safe }} {% endcomment %}
-                                {% comment %} <div class="text-center"
-                                    style="margin-left: 200px;">
-                                    <button type="button"
-                                        class="btn btn-success btn-flat"
-                                        id="preview"><i
-                                            class="fa fa-file-text"></i>
-                                        Preview</button>
-                                    <button type="submit"
-                                        class="btn btn-primary btn-flat"
-                                        name="submit_vote"><i
-                                            class="fa fa-check-square-o"></i>Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div> {% endcomment %}
-                    {% comment %} {%if electionposts %}
-                    <section
-                        style="margin: 0 auto; max-width: 600px; padding: 20px; border: 1px solid #ccc; border-radius: 30px;">
-                        <h2>Vote Your Candidate</h2>
-                        <form method="post" class="form-group">
-                            {% csrf_token %}
-                            <h4>Select Candidate:</h4>
-                            {% for candidate in candidates %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox"
-                                    name="selected_candidates"
-                                    id="candidate{{ candidate.id }}"
-                                    value="{{ candidate.id }}">
-                                <label class="form-check-label"
-                                    for="candidate{{ candidate.id }}">
-                                    {{ candidate.fullname }}
-                                </label>
-                            </div>
-                            {% endfor %}
-                            <hr>
-                            <button type="submit" class="btn btn-primary">Submit
-                                Vote</button>
-                        </form>
-                    </section>
-                    {%else%}
-                    <section
-                        style="margin: 100 auto; max-width: 1600px; padding: 20px; ">
-                        <div class="row justify-content-center">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <h2 class="card-title">Sorry, It's Not
-                                            vote Time</h2>
+                    <form method="POST" id="candidateForm" action="{% url 'submit_ballot' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            {% for sew in sewoch %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card custom-card">
+                                    <img src="{{ sew.photo.url }}" class="card-img-top" alt="{{ sew.fullname }}">
+                                    <div class="card-body">
+                                        <input type="radio" name="selected_candidate" id="candidate{{ sew.id }}" value="{{ sew.id }}">
+                                        <label for="candidate{{ sew.id }}" class="form-check-label fw-bold">{{ sew.fullname }}</label>
+                                        <p class="card-text">{{ sew.bio }}</p>
                                     </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Vote</button>
+                        </div>
+                    </form>
+                    
+                    
+                </div>
+            </section>
+            {% comment %} {% for electionpost in electionposts %}
+            {% endcomment %}
+            {% comment %} <div class="election-post">
+                <h2>{{ electionpost.title }}</h2>
+                <p>{{ electionpost.description }}</p>
+                <p>Start Date: {{ electionpost.start_date }}</p>
+                <p>End Date: {{ electionpost.end_date }}</p>
+                <p>Start Time: {{ electionpost.start_time }}</p>
+                <p>End Time: {{ electionpost.end_time }}</p>
+                <div class="countdown-timer">
+                    {% if electionpost.remaining_time %}
+                    <h3>Time Left Until Election Ends:</h3>
+                    <div class="timer"
+                        data-end="{{ electionpost.end_date }}T{{ electionpost.end_time }}">
+                    </div>
+                    {% else %}
+                    <p>Election has ended.</p>
+                    {% endif %}
+                </div>
+                <!-- Add buttons to post/unpost if needed -->
+            </div> {% endcomment %}
+            {% comment %} {% endfor %} {% endcomment %}
+            {%else%}
+            <br><br>
+            <section
+                style="margin: 100 auto; max-width: 1600px; padding: 20px; ">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h2 class="card-title">Sorry, It's Not
+                                    Election Time</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {%endif%}
+            {% endblock content %}
+            {% block modal %}
+            <!-- Your modal HTML code... -->
+            {% endblock modal %}
+            {% comment %} {% block content %}
+            {% load static %}
+            <section style="background-color: ;">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport"
+                        content="width=device-width, initial-scale=1, minimum-scale=1">
+                    <link rel="shortcut icon"
+                        href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                        type="image/x-icon">
+                    <title>Haramaya University Student Union Election</title>
+                    <link rel="stylesheet"
+                        href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/parallax/jarallax.css' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/dropdown/css/style.css' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/socicon/css/styles.css' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/theme/css/style.css' %}">
+                    <link rel="preload"
+                        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap"
+                        as="style"
+                        onload="this.onload=null;this.rel='stylesheet'">
+                    <noscript>
+                        <link rel="stylesheet"
+                            href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
+                    </noscript>
+                    <link rel="preload" as="style"
+                        href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
+                    <link rel="stylesheet"
+                        href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}"
+                        type="text/css">
+                </head>
+                <body>
+                    <nav class="navbar navbar-expand-lg navbar-light fixed-top"
+                        style="">
+                        <div class="container-fluid">
+                            <!-- Add the logo and text -->
+                            <a class="navbar-brand" href="#">
+                                <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                                    alt="HUEVS Logo" width="30" height="50"
+                                    class="d-inline-block align-top">
+                                <a href="" style="color:black;"> HUEVS </a>
+                            </a>
+                            <!-- Add the toggle button for small screens -->
+                            <button class="navbar-toggler" type="button"
+                                data-toggle="collapse"
+                                data-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <!-- Add the navigation links -->
+                            <div class="collapse navbar-collapse justify-content-between"
+                                id="navbarSupportedContent">
+                                <ul class="navbar-nav">
+                                    <!-- Navigation items -->
+                                </ul>
+                                <!-- Add the buttons -->
+                                <div class="navbar-buttons mbr-section-btn">
+                                    <a class="btn btn-primary"
+                                        href="{% url 'electionpage' %}"
+                                        style="border-radius: 15px;">Home</a>
+                                    <a class="btn btn-primary"
+                                        href="{% url 'nominate_candidate' %}"
+                                        style="border-radius: 15px;">Nominate</a>
+                                    <a class="btn btn-primary"
+                                        href="{% url 'show_ballot' %}"
+                                        style="border-radius: 15px;">Vote</a>
+                                    <a class="btn btn-primary" href=""
+                                        style="border-radius: 15px;">Result</a>
+                                    <a class="btn btn-primary"
+                                        href="{% url 'account_logout' %}"
+                                        style="border-radius: 15px;">Logout</a>
+                                    {% comment %} <li class="dropdown">
+                                        {% endcomment %}
+                                        {% comment %} <a href=""
+                                            class="dropdown-toggle"
+                                            data-toggle="dropdown">
+                                            <span>Profile</span> <i
+                                                class="bi bi-chevron-down"></i>
+                                        </a> {% endcomment %}
+                                        {% comment %} <ul class="dropdown-menu">
+                                            {% if user.is_authenticated %}
+                                            <li><a href="">Profile</a></li>
+                                            <li><a
+                                                    href="{% url 'account_logout' %}">Log
+                                                    Out</a>
+                                            </li>
+                                            {% else %}
+                                            <li><a
+                                                    href="{% url 'account_login' %}">Log
+                                                    In</a>
+                                            </li>
+                                            <li><a
+                                                    href="{% url 'account_register' %}">Register</a>
+                                            </li>
+                                            {% endif %}
+                                        </ul> {% endcomment %}
+                                        {% comment %} </li>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                    <br> <br>
+                    <br> <br>
+                    <section class="content">
+                        <br>
+                        <style>
+                            @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
+                            #the-final-countdown {
+                                    {
+                                    % comment %
+                                }
+                                background: blue;
+                                    {
+                                    % endcomment %
+                                }
+                                font-family: 'Lato',
+                                sans-serif;
+                                text-align: center;
+                                color: black;
+                                text-shadow: 1px 1px 5px black;
+                                font-size: 3rem;
+                                border-radius: 45px;
+                                width: 1200px;
+                                margin-left: 70px;
+                            }
+                        </style>
+                        </head>
+                        <body>
+                            <div id="the-final-countdown">
+                                <p></p>
+                            </div>
+                            <script
+                                src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+                            </script>
+                            <script>
+                                setInterval(function time() {
+                                    var d = new Date();
+                                    var hours = 24 - d.getHours();
+                                    var min = 60 - d.getMinutes();
+                                    if ((min + '').length == 1) {
+                                        min = '0' + min;
+                                    }
+                                    var sec = 60 - d.getSeconds();
+                                    if ((sec + '').length == 1) {
+                                        sec = '0' + sec;
+                                    }
+                                    jQuery('#the-final-countdown p')
+                                        .html(
+                                            hours +
+                                            ':' +
+                                            min + ':' + sec)
+                                }, 1000);
+                            </script>
+                        </body>
+                        </html> {% endcomment %}
+                        <!-- Your original content -->
+                        {% comment %} <h1 class="page-header text-center title">
+                            <b>{{ TITLE }}</b>
+                        </h1>
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="alert alert-danger alert-dismissible"
+                                    id="alert" style="display:none;">
+                                    <button type="button" class="close"
+                                        data-dismiss="alert"
+                                        aria-hidden="true">&times;</button>
+                                    <span class="message"></span>
+                                </div>
+                                <form method="POST" id="ballotForm"
+                                    action="{% url 'submit_ballot' %}">
+                                    {% csrf_token %} {% endcomment %}
+                                    {% comment %} {{ ballot|safe }}
+                                    {% endcomment %}
+                                    {% comment %} <div class="text-center"
+                                        style="margin-left: 200px;">
+                                        <button type="button"
+                                            class="btn btn-success btn-flat"
+                                            id="preview"><i
+                                                class="fa fa-file-text"></i>
+                                            Preview</button>
+                                        <button type="submit"
+                                            class="btn btn-primary btn-flat"
+                                            name="submit_vote"><i
+                                                class="fa fa-check-square-o"></i>Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> {% endcomment %}
+                        {% comment %} {%if electionposts %}
+                        <section
+                            style="margin: 0 auto; max-width: 600px; padding: 20px; border: 1px solid #ccc; border-radius: 30px;">
+                            <h2>Vote Your Candidate</h2>
+                            <form method="post" class="form-group">
+                                {% csrf_token %}
+                                <h4>Select Candidate:</h4>
+                                {% for candidate in candidates %}
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        name="selected_candidates"
+                                        id="candidate{{ candidate.id }}"
+                                        value="{{ candidate.id }}">
+                                    <label class="form-check-label"
+                                        for="candidate{{ candidate.id }}">
+                                        {{ candidate.fullname }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                                <hr>
+                                <button type="submit"
+                                    class="btn btn-primary">Submit
+                                    Vote</button>
+                            </form>
+                        </section>
+                        {%else%}
+                        <section
+                            style="margin: 100 auto; max-width: 1600px; padding: 20px; ">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h2 class="card-title">Sorry, It's
+                                                Not
+                                                vote Time</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        {%endif%}
+                        {% endblock content %}
                     </section>
-                    {%endif%}
-                    {% endblock content %}
-                </section>
-                {% block custom_js %}
-                {% endblock custom_js %}
-                {% block modal %}
-                <!-- Your modal HTML code... -->
-                {% endblock modal %} {% endcomment %}
+                    {% block custom_js %}
+                    {% endblock custom_js %}
+                    {% block modal %}
+                    <!-- Your modal HTML code... -->
+                    {% endblock modal %} {% endcomment %}
+                    {% if messages %}
+                    {% for message in messages  %}
+                    <!-- <script>
+                    swal("{{ message.tags|title }}", "{{ message }}", "{{ message.tags }}");
+                </script> -->
+                    <script>
+                        toastr. {
+                            {
+                                message.tags
+                            }
+                        }('{{ message }}', '{{ message.tags|title }}');
+                    </script>
+                    {% endfor %}
+                    {% endif %}

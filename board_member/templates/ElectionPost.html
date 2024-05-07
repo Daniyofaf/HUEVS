@@ -18,8 +18,8 @@
                     <table id="example1"
                         class="table table-bordered table-hover table-striped">
                         <thead style="background-color: #222D32; color:white;">
-                            <th>Start Time</th>
-                            <th>Start Date</th>
+                            {% comment %} <th>Start Time</th>
+                            <th>Start Date</th> {% endcomment %}
                             <th>Ending Time</th>
                             <th>Ending Date</th>
                             <th>Status</th>
@@ -28,8 +28,8 @@
                         <tbody>
                             {% for election_post in electionposts %}
                             <tr>
-                                <td>{{ election_post.start_time}}</td>
-                                <td>{{ election_post.start_date }}</td>
+                                {% comment %} <td>{{ election_post.start_time}}</td>
+                                <td>{{ election_post.start_date }}</td> {% endcomment %}
                                 <td>{{ election_post.end_time }}</td>
                                 <td>{{ election_post.end_date }}</td>
                                 <td>
