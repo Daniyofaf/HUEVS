@@ -184,6 +184,10 @@ from django.shortcuts import render, redirect
 from .models import Votes, Nominee
 from django.contrib import messages
 
+from .models import Voter, Votes, Nominee
+
+from .models import Position, Votes
+
 def submit_ballot(request):
     if request.method == 'POST':
         selected_candidate_id = request.POST.get('selected_candidate')
@@ -198,8 +202,11 @@ def submit_ballot(request):
                     if Votes.objects.filter(voter=voter).exists():
                         return redirect('vote')
                     else:
-                        position = selected_candidate.position  # Access the position ID directly
-                        vote = Votes.objects.create(voter=voter, position=position, candidate=candidate_name)
+                        # Retrieve the Position instance for 'President'
+                        president_position, _ = Position.objects.get_or_create(name='President', defaults={'priority': 1})
+                        
+                        # Create the Vote instance
+                        vote = Votes.objects.create(voter=voter, position=president_position, candidate=candidate_name)
                         vote.save()
                         messages.success(request, f'Vote submitted successfully for {candidate_name}.')
                 else:
@@ -212,6 +219,8 @@ def submit_ballot(request):
     else:
         return redirect('electionpage')
 
+    
+    
 # def submit_ballot(request):
 #     if request.method != "POST":
 #         messages.error(request, "Please, browse the system properly")
@@ -221,6 +230,8 @@ def submit_ballot(request):
 #     if voter.voted:
 #         messages.error(request, "You have voted already")
 #         return redirect(reverse("voterDashboard"))
+
+#     president_position, created = Position.objects.get_or_create(name='President', defaults={'priority': 1})
 
 #     form = dict(request.POST)
 #     form.pop("csrfmiddlewaretoken", None)
@@ -234,11 +245,7 @@ def submit_ballot(request):
 #         position = Position.objects.get(name=pos)
 #         form_position = form_position[0]
 #         candidate = Candidate.objects.get(position=position, id=form_position)
-#         vote = Votes()
-#         vote.candidate = candidate
-#         vote.voter = voter
-#         vote.position = position
-#         vote.save()
+#         vote = Votes.objects.create(candidate=candidate, voter=voter, position=position)
 
 #     inserted_votes = Votes.objects.filter(voter=voter)
 #     if inserted_votes.count() != len(form):
@@ -250,6 +257,7 @@ def submit_ballot(request):
 #         voter.save()
 #         messages.success(request, "Thanks for voting")
 #         return redirect(reverse("voterDashboard"))
+
 
 
 from django.shortcuts import render, redirect
