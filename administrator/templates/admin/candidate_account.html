@@ -31,7 +31,7 @@
                                     enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <!-- Add your registration form fields here -->
-                                    <div class="form-group">
+                                    {% comment %} <div class="form-group">
                                         <label for="candidate_account_name">Candidate Name:</label>
                                         <select id="candidate_account_name" name="candidate_name" class="form-control" required>
                                             <option value="">Select Candidate</option>
@@ -39,6 +39,17 @@
                                                 <option value="{{ nominated_candidate.fullname }}">{{ nominated_candidate.fullname }}</option>
                                             {% endfor %}
                                         </select>
+                                    </div> {% endcomment %}
+
+                                    <div class="form-group">
+                                        <label
+                                            for="candidate_account_fullname">Full
+                                            Name:</label>
+                                        <input type="text"
+                                            id="candidate_account_fullname"
+                                            name="fullname"
+                                            class="form-control"
+                                            placeholder="Full Name" required>
                                     </div>
                                     
                                     <div class="form-group">

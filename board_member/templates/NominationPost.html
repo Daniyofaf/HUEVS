@@ -18,8 +18,8 @@
                     <table id="example1"
                         class="table table-bordered table-hover table-striped">
                         <thead style="background-color: #222D32; color:white;">
-                            {% comment %} <th>Start Time</th>
-                            <th>Start Date</th> {% endcomment %}
+                            <th>Start Time</th>
+                            <th>Start Date</th>
                             <th>Ending Time</th>
                             <th>Ending Date</th>
                             <th>Status</th>
@@ -28,8 +28,8 @@
                         <tbody>
                             {% for nomination_post in nominationposts %}
                             <tr>
-                                {% comment %} <td>{{ nomination_post.start_time}}</td>
-                                <td>{{ nomination_post.start_date }}</td> {% endcomment %}
+                                <td>{{ nomination_post.start_time}}</td>
+                                <td>{{ nomination_post.start_date }}</td> 
                                 <td>{{ nomination_post.end_time }}</td>
                                 <td>{{ nomination_post.end_date }}</td>
                                 <td>
@@ -55,9 +55,16 @@
                                 </form>
                                {% endif %}
                                <td>
-                                <button type="submit" class="btn btn-danger me-4">
-                                    <i class="fas fa-edit"></i> Delete
-                                </button>
+                                <button
+                                        class='btn btn-primary btn-sm edit btn-flat'
+                                        data-id='{{ nomination_post.id }}'><i
+                                            class='fa fa-edit'></i>
+                                        Edit</button>
+                                    <button
+                                        class='btn btn-danger btn-sm delete btn-flat'
+                                        data-id='{{ nomination_post.id }}'><i
+                                            class='fa fa-trash'></i>
+                                        Delete</button>
                                </td>
                                 </td>
                                

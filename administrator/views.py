@@ -326,64 +326,64 @@ def deleteCandidate(request):
         return JsonResponse({"success": False, "message": "Invalid request method"})
 
 
-# def ballot_position(request):
-#     context = {
-#         'page_title': "Ballot Position"
-#     }
-#     return render(request, "admin/ballot_position.html", context)
+def ballot_position(request):
+    context = {
+        'page_title': "Ballot Position"
+    }
+    return render(request, "admin/ballot_position.html", context)
 
 
-# def update_ballot_position(request, position_id, up_or_down):
-#     try:
-#         context = {
-#             'error': False
-#         }
-#         position = Position.objects.get(id=position_id)
-#         if up_or_down == 'up':
-#             priority = position.priority - 1
-#             if priority == 0:
-#                 context['error'] = True
-#                 output = "This position is already at the top"
-#             else:
-#                 Position.objects.filter(priority=priority).update(
-#                     priority=(priority+1))
-#                 position.priority = priority
-#                 position.save()
-#                 output = "Moved Up"
-#         else:
-#             priority = position.priority + 1
-#             if priority > Position.objects.all().count():
-#                 output = "This position is already at the bottom"
-#                 context['error'] = True
-#             else:
-#                 Position.objects.filter(priority=priority).update(
-#                     priority=(priority-1))
-#                 position.priority = priority
-#                 position.save()
-#                 output = "Moved Down"
-#         context['message'] = output
-#     except Exception as e:
-#         context['message'] = e
+def update_ballot_position(request, position_id, up_or_down):
+    try:
+        context = {
+            'error': False
+        }
+        position = Position.objects.get(id=position_id)
+        if up_or_down == 'up':
+            priority = position.priority - 1
+            if priority == 0:
+                context['error'] = True
+                output = "This position is already at the top"
+            else:
+                Position.objects.filter(priority=priority).update(
+                    priority=(priority+1))
+                position.priority = priority
+                position.save()
+                output = "Moved Up"
+        else:
+            priority = position.priority + 1
+            if priority > Position.objects.all().count():
+                output = "This position is already at the bottom"
+                context['error'] = True
+            else:
+                Position.objects.filter(priority=priority).update(
+                    priority=(priority-1))
+                position.priority = priority
+                position.save()
+                output = "Moved Down"
+        context['message'] = output
+    except Exception as e:
+        context['message'] = e
 
-#     return JsonResponse(context)
+    return JsonResponse(context)
 
 
-# def ballot_title(request):
-#     from urllib.parse import urlparse
-#     url = urlparse(request.META['HTTP_REFERER']).path
-#     from django.urls import resolve
-#     try:
-#         redirect_url = resolve(url)
-#         title = request.POST.get('title', 'No Name')
-#         file = open(settings.ELECTION_TITLE_PATH, 'w')
-#         file.write(title)
-#         file.close()
-#         messages.success(
-#             request, "Election title has been changed to " + str(title))
-#         return redirect(url)
-#     except Exception as e:
-#         messages.error(request, e)
-#         return redirect("/")
+def ballot_title(request):
+    from urllib.parse import urlparse
+    url = urlparse(request.META['HTTP_REFERER']).path
+    from django.urls import resolve
+    try:
+        redirect_url = resolve(url)
+        title = request.POST.get('title', 'No Name')
+        file = open(settings.ELECTION_TITLE_PATH, 'w')
+        file.write(title)
+        file.close()
+        messages.success(
+            request, "Election title has been changed to " + str(title))
+        return redirect(url)
+    except Exception as e:
+        messages.error(request, e)
+        return redirect("/")
 
 
 def viewVotes(request):

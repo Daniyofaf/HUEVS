@@ -87,18 +87,20 @@ WSGI_APPLICATION = 'e_voting.wsgi.application'
 
 DATABASES = {
     #   You can use this :
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'huevs',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': 'dani1234'
+        'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'db.sqlite3',
+
     }
+
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'huevs',
+    #     'HOST': 'localhost',
+    #     'USER': 'root',
+    #     'PASSWORD': 'dani1234'
+    # }
 }
 
 
