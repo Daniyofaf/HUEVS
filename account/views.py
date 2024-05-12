@@ -181,35 +181,34 @@ def account_logout(request):
     return redirect(reverse("account_login"))
 
 
-
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.shortcuts import render
 
 # View for rendering the password reset form
-def password_reset(request):
+def password_reset_view(request):
     return auth_views.PasswordResetView.as_view(
-        template_name='accounts/password_reset_form.html',
-        email_template_name='accounts/password_reset_email.html',
-        subject_template_name='accounts/password_reset_subject.txt',
+        template_name='voting/accounts/password_reset_form.html',
+        email_template_name='voting/accounts/password_reset_email.html',
+        subject_template_name='voting/accounts/password_reset_subject.txt',
         success_url=reverse_lazy('password_reset_done')
     )(request)
 
 # View for rendering the password reset done page
-def password_reset_done(request):
+def password_reset_done_view(request):
     return auth_views.PasswordResetDoneView.as_view(
-        template_name='accounts/password_reset_done.html'
+        template_name='voting/accounts/password_reset_done.html'
     )(request)
 
 # View for rendering the password reset confirm form
-def password_reset_confirm(request, uidb64=None, token=None):
+def password_reset_confirm_view(request, uidb64=None, token=None):
     return auth_views.PasswordResetConfirmView.as_view(
-        template_name='accounts/password_reset_confirm.html',
+        template_name='voting/accounts/password_reset_confirm.html',
         success_url=reverse_lazy('password_reset_complete')
     )(request, uidb64=uidb64, token=token)
 
 # View for rendering the password reset complete page
-def password_reset_complete(request):
+def password_reset_complete_view(request):
     return auth_views.PasswordResetCompleteView.as_view(
-        template_name='accounts/password_reset_complete.html'
+        template_name='voting/accounts/password_reset_complete.html'
     )(request)

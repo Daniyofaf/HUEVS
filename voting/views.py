@@ -41,6 +41,8 @@ def vote(request):
 
 
 
+
+
 def view_ballot(request):
     if request.user.is_authenticated:
         voter = request.user.voter
@@ -283,5 +285,3 @@ def nominate_candidate(request):
     )
 
 
-# def confirmation(request):
-#     return render(request, "voting/voter/confirmation.html")

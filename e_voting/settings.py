@@ -32,13 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
+    
     # My Created Applications
     'account.apps.AccountConfig',
     'voting.apps.VotingConfig',
@@ -46,6 +40,14 @@ INSTALLED_APPS = [
     'board_member.apps.BoardMemberConfig',
     'candidate.apps.CandidateConfig',
     # 'Face_Detection.apps.FaceDetectionConfig',
+    
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
 ]
 
 MIDDLEWARE = [
@@ -159,3 +161,17 @@ ELECTION_TITLE_PATH = os.path.join(
 
 # Add this line at the bottom of your settings.py file
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+LOGIN_REDIRECT_URL = '/login/'
+
+
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'daniyoman2016@gmail.com'  # Enter your Gmail address
+EMAIL_HOST_PASSWORD = 'etej afpg pasn rimr'  # Enter your Gmail password or app-specific password
+
+

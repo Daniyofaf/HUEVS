@@ -91,39 +91,59 @@ class PrintView(PDFView):
         print(context)
         return context
 
+from django.shortcuts import render
+from voting.models import Position, Candidate, Voter, Votes
 
 def dashboard(request):
+    # Retrieve all positions from the database, ordered by priority
     positions = Position.objects.all().order_by("priority")
+    
+    # Retrieve all candidates, voters, and voted voters
     candidates = Candidate.objects.all()
     voters = Voter.objects.all()
     voted_voters = Voter.objects.filter(voted=1)
-    list_of_candidates = []
-    votes_count = []
+    
+    # Dictionary to store chart data for each position
     chart_data = {}
 
+    # Iterate over each position to gather data
     for position in positions:
-        list_of_candidates = []
-        votes_count = []
-        for candidate in Candidate.objects.filter(position=position):
-            list_of_candidates.append(candidate.fullname)
+        # Retrieve candidates for the current position
+        candidates_for_position = Candidate.objects.filter(position=position)
+        
+        # List to store candidate names
+        candidate_names = []
+        # List to store vote counts for each candidate
+        vote_counts = []
+        
+        # Iterate over candidates to gather candidate names and their votes
+        for candidate in candidates_for_position:
+            candidate_names.append(candidate.fullname)
+            # Retrieve vote count for the candidate
             votes = Votes.objects.filter(candidate=candidate).count()
-            votes_count.append(votes)
+            vote_counts.append(votes)
+        
+        # Store candidate names and their corresponding vote counts in the chart_data dictionary
         chart_data[position] = {
-            "candidates": list_of_candidates,
-            "votes": votes_count,
+            "candidates": candidate_names,
+            "votes": vote_counts,
             "pos_id": position.id,
         }
 
+    # Context dictionary to pass data to the template
     context = {
         "position_count": positions.count(),
         "candidate_count": candidates.count(),
         "voters_count": voters.count(),
         "voted_voters_count": voted_voters.count(),
         "positions": positions,
-        "chart_data": chart_data,
+        "chart_data": chart_data,  # Pass the chart data to the template
         "page_title": "Dashboard",
     }
+    
+    # Render the template with the context data
     return render(request, "admin/home.html", context)
+
 
 
 def voters(request):
