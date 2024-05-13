@@ -221,7 +221,10 @@ def submit_ballot(request):
     else:
         return redirect('electionpage')
 
-    
+def resultpage(request):
+        return render(request, "voting/voter/ResultPage.html")
+
+
     
 # def submit_ballot(request):
 #     if request.method != "POST":

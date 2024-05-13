@@ -75,7 +75,7 @@
                         <a class="btn btn-primary"
                             href="{% url 'show_ballot' %}"
                             style="border-radius: 15px;">Vote</a>
-                            <a class="btn btn-primary" href="{% url 'result' %}"
+                            <a class="btn btn-primary" href="{% url 'resultpage' %}"
                             style="border-radius: 15px;">Result</a>
                         <a class="btn btn-primary"
                             href="{% url 'account_logout' %}"
@@ -137,7 +137,7 @@
                 }
             </style>
             </head>
-            <body>
+            {% comment %} <body>
                 <div id="the-final-countdown">
                     <p></p>
                 </div>
@@ -162,7 +162,7 @@
                     }, 1000);
                 </script>
             </body>
-            </html>
+            </html> {% endcomment %}
             <section
                 style="margin: 0 auto; height: 450px; max-width: 900px; padding-left: 30px; padding-right: 30px; border: 2px solid #ccc; border-radius: 30px;">
                 <h1 class="page-header text-center title"><b>Nominate a

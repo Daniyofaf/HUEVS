@@ -74,7 +74,7 @@
                         <a class="btn btn-primary"
                             href="{% url 'show_ballot' %}"
                             style="border-radius: 15px;">Vote</a>
-                        <a class="btn btn-primary" href=""
+                        <a class="btn btn-primary" href="{% url 'resultpage' %}"
                             style="border-radius: 15px;">Result</a>
                         <a class="btn btn-primary"
                             href="{% url 'account_logout' %}"
@@ -144,9 +144,9 @@
             </style>
             </head>
             <body>
-                <div id="the-final-countdown">
+                {% comment %} <div id="the-final-countdown">
                     <p></p>
-                </div>
+                </div> {% endcomment %}
                 <script
                     src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
                 </script>
@@ -211,10 +211,14 @@
                             {% for sew in sewoch %}
                             <div class="col-md-4 mb-4">
                                 <div class="card custom-card">
-                                    <img src="{{ sew.photo.url }}" class="card-img-top" alt="{{ sew.fullname }}">
+                                    <img src="{% static 'images/userplaceholder.png' %}" class="card-img-top" alt="{{ sew.photo }}" style="height: 300px; width: 250px;"> 
+                                    {% comment %} <img src="{% static 'images/userplaceholder.png' %}" class="card-img-top" alt="Default Photo"> {% endcomment %}
+                                   
                                     <div class="card-body">
                                         <input type="radio" name="selected_candidate" id="candidate{{ sew.id }}" value="{{ sew.id }}">
                                         <label for="candidate{{ sew.id }}" class="form-check-label fw-bold">{{ sew.fullname }}</label>
+                                        <br>
+                                        <br>
                                         <p class="card-text">{{ sew.bio }}</p>
                                     </div>
                                 </div>

@@ -15,5 +15,7 @@ urlpatterns = [
     
     path('view_ballot/', views.view_ballot, name='view_ballot'),
 
+    path('resultpage/', views.resultpage, name='resultpage'),
+
     
 ]

@@ -186,12 +186,10 @@ def nominated_candidates(request):
     # Render template with nominated candidates data
     return render(request, "nominatedcandidates.html", context)
 
-
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from voting.models import Nominee
+from voting.models import Nominee, Candidate  # Import Candidate model
 import json
-
 
 @csrf_exempt
 def approve_nomination(request, nominated_candidate_id):
@@ -202,18 +200,16 @@ def approve_nomination(request, nominated_candidate_id):
         nominated_candidate.is_approved = approved
         nominated_candidate.save()
         
-        if approved:
-            approved_nominee = Candidate.objects.create(
+        if approved:  # Only create a Candidate if the nomination is approved
+            candidate = Candidate.objects.create(
                 fullname=nominated_candidate.fullname,
                 bio=nominated_candidate.bio,
                 position=nominated_candidate.position
             )
-            # Optionally, you might need to save the image if it's uploaded
-            # approved_nominee.photo = nominated_candidate.photo
-            # approved_nominee.save()
-            
-        return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "error"})
+            return JsonResponse({"status": "success"})
+        else:
+            return JsonResponse({"status": "error", "message": "Nomination not approved"})
+    return JsonResponse({"status": "error", "message": "Invalid request method"})
 
 
 # views.py

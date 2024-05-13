@@ -69,131 +69,109 @@
         </div>
         <!-- ./col -->
     </div>
+   
+
     <div class="row">
         <div class="col-xs-12">
-            <h3>Vote Detail
-                <span class="pull-right">
-                    <a href="{% url 'printResult' %}"
-                        class="btn btn-success btn-sm btn-flat">
-                        <span class="glyphicon glyphicon-print"></span>
-                        Print/Download PDF <i class="fa fa-download"></i>
-                    </a>
-                </span>
-            </h3>
+          <h3>Votes Detail
+            <span class="pull-right">
+              <a href="{% url 'printResult' %}" class="btn btn-success btn-sm btn-flat"><span class="glyphicon glyphicon-print"></span> Print/Download PDF <i class="fa fa-download"></i></a>
+            </span>
+          </h3>
         </div>
-    </div>
+      </div>
 
-    
-    <!-- Main content -->
-<section class="content">
-    <!-- Existing content -->
-
-    {% comment %} {% for position in positions %} {% endcomment %}
-    {% comment %} <div class='row'>
-        <div class='col-sm-6'>
-            <div class='box box-solid'>
-                <div class='box-header with-border'>
-                    <h4 class='box-title'><b>{{ position.name }}</b></h4>
-                </div>
-                <div class='box-body'>
-                    <!-- Canvas for chart -->
-                    <canvas id='{{ position.name|slugify }}Chart' style='height:200px'></canvas>
-                    <ul>
-                        <!-- List of nominated candidates -->
-                        {% for nominated_candidate in approved_candidates %}
-                        {% if nominated_candidate.position == position.name %}
-                        <li>{{ nominated_candidate.fullname }} - {{ nominated_candidate.position }}</li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+     {% for position in positions %}
+     {% if not forloop.counter|divisibleby:2 %}
+     <div class='row'>
+     {% endif %}
+     <div class='col-sm-6'>
+      <div class='box box-solid'>
+        <div class='box-header with-border'>
+          <h4 class='box-title'><b>{{ position.name }}</b></h4>
         </div>
-    </div> {% endcomment %}
-
-    <div>
-        <canvas id="myChart"></canvas>
+        <div class='box-body'>
+          <div class='chart'>
+            <canvas id='{{ position.name|slugify }}' style='height:250px'></canvas>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <script>
-        const ctx = document.getElementById('myChart');
-    
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    {% for position, data in chart_data.items %}
-                        '{{ position.name }}',
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [
-                        {% for position, data in chart_data.items %}
-                            {% for votes in data.votes %}
-                                {{ votes }},
-                            {% endfor %}
-                        {% endfor %}
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-    
+    {% if forloop.counter|divisibleby:2 %}
+     </div>
+     {% endif %}
 
-    {% comment %} {% endfor %} {% endcomment %}
-</section>
+     {% endfor %}
+     {% if not forloop.counter|divisibleby:2 %}
+     </div>
+     {% endif %}
+      </section>
+      
+      {% endblock content %}
 
-{% endblock %}
-{% comment %} 
-<!-- Include Chart.js library -->
-<script src="{% static 'static\bower_components\chart.js\Chart.js' %}"></script>
-
-<!-- JavaScript to render charts -->
+      <!-- New Block -->
+      {% block custom_js %}
+      <script src="{% static 'bower_components/chart.js/Chart.js' %}"></script>
+<!-- ChartJS Horizontal Bar -->
+<script src="{% static 'bower_components/chart.js/Chart.HorizontalBar.js' %}"></script>
+      
+{% for key, value in chart_data.items  %}
 <script>
-    {% for position in positions %}
-    // Data for chart (example)
-    var {{ position.name|slugify }}Data = {
-        labels: ['Candidate 1', 'Candidate 2', 'Candidate 3'], // Labels for each bar
-        datasets: [{
-            label: 'Votes',
-            backgroundColor: 'rgba(60,141,188,0.9)',
-            borderColor: 'rgba(60,141,188,0.8)',
-            borderWidth: 1,
-            data: [10, 20, 30] // Number of votes for each candidate (adjust this with your real data)
-        }]
-    };
+  $(function() {
+    var rowid = '{{ value.pos_id }}';
+    var description = '{{ key|safe|slugify }}';
+    var barChartCanvas = $('#' + description).get(0).getContext('2d')
+    var barChart = new Chart(barChartCanvas)
+    var barChartData = {
+      labels: {{ value.candidates|safe }},
+      datasets: [{
+        label: 'Votes',
+        fillColor: 'rgba(60,141,188,0.9)',  
+        strokeColor: 'rgba(60,141,188,0.8)',
+        pointColor: '#3b8bba',
+        pointStrokeColor: 'rgba(60,141,188,1)',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(60,141,188,1)',
+        data: {{ value.votes|safe }}
+      }]
+    }
+    var barChartOptions = {
+      //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+      scaleBeginAtZero: true,
+      //Boolean - Whether grid lines are shown across the chart
+      scaleShowGridLines: true,
+      //String - Colour of the grid lines
+      scaleGridLineColor: 'rgba(0,0,0,.05)',
+      //Number - Width of the grid lines
+      scaleGridLineWidth: 1,
+      //Boolean - Whether to show horizontal lines (except X axis)
+      scaleShowHorizontalLines: true,
+      //Boolean - Whether to show vertical lines (except Y axis)
+      scaleShowVerticalLines: true,
+      //Boolean - If there is a stroke on each bar
+      barShowStroke: true,
+      //Number - Pixel width of the bar stroke
+      barStrokeWidth: 2,
+      //Number - Spacing between each of the X value sets
+      barValueSpacing: 5,
+      //Number - Spacing between data sets within X values
+      barDatasetSpacing: 1,
+      //String - A legend template
+     {% comment %}
+       
+     legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>', //! Take note*/
+     
+     {% endcomment %}
+      //Boolean - whether to make the chart responsive
+      responsive: true,
+      maintainAspectRatio: true
+    }
 
-    // Get canvas element
-    var {{ position.name|slugify }}Ctx = document.getElementById('{{ position.name|slugify }}Chart').getContext('2d');
-
-    // Render bar chart
-    var {{ position.name|slugify }}Chart = new Chart({{ position.name|slugify }}Ctx, {
-        type: 'bar',
-        data: {{ position.name|slugify }}Data,
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-    {% endfor %}
+    barChartOptions.datasetFill = false
+    var myChart = barChart.HorizontalBar(barChartData, barChartOptions)
+    //document.getElementById('legend_'+rowid).innerHTML = myChart.generateLegend();
+  });
 </script>
+{% endfor %}
 
-</section>
-{% endblock content %}
- {% endcomment %}
+{% endblock custom_js %}

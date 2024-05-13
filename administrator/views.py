@@ -1,25 +1,14 @@
 from django.shortcuts import render, reverse, redirect
 from administrator.models import SenateMembers
-from voting.models import Voter, Position, Candidate, Votes, Nominee
-from account.models import AdminCandidateCreation, CustomUser
+from voting.models import Voter, Position, Candidate, Votes
+from account.models import CustomUser
 from account.forms import CustomUserForm
 from voting.forms import *
 from django.contrib import messages
-from django.http import HttpResponseBadRequest, JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.conf import settings
 import json  # Not used
 from django_renderpdf.views import PDFView
-
-
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
-
-# from account.models import Candidate, BoardMember
-
-
-# from django.shortcuts import render, redirect, get_object_or_404
-# from .models import BoardMember
-# from .forms import BoardMemberAccountForm
 
 
 def find_n_winners(data, n):
@@ -33,26 +22,27 @@ def find_n_winners(data, n):
         max1 = 0
         if len(candidate_data) == 0:
             continue
-        this_winner = max(candidate_data, key=lambda x: x["votes"])
+        this_winner = max(candidate_data, key=lambda x: x['votes'])
         # TODO: Check if None
-        this = this_winner["name"] + " with " + str(this_winner["votes"]) + " votes"
+        this = this_winner['name'] + \
+            " with " + str(this_winner['votes']) + " votes"
         final_list.append(this)
         candidate_data.remove(this_winner)
     return ", &nbsp;".join(final_list)
 
 
 class PrintView(PDFView):
-    template_name = "admin/print.html"
+    template_name = 'admin/print.html'
     prompt_download = True
 
     @property
     def download_name(self):
-        return "Election Result.pdf"
+        return "result.pdf"
 
     def get_context_data(self, *args, **kwargs):
-        title = "Hu E-voting"
+        title = "E-voting"
         try:
-            file = open(settings.ELECTION_TITLE_PATH, "r")
+            file = open(settings.ELECTION_TITLE_PATH, 'r')
             title = file.read()
         except:
             pass
@@ -64,86 +54,74 @@ class PrintView(PDFView):
             for candidate in Candidate.objects.filter(position=position):
                 this_candidate_data = {}
                 votes = Votes.objects.filter(candidate=candidate).count()
-                this_candidate_data["name"] = candidate.fullname
-                this_candidate_data["votes"] = votes
+                this_candidate_data['name'] = candidate.fullname
+                this_candidate_data['votes'] = votes
                 candidate_data.append(this_candidate_data)
-            print(
-                "Candidate Data For  ", str(position.name), " = ", str(candidate_data)
-            )
+            print("Candidate Data For  ", str(
+                position.name), " = ", str(candidate_data))
             # ! Check Winner
             if len(candidate_data) < 1:
                 winner = "Position does not have candidates"
             else:
                 # Check if max_vote is more than 1
-                winner = max(candidate_data, key=lambda x: x["votes"])
-                if winner["votes"] == 0:
-                    winner = "No one voted for this position yet."
+                if position.max_vote > 1:
+                    winner = find_n_winners(candidate_data, position.max_vote)
                 else:
-                    winner = "Winner : " + winner["name"]
-            print(
-                "Candidate Data For  ", str(position.name), " = ", str(candidate_data)
-            )
+
+                    winner = max(candidate_data, key=lambda x: x['votes'])
+                    if winner['votes'] == 0:
+                        winner = "No one voted for this yet position, yet."
+                    else:
+                        """
+                        https://stackoverflow.com/questions/18940540/how-can-i-count-the-occurrences-of-an-item-in-a-list-of-dictionaries
+                        """
+                        count = sum(1 for d in candidate_data if d.get(
+                            'votes') == winner['votes'])
+                        if count > 1:
+                            winner = f"There are {count} candidates with {winner['votes']} votes"
+                        else:
+                            winner = "Winner : " + winner['name']
+            print("Candidate Data For  ", str(
+                position.name), " = ", str(candidate_data))
             position_data[position.name] = {
-                "candidate_data": candidate_data,
-                "winner": winner,
-            }
-        context["positions"] = position_data
+                'candidate_data': candidate_data, 'winner': winner, 'max_vote': position.max_vote}
+        context['positions'] = position_data
         print(context)
         return context
 
-from django.shortcuts import render
-from voting.models import Position, Candidate, Voter, Votes
 
 def dashboard(request):
-    # Retrieve all positions from the database, ordered by priority
-    positions = Position.objects.all().order_by("priority")
-    
-    # Retrieve all candidates, voters, and voted voters
+    positions = Position.objects.all().order_by('priority')
     candidates = Candidate.objects.all()
     voters = Voter.objects.all()
     voted_voters = Voter.objects.filter(voted=1)
-    
-    # Dictionary to store chart data for each position
+    list_of_candidates = []
+    votes_count = []
     chart_data = {}
 
-    # Iterate over each position to gather data
     for position in positions:
-        # Retrieve candidates for the current position
-        candidates_for_position = Candidate.objects.filter(position=position)
-        
-        # List to store candidate names
-        candidate_names = []
-        # List to store vote counts for each candidate
-        vote_counts = []
-        
-        # Iterate over candidates to gather candidate names and their votes
-        for candidate in candidates_for_position:
-            candidate_names.append(candidate.fullname)
-            # Retrieve vote count for the candidate
+        list_of_candidates = []
+        votes_count = []
+        for candidate in Candidate.objects.filter(position=position):
+            list_of_candidates.append(candidate.fullname)
             votes = Votes.objects.filter(candidate=candidate).count()
-            vote_counts.append(votes)
-        
-        # Store candidate names and their corresponding vote counts in the chart_data dictionary
+            votes_count.append(votes)
         chart_data[position] = {
-            "candidates": candidate_names,
-            "votes": vote_counts,
-            "pos_id": position.id,
+            'candidates': list_of_candidates,
+            'votes': votes_count,
+            'pos_id': position.id
         }
 
-    # Context dictionary to pass data to the template
     context = {
-        "position_count": positions.count(),
-        "candidate_count": candidates.count(),
-        "voters_count": voters.count(),
-        "voted_voters_count": voted_voters.count(),
-        "positions": positions,
-        "chart_data": chart_data,  # Pass the chart data to the template
-        "page_title": "Dashboard",
+        'position_count': positions.count(),
+        'candidate_count': candidates.count(),
+        'voters_count': voters.count(),
+        'voted_voters_count': voted_voters.count(),
+        'positions': positions,
+        'chart_data': chart_data,
+        'page_title': "Dashboard"
     }
-    
-    # Render the template with the context data
     return render(request, "admin/home.html", context)
-
 
 
 def voters(request):
@@ -151,12 +129,12 @@ def voters(request):
     userForm = CustomUserForm(request.POST or None)
     voterForm = VoterForm(request.POST or None)
     context = {
-        "form1": userForm,
-        # 'form2': voterForm,
-        "voters": voters,
-        "page_title": "Voters List",
+        'form1': userForm,
+        'form2': voterForm,
+        'voters': voters,
+        'page_title': 'Voters List'
     }
-    if request.method == "POST":
+    if request.method == 'POST':
         if userForm.is_valid() and voterForm.is_valid():
             user = userForm.save(commit=False)
             voter = voterForm.save(commit=False)
@@ -170,28 +148,42 @@ def voters(request):
 
 
 def view_voter_by_id(request):
-    voter_id = request.GET.get("id", None)
+    voter_id = request.GET.get('id', None)
     voter = Voter.objects.filter(id=voter_id)
     context = {}
     if not voter.exists():
-        context["code"] = 404
+        context['code'] = 404
     else:
-        context["code"] = 200
+        context['code'] = 200
         voter = voter[0]
-        context["id"] = voter.id
-        context["first_name"] = voter.admin.first_name
-        context["middle_name"] = voter.admin.middle_name
-        context["last_name"] = voter.admin.last_name
-        context["phone"] = voter.phone_number
-        context["email"] = voter.admin.email
+        context['first_name'] = voter.admin.first_name
+        context['last_name'] = voter.admin.last_name
+        context['phone'] = voter.phone
+        context['id'] = voter.id
+        context['email'] = voter.admin.email
+    return JsonResponse(context)
+
+
+def view_position_by_id(request):
+    pos_id = request.GET.get('id', None)
+    pos = Position.objects.filter(id=pos_id)
+    context = {}
+    if not pos.exists():
+        context['code'] = 404
+    else:
+        context['code'] = 200
+        pos = pos[0]
+        context['name'] = pos.name
+        context['max_vote'] = pos.max_vote
+        context['id'] = pos.id
     return JsonResponse(context)
 
 
 def updateVoter(request):
-    if request.method != "POST":
+    if request.method != 'POST':
         messages.error(request, "Access Denied")
     try:
-        instance = Voter.objects.get(id=request.POST.get("id"))
+        instance = Voter.objects.get(id=request.POST.get('id'))
         user = CustomUserForm(request.POST or None, instance=instance.admin)
         voter = VoterForm(request.POST or None, instance=instance)
         user.save()
@@ -200,27 +192,31 @@ def updateVoter(request):
     except:
         messages.error(request, "Access To This Resource Denied")
 
-    return redirect(reverse("adminViewVoters"))
+    return redirect(reverse('adminViewVoters'))
 
 
 def deleteVoter(request):
-    if request.method != "POST":
+    if request.method != 'POST':
         messages.error(request, "Access Denied")
     try:
-        admin = Voter.objects.get(id=request.POST.get("id")).admin
+        admin = Voter.objects.get(id=request.POST.get('id')).admin
         admin.delete()
         messages.success(request, "Voter Has Been Deleted")
     except:
         messages.error(request, "Access To This Resource Denied")
 
-    return redirect(reverse("adminViewVoters"))
+    return redirect(reverse('adminViewVoters'))
 
 
 def viewPositions(request):
-    positions = Position.objects.order_by("-priority").all()
+    positions = Position.objects.order_by('-priority').all()
     form = PositionForm(request.POST or None)
-    context = {"positions": positions, "form1": form, "page_title": "Positions"}
-    if request.method == "POST":
+    context = {
+        'positions': positions,
+        'form1': form,
+        'page_title': "Positions"
+    }
+    if request.method == 'POST':
         if form.is_valid():
             form = form.save(commit=False)
             form.priority = positions.count() + 1  # Just in case it is empty.
@@ -232,118 +228,94 @@ def viewPositions(request):
 
 
 def updatePosition(request):
-    if request.method != "POST":
+    if request.method != 'POST':
         messages.error(request, "Access Denied")
     try:
-        instance = Position.objects.get(id=request.POST.get("id"))
+        instance = Position.objects.get(id=request.POST.get('id'))
         pos = PositionForm(request.POST or None, instance=instance)
         pos.save()
         messages.success(request, "Position has been updated")
     except:
         messages.error(request, "Access To This Resource Denied")
 
-    return redirect(reverse("viewPositions"))
+    return redirect(reverse('viewPositions'))
 
 
 def deletePosition(request):
-    if request.method != "POST":
+    if request.method != 'POST':
         messages.error(request, "Access Denied")
     try:
-        pos = Position.objects.get(id=request.POST.get("id"))
+        pos = Position.objects.get(id=request.POST.get('id'))
         pos.delete()
         messages.success(request, "Position Has Been Deleted")
     except:
         messages.error(request, "Access To This Resource Denied")
 
-    return redirect(reverse("viewPositions"))
-
-
-def view_position_by_id(request):
-    pos_id = request.GET.get("id", None)
-    pos = Position.objects.filter(id=pos_id)
-    context = {}
-    if not pos.exists():
-        context["code"] = 404
-    else:
-        context["code"] = 200
-        pos = pos[0]
-        context["name"] = pos.name
-        context["id"] = pos.id
-    return JsonResponse(context)
-
-
-# def viewNominatedCandidates(request):
-#     nominatedcandidates = Nominee.objects.all()
-#     return render(request, 'admin/Nominatedcandidates.html', {'nominatedcandidates': nominatedcandidates})
-
-# views.py
-from django.shortcuts import render
-from voting.models import Nominee
-
-
-def viewNominatedCandidates(request):
-    nominated_candidates = Nominee.objects.all()
-    return render(
-        request,
-        "admin/Nominatedcandidates.html",
-        {"nominated_candidates": nominated_candidates},
-    )
-
-
-# def viewCandidates(request):
-#     candidates = Candidate.objects.all()
-#     return render(request, "admin/candidates.html", {"candidates": candidates})
+    return redirect(reverse('viewPositions'))
 
 
 def viewCandidates(request):
-    # Add logic here to retrieve candidates data
-    # Example: candidates = Candidate.objects.all()
-    approved_candidates = Nominee.objects.filter(is_approved=True)
-    # Pass candidates data to template
-    
-    # Render template with candidates data
-    return render(request, 'admin/candidates.html', {'approved_candidates':approved_candidates})
-
-
-
-def view_candidate_by_id(request):
-    candidate_id = request.GET.get("id")
-    candidate = Candidate.objects.filter(id=candidate_id).first()
-    if candidate:
-        return JsonResponse(
-            {
-                "id": candidate.id,
-                "fullname": candidate.fullname,
-                "position": candidate.position,
-                "bio": candidate.bio,
-            }
-        )
-    else:
-        return JsonResponse({"error": "Candidate not found"})
+    candidates = Candidate.objects.all()
+    form = CandidateForm(request.POST or None, request.FILES or None)
+    context = {
+        'candidates': candidates,
+        'form1': form,
+        'page_title': 'Candidates'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form = form.save()
+            messages.success(request, "New Candidate Created")
+        else:
+            messages.error(request, "Form errors")
+    return render(request, "admin/candidates.html", context)
 
 
 def updateCandidate(request):
-    if request.method == "POST":
-        candidate_id = request.POST.get("id")
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        candidate_id = request.POST.get('id')
         candidate = Candidate.objects.get(id=candidate_id)
-        form = CandidateForm(request.POST, instance=candidate)
+        form = CandidateForm(request.POST or None,
+                             request.FILES or None, instance=candidate)
         if form.is_valid():
             form.save()
-            return JsonResponse({"success": True})
+            messages.success(request, "Candidate Data Updated")
         else:
-            return JsonResponse({"success": False, "errors": form.errors})
-    else:
-        return JsonResponse({"success": False, "message": "Invalid request method"})
+            messages.error(request, "Form has errors")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+
+    return redirect(reverse('viewCandidates'))
 
 
 def deleteCandidate(request):
-    if request.method == "POST":
-        candidate_id = request.POST.get("id")
-        candidate = Candidate.objects.get(id=candidate_id)
-        candidate.delete()
-        return JsonResponse({"success": True})
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        pos = Candidate.objects.get(id=request.POST.get('id'))
+        pos.delete()
+        messages.success(request, "Candidate Has Been Deleted")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+
+    return redirect(reverse('viewCandidates'))
+
+
+def view_candidate_by_id(request):
+    candidate_id = request.GET.get('id', None)
+    candidate = Candidate.objects.filter(id=candidate_id)
+    context = {}
+    if not candidate.exists():
+        context['code'] = 404
     else:
-        return JsonResponse({"success": False, "message": "Invalid request method"})
+        candidate = candidate[0]
+        context['code'] = 200
+        context['fullname'] = candidate.fullname
+        previous = CandidateForm(instance=candidate)
+        context['form'] = str(previous.as_p())
+    return JsonResponse(context)
 
 
 def ballot_position(request):
@@ -408,15 +380,19 @@ def ballot_title(request):
 
 def viewVotes(request):
     votes = Votes.objects.all()
-    context = {"votes": votes, "page_title": "Votes"}
+    context = {
+        'votes': votes,
+        'page_title': 'Votes'
+    }
     return render(request, "admin/votes.html", context)
 
 
 def resetVote(request):
     Votes.objects.all().delete()
-    Voter.objects.all().update(voted=False)
+    Voter.objects.all().update(voted=False, verified=False, otp=None)
     messages.success(request, "All votes has been reset")
-    return redirect(reverse("viewVotes"))
+    return redirect(reverse('viewVotes'))
+
 
 
 from django.shortcuts import render, redirect, reverse
@@ -427,8 +403,8 @@ from account.models import *
 
 def candidate_accounts(request):
     candidate_accounts = AdminCandidateCreation.objects.all()
-    userForm = CustomUserForm(request.POST , request.FILES)
-    candidate_accountsForm = AdminCandidateCreationform(request.POST , request.FILES)
+    userForm = CustomUserForm(request.POST, request.FILES)
+    candidate_accountsForm = AdminCandidateCreationform(request.POST, request.FILES)
 
     context = {
         "form1": userForm,
@@ -495,19 +471,15 @@ def delete_candidate_account(request):
         # candidate_account = AdminCandidateCreation.objects.get(
         #     id=request.POST.get("id")
         # )
-        
+
         admin = AdminCandidateCreation.objects.get("id").admin
         admin.delete()
-        
+
         # candidate_account.delete()
         messages.success(request, "candidate account has been deleted")
     except:
         messages.error(request, "Access To This Resource Denied")
     return redirect(reverse("adminViewCandidates"))
-
-    
-    
-
 
 
 from django.shortcuts import render, redirect, reverse
@@ -655,19 +627,14 @@ def delete_senate_members(request):
 
     return redirect(reverse("adminViewSenateMembers"))
 
+from django.shortcuts import render
+from voting.models import Nominee
 
-# from django.shortcuts import render, redirect
-# from django.contrib.auth.decorators import login_required
-# from account.forms import CustomUserForm  # Import the correct form
 
-# @login_required
-# def profile_update(request):
-#     if request.method == 'POST':
-#         form = CustomUserForm(request.POST, instance=request.user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('profile_update_success')  # Redirect to a success page
-#     else:
-#         form = CustomUserForm(instance=request.user)
-
-#     return render(request, 'bio.html', {'form': form})
+def viewNominatedCandidates(request):
+    nominated_candidates = Nominee.objects.all()
+    return render(
+        request,
+        "admin/Nominatedcandidates.html",
+        {"nominated_candidates": nominated_candidates},
+    )
