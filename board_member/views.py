@@ -12,7 +12,24 @@ from django.utils import timezone
 
 # Dashboard view
 def dashboard(request):
-    return render(request, "dashboard.html")
+    positions = Position.objects.all().order_by('priority')
+    candidates = Candidate.objects.all()
+    voters = Voter.objects.all()
+    voted_voters = Voter.objects.filter(voted=1)
+    list_of_candidates = []
+    votes_count = []
+    chart_data = {}
+
+    context = {
+        'position_count': positions.count(),
+        'candidate_count': candidates.count(),
+        'voters_count': voters.count(),
+        'voted_voters_count': voted_voters.count(),
+        'positions': positions,
+        'chart_data': chart_data,
+        'page_title': "Dashboard"
+    }
+    return render(request, "home.html",context)
 
 
 def nominationposts(request):

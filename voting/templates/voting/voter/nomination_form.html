@@ -46,9 +46,9 @@
             <div class="container-fluid">
                 <!-- Add the logo and text -->
                 <a class="navbar-brand" href="#">
-                    {% comment %} <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                    <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
                         alt="HUEVS Logo" width="30" height="50"
-                        class="d-inline-block align-top"> {% endcomment %}
+                        class="d-inline-block align-top"> 
                     <a href="" style="color:black;"> HUEVS </a>
                 </a>
                 <!-- Add the toggle button for small screens -->
@@ -107,11 +107,11 @@
             </div>
         </nav>
         <br> <br>
-        <br>
+        <br> <br>
 
 
         {%if nominationposts %}
-        <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
+        <h1 class="page-header text-center title"><b>Haramaya University Student Union President Nomination</b></h1>
 
         <section class="content">
             <br>
@@ -164,8 +164,8 @@
             </body>
             </html> {% endcomment %}
             <section
-                style="margin: 0 auto; height: 450px; max-width: 900px; padding-left: 30px; padding-right: 30px; border: 2px solid #ccc; border-radius: 30px;">
-                <h1 class="page-header text-center title"><b>Nominate a
+                style="margin: 0 auto; height: 500px; max-width: 900px; padding-left: 30px; padding-right: 30px; border: 2px solid #ccc; border-radius: 30px;">
+               <br> <h1 class="page-header text-center title"><b>Nominate a
                         Candidate</b></h1>
                         <form method="post" class="form-group">
                             {% csrf_token %}
@@ -177,7 +177,9 @@
                                 <label for="id_bio" class="form-label">Bio</label>
                                 <textarea name="bio" id="id_bio" class="form-control" placeholder="Enter bio" rows="5" required></textarea>
                             </div>
+                            <div style="padding-left: 260px;">
                             <button type="submit" class="btn btn-primary">Submit Nomination</button>
+                            </div>
                         </form>
                         
             </section>

@@ -1,43 +1,147 @@
 {% extends 'bmroot.html' %}
 {% block content %}
 {% include "bmaside.html" %}
-<div class="row justify-content-center" style="margin-top: 50px;">
-    <div class="col-md-8" style="padding-left: 100px;">
-        <div class="card card-primary">
-            <div class="card-body">
-                <div class="row">
-                    <!-- Website Announcement -->
-                    <div class="col-12">
-                        <a href="#" data-toggle="lightbox" data-title="Announce result at the website" data-gallery="gallery">
-                            <div class="card">
-                                <div class="card-body">
-                                    <label for="websiteAnnouncement" class="form-check-label fw-bold"><h2>Announce result at the website</h2></label>
-                                </div>
-                                <br>
-                                <div class="card-footer">
-                                    <button form="websiteAnnouncementForm" type="button" class="btn btn-primary btn-block"><strong>Announce<strong></button>
-                                </div>
-                            </div>
-                        </a>
+{% load static %}
+
+    <section data-bs-version="5.1" class="pricing03 cid-ucLy5aX0oH" style="margin: 50px;"
+        id="pricing03-d">
+        <div class="container-fluid" style="border-color: black;">
+            <div class="row justify-content-center" style="padding-left: 250px;">
+                <div class="col-12 content-head">
+                    <div class="mbr-section-head mb-5">
+                        <h1
+                            class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                            <strong>Announce Result</strong>
+                        </h1>
                     </div>
-                    <br><br>
-                    <!-- Email Announcement -->
-                    <div class="col-12">
-                        <a href="#" data-toggle="lightbox" data-title="Announce the result in email" data-gallery="gallery">
-                            <div class="card">
-                                <div class="card-body">
-                                    <label for="emailAnnouncement" class="form-check-label fw-bold"><h2>Announce the result in email</h2></label>
-                                </div>
-                                <br>
-                                <div class="card-footer">
-                                    <button form="emailAnnouncementForm" type="button" class="btn btn-primary btn-block"><strong>Announce<strong></button>
-                                </div>
-                            </div>
-                        </a>
+                </div>
+            </div>
+            <div class="row">
+                <div
+                    class="item features-without-image col-12 col-md-6 col-lg-6 item-mb active">
+                    <div class="item-wrapper">
+                        <div class="item-head">
+                            <h2
+                                class="item-title mbr-fonts-style mb-0 display-5">
+                                <strong>At Website</strong>
+                            </h2>
+                        </div>
+                        <div class="item-content">
+                            <p class="mbr-text mbr-fonts-style display-7">Each
+                                Voter Can view the result of the election.</p>
+                        </div>
+                        {% comment %} <button class="btn item-btn btn-info display-7">Announce</button> {% endcomment %}
+                   
+                        <form method="post" class="me-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="" value="">
+                            <button type="submit" class="btn btn-success me-4 approve-btn">
+                                <i class="fas fa-edit"></i> Announce
+                            </button>
+                        </form>
+                        {% comment %} <form method="post" class="me-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="" value="">
+                            <button type="submit" class="btn btn-danger me-4">
+                                <i class="fas fa-edit"></i> Announced
+                            </button>
+                        </form> {% endcomment %}
+                   
+                    </div>
+                </div>
+                <div
+                    class="item features-without-image col-12 col-md-6 col-lg-6 item-mb">
+                    <div class="item-wrapper">
+                        <div class="item-head">
+                            <h2
+                                class="item-title mbr-fonts-style mb-0 display-5">
+                                <strong>At Email</strong>
+                            </h2>
+                        </div>
+                        <div class="item-content">
+                            <p class="mbr-text mbr-fonts-style display-7">Each
+                                Voter Can view the result detail of election at
+                                their email.</p>
+                        </div>
+                        {% comment %} <button class="btn item-btn btn-info display-7">Announce</button> {% endcomment %}
+                    
+                        <form method="post" class="me-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="" value="">
+                            <button type="submit" class="btn btn-success me-4 approve-btn">
+                                <i class="fas fa-edit"></i> Announce
+                            </button>
+                        </form>
+                        {% comment %} <form method="post" class="me-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="" value="">
+                            <button type="submit" class="btn btn-danger me-4">
+                                <i class="fas fa-edit"></i> Announced
+                            </button>
+                        </form> {% endcomment %}
+                    
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+
+
+
+
+
+
+
+
+
+
 {% endblock content %}
+
+
+
+
+{% block custom_js %}
+<!-- Custom JavaScript code -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const approveButtons = document.querySelectorAll(
+        '.approve-btn');
+        approveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const nominatedCandidateId = this
+                    .dataset.id;
+                const buttonElement = this;
+                fetch(`/${nominatedCandidateId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            approved: true
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            buttonElement
+                                .textContent =
+                                'Disapprove';
+                            buttonElement.classList
+                                .remove(
+                                    'btn-primary');
+                            buttonElement.classList
+                                .add('btn-danger');
+                            location.reload();
+                        } 
+                    })
+                    .catch(error => {
+                        console.error('Error:',
+                            error);
+                        alert(
+                            'An error occurred while processing the request.');
+                    });
+            });
+        });
+    });
+</script>
+{% endblock custom_js %}

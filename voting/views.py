@@ -26,7 +26,7 @@ def dashboard(request):
         context = {
             "my_votes": Votes.objects.filter(voter=user.voter),
         }
-        return render(request, "voting/voter/result.html", context)
+        return render(request, "voting/voter/myvote.html", context)
     else:
         return redirect(reverse("electionpage"))
 

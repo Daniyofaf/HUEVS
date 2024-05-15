@@ -1,6 +1,12 @@
 {% extends 'bmroot.html' %}
+{% comment %} {% include "sidebar.html" %} {% endcomment %}
 {% load static %}
 {% block content %}
+<!-- Main content -->
+<section class="">
+    <!-- Sidebar -->
+    {% include "bmaside.html" %}
+</section>
 <!-- Main content -->
 <section class="content">
     <!-- Small boxes (Stat box) -->
@@ -15,9 +21,8 @@
                 <div class="icon">
                     <i class="fa fa-users"></i>
                 </div>
-                <a href="{% url 'view_voters_list' %}"
-                    class="small-box-footer">More Info <i
-                        class="fa fa-arrow-circle-right"></i></a>
+                <a href="{% url 'voters' %}" class="small-box-footer">More Info
+                    <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -26,12 +31,12 @@
             <div class="small-box bg-green">
                 <div class="inner">
                     <h3>{{ candidate_count }}</h3>
-                    <p>No of Candidates</p>
+                    <p>No. of Candidates</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-black-tie"></i>
                 </div>
-                <a href="{% url 'candidates' %}" class="small-box-footer">More
+                <a href="{% url 'Candidate' %}" class="small-box-footer">More
                     Info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
@@ -51,23 +56,43 @@
             </div>
         </div>
         <!-- ./col -->
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-maroon">
-                <div class="inner">
-                    <h3>{{ nominated_candidates_count }}</h3>
-                    <p>Nominated Candidates</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-users"></i>
-                </div>
-                <a href="{% url 'viewnominatedcandidate' %}" class="small-box-footer">More Info
-                    <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Vote Detail</h3>
+            <div class="pull-right">
+                <a href="{% url 'printResult' %}"
+                    class="btn btn-success btn-sm btn-flat">
+                    <span class="glyphicon glyphicon-print"></span>
+                    Print/Download PDF <i class="fa fa-download"></i>
+                </a>
             </div>
         </div>
-        <!-- ./col -->
     </div>
+    {% for position in positions %}
+    {% if not forloop.counter|divisibleby:2 %}
+    <div class='row'>
+        {% endif %}
+        <div class='col-sm-6'>
+            <div class='box box-solid'>
+                <div class='box-header with-border'>
+                    <h4 class='box-title'><b>{{ position.name }}</b></h4>
+                </div>
+                <div class='box-body'>
+                    <div class='chart'>
+                        <canvas id='{{ position.name|slugify }}'
+                            style='height:200px'></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:2 %}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% if not forloop.counter|divisibleby:2 %}
+    </div>
+    {% endif %}
 </section>
 <!-- /.content -->
 {% endblock content %}
@@ -83,8 +108,8 @@
         var rowid = '{{ value.pos_id }}';
         var description = '{{ key|safe|slugify }}';
         var barChartCanvas = $('#' + description).get(0).getContext(
-            '2d');
-        var barChart = new Chart(barChartCanvas);
+            '2d')
+        var barChart = new Chart(barChartCanvas)
         var barChartData = {
             labels: {
                 {
@@ -105,7 +130,7 @@
                     }
                 }
             }]
-        };
+        }
         var barChartOptions = {
             //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
             scaleBeginAtZero: true,
@@ -127,13 +152,15 @@
             barValueSpacing: 5,
             //Number - Spacing between data sets within X values
             barDatasetSpacing: 1,
+            //String - A legend template
             //Boolean - whether to make the chart responsive
             responsive: true,
             maintainAspectRatio: true
-        };
-        barChartOptions.datasetFill = false;
+        }
+        barChartOptions.datasetFill = false
         var myChart = barChart.HorizontalBar(barChartData,
-            barChartOptions);
+            barChartOptions)
+        //document.getElementById('legend_'+rowid).innerHTML = myChart.generateLegend();
     });
 </script>
 {% endfor %}

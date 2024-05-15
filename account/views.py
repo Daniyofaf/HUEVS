@@ -50,7 +50,7 @@ def account_login(request):
                 messages.success(request, "Welcome Back!")
                 return redirect(reverse("adminDashboard"))
             elif user.user_type == 2:
-                # messages.success(request, "Welcome Back!")
+                messages.success(request, "Welcome Back!")
                 return redirect(reverse("voterDashboard"))
             elif user.user_type == 3:
                 messages.success(request, "Welcome Back!")
