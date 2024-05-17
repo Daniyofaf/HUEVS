@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from account.views import account_login
 from board_member.forms import ElectionPost
+from board_member.models import ElectionResult
 from .models import Nominee, Position, Candidate, Voter, Votes
 from django.http import JsonResponse
 from django.utils.text import slugify
@@ -26,7 +27,7 @@ def dashboard(request):
         context = {
             "my_votes": Votes.objects.filter(voter=user.voter),
         }
-        return render(request, "voting/voter/myvote.html", context)
+        return redirect(reverse("vote"))
     else:
         return redirect(reverse("electionpage"))
 
@@ -221,9 +222,22 @@ def submit_ballot(request):
     else:
         return redirect('electionpage')
 
-def resultpage(request):
-        return render(request, "voting/voter/ResultPage.html")
 
+from administrator.views import PrintView  # Import the PrintView class
+
+def resultpage(request):
+    resultpage = ElectionResult.objects.filter(isposted=True)
+    falseresultpage = ElectionResult.objects.filter(isposted=False)
+    # Instantiate the PrintView class to generate context data
+    print_view = PrintView()
+    # context = print_view.get_context_data()
+    # context = {'resultpage' : resultpage}
+    
+    context = {**print_view.get_context_data(), 'resultpage': resultpage}
+
+
+    # Render the template with the context data
+    return render(request, "voting/voter/ResultPage.html", context)
 
     
 # def submit_ballot(request):

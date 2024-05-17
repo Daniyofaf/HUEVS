@@ -30,7 +30,6 @@ def find_n_winners(data, n):
         candidate_data.remove(this_winner)
     return ", &nbsp;".join(final_list)
 
-
 class PrintView(PDFView):
     template_name = 'admin/print.html'
     prompt_download = True
@@ -59,35 +58,39 @@ class PrintView(PDFView):
                 candidate_data.append(this_candidate_data)
             print("Candidate Data For  ", str(
                 position.name), " = ", str(candidate_data))
+            # Check if the 'max_vote' attribute exists for the Position object
+            if hasattr(position, 'max_vote'):
+                max_vote = position.max_vote
+            else:
+                max_vote = 1  # Default value if 'max_vote' attribute is not present
             # ! Check Winner
             if len(candidate_data) < 1:
                 winner = "Position does not have candidates"
             else:
                 # Check if max_vote is more than 1
-                if position.max_vote > 1:
-                    winner = find_n_winners(candidate_data, position.max_vote)
+                if max_vote > 1:
+                    winner = find_n_winners(candidate_data, max_vote)
                 else:
-
                     winner = max(candidate_data, key=lambda x: x['votes'])
                     if winner['votes'] == 0:
-                        winner = "No one voted for this yet position, yet."
+                        winner = "No one voted for this position yet."
                     else:
-                        """
-                        https://stackoverflow.com/questions/18940540/how-can-i-count-the-occurrences-of-an-item-in-a-list-of-dictionaries
-                        """
-                        count = sum(1 for d in candidate_data if d.get(
-                            'votes') == winner['votes'])
+                        count = sum(1 for d in candidate_data if d.get('votes') == winner['votes'])
                         if count > 1:
                             winner = f"There are {count} candidates with {winner['votes']} votes"
                         else:
-                            winner = "Winner : " + winner['name']
+                            # Assign winner as a dictionary with 'name' key
+                            winner = {'name': winner['name']}
             print("Candidate Data For  ", str(
                 position.name), " = ", str(candidate_data))
             position_data[position.name] = {
-                'candidate_data': candidate_data, 'winner': winner, 'max_vote': position.max_vote}
+                'candidate_data': candidate_data, 'winner': winner, 'max_vote': max_vote
+            }
         context['positions'] = position_data
         print(context)
         return context
+
+
 
 
 def dashboard(request):

@@ -72,7 +72,7 @@
                         {{ senatemembersForm.as_p }}
                         <!-- Render all form fields -->
                     </div>
-                                <div class="modal-footer">
+                    <div class="modal-footer">
                         <button type="button"
                             class="btn btn-danger btn-flat pull-left"
                             data-dismiss="modal"><i class="fa fa-close"></i>
@@ -99,67 +99,67 @@
                 <form class="form-horizontal" method="POST"
                     action="{% url 'updateSenateMember' %}">
                     {% csrf_token %}
-                   
-            
-            <label for="edit_id_number"
-                class="col-sm-3 control-label">Id Number</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="edit_id_number"
-                    name="id_number">
+                    <label for="edit_id_number"
+                        class="col-sm-3 control-label">Id Number</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                            id="edit_id_number" name="id_number">
+                    </div>
+                    <br><br>
+                    <label for="edit_first_name"
+                        class="col-sm-3 control-label">Firstname</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                            id="edit_first_name" name="first_name">
+                    </div>
+                    <br><br>
+                    <label for="edit_middle_name"
+                        class="col-sm-3 control-label">Middlename</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                            id="edit_middle_name" name="middle_name">
+                    </div>
+                    <br><br>
+                    <label for="edit_last_name"
+                        class="col-sm-3 control-label">Lastname</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                            id="edit_last_name" name="last_name">
+                    </div>
+                    <br><br>
+                    <label for="edit_cgpa"
+                        class="col-sm-3 control-label">Cgpa</label>
+                    <div class="col-sm-9">
+                        <input type="cgpa" class="form-control" id="edit_cgpa"
+                            name="cgpa">
+                    </div>
+                    <br><br>
+                    <label for="edit_phone_number"
+                        class="col-sm-3 control-label">Phone</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                            id="edit_phone_number" name="phone_number">
+                    </div>
+                    <br><br>
+                    <label for="edit_email"
+                        class="col-sm-3 control-label">Email</label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" id="edit_email"
+                            name="email">
+                    </div>
             </div>
             <br><br>
-            <label for="edit_first_name"
-                class="col-sm-3 control-label">Firstname</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="edit_first_name"
-                    name="first_name">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-flat pull-left"
+                    data-dismiss="modal"><i class="fa fa-close"></i>
+                    Close</button>
+                <button type="submit" class="btn btn-success btn-flat"
+                    name="edit"><i class="fa fa-check-square-o"></i>
+                    Update</button>
+                </form>
             </div>
-            <br><br>
-            <label for="edit_middle_name"
-                class="col-sm-3 control-label">Middlename</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="edit_middle_name"
-                    name="middle_name">
-            </div>
-            <br><br>
-            <label for="edit_last_name"
-                class="col-sm-3 control-label">Lastname</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="edit_last_name"
-                    name="last_name">
-            </div>
-            <br><br>
-            <label for="edit_cgpa" class="col-sm-3 control-label">Cgpa</label>
-            <div class="col-sm-9">
-                <input type="cgpa" class="form-control" id="edit_cgpa"
-                    name="cgpa">
-            </div>
-            <br><br>
-            <label for="edit_phone_number"
-                class="col-sm-3 control-label">Phone</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="edit_phone_number"
-                    name="phone_number">
-            </div>
-            <br><br>
-            <label for="edit_email" class="col-sm-3 control-label">Email</label>
-            <div class="col-sm-9">
-                <input type="email" class="form-control" id="edit_email"
-                    name="email">
-            </div>
-            
-        </div>
-        <br><br>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-flat pull-left"
-                data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-            <button type="submit" class="btn btn-success btn-flat"
-                name="edit"><i class="fa fa-check-square-o"></i>
-                Update</button>
-            </form>
         </div>
     </div>
-</div>
 </div>
 <!-- Delete -->
 <div class="modal fade" id="delete">

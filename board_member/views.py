@@ -1,16 +1,19 @@
 import datetime
+# from pyexpat.errors import messages
+from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.urls import reverse
 from administrator.models import SenateMembers
 from administrator.views import senate_members
 from e_voting import settings
+from voting.forms import CandidateForm
 from voting.models import Candidate, Position, Voter, Votes
-from .models import ElectionPost, NominationPost
+from .models import ElectionPost, ElectionResult, NominationPost
 from datetime import datetime, time
 from django.utils import timezone
 
 
-# Dashboard view
 def dashboard(request):
     positions = Position.objects.all().order_by('priority')
     candidates = Candidate.objects.all()
@@ -19,6 +22,19 @@ def dashboard(request):
     list_of_candidates = []
     votes_count = []
     chart_data = {}
+
+    for position in positions:
+        list_of_candidates = []
+        votes_count = []
+        for candidate in Candidate.objects.filter(position=position):
+            list_of_candidates.append(candidate.fullname)
+            votes = Votes.objects.filter(candidate=candidate).count()
+            votes_count.append(votes)
+        chart_data[position] = {
+            'candidates': list_of_candidates,
+            'votes': votes_count,
+            'pos_id': position.id
+        }
 
     context = {
         'position_count': positions.count(),
@@ -29,7 +45,7 @@ def dashboard(request):
         'chart_data': chart_data,
         'page_title': "Dashboard"
     }
-    return render(request, "home.html",context)
+    return render(request, "home.html", context)
 
 
 def nominationposts(request):
@@ -202,10 +218,9 @@ def nominated_candidates(request):
 
     # Render template with nominated candidates data
     return render(request, "nominatedcandidates.html", context)
-
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from voting.models import Nominee, Candidate  # Import Candidate model
+from voting.models import Nominee, Candidate
 import json
 
 @csrf_exempt
@@ -213,19 +228,27 @@ def approve_nomination(request, nominated_candidate_id):
     if request.method == "POST":
         post_data = json.loads(request.body.decode("utf-8"))
         approved = post_data.get("approved", False)
-        nominated_candidate = Nominee.objects.get(id=nominated_candidate_id)
+        
+        try:
+            nominated_candidate = Nominee.objects.get(id=nominated_candidate_id)
+        except Nominee.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Nominee not found"})
+        
         nominated_candidate.is_approved = approved
         nominated_candidate.save()
         
-        if approved:  # Only create a Candidate if the nomination is approved
-            candidate = Candidate.objects.create(
-                fullname=nominated_candidate.fullname,
-                bio=nominated_candidate.bio,
-                position=nominated_candidate.position
-            )
-            return JsonResponse({"status": "success"})
+        if approved:
+            try:
+                candidate = Candidate.objects.create(
+                    fullname=nominated_candidate.fullname,
+                    bio=nominated_candidate.bio,
+                    position=nominated_candidate.position
+                )
+                return JsonResponse({"status": "success"})
+            except Exception as e:
+                return JsonResponse({"status": "error", "message": str(e)})
         else:
-            return JsonResponse({"status": "error", "message": "Nomination not approved"})
+            return JsonResponse({"status": "success", "message": "Nomination not approved"})
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
 
@@ -252,28 +275,99 @@ def approve_nomination(request, nominated_candidate_id):
 
 
 # View for displaying list of candidates
-def candidates(request):
-    # Add logic here to retrieve candidates data
-    # Example: candidates = Candidate.objects.all()
-    approved_candidates = Nominee.objects.filter(is_approved=True)
-    # Pass candidates data to template
+# def candidates(request):
+#     # Add logic here to retrieve candidates data
+#     # Example: candidates = Candidate.objects.all()
+#     approved_candidates = Nominee.objects.filter(is_approved=True)
+#     # Pass candidates data to template
 
-    # Render template with candidates data
-    return render(
-        request, "candidatesview.html", {"approved_candidates": approved_candidates}
-    )
+#     # Render template with candidates data
+#     return render(
+#         request, "candidatesview.html", {"approved_candidates": approved_candidates}
+#     )
 
 
-# View for displaying votes
-def votes(request):
-    # Add logic here to retrieve votes data
-    # Example: votes = Vote.objects.all()
 
-    # Pass votes data to template
-    context = {}  # Add your data to pass to the template
+def Candidateview(request):
+    candidatesview = Candidate.objects.all()
+    form = CandidateForm(request.POST or None, request.FILES or None)
+    context = {
+        'candidatesview': candidatesview,
+        'form1': form,
+        'page_title': 'Candidates'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form = form.save()
+            messages.success(request, "New Candidate Created")
+        else:
+            messages.error(request, "Form errors")
+    return render(request, "candidatesview.html", context)
 
-    # Render template with votes data
+def candidate_view(request):
+    candidate_id = request.GET.get('id', None)
+    candidate = Candidate.objects.filter(id=candidate_id)
+    context = {}
+    if not candidate.exists():
+        context['code'] = 404
+    else:
+        candidate = candidate[0]
+        context['code'] = 200
+        context['fullname'] = candidate.fullname
+        previous = CandidateForm(instance=candidate)
+        context['form'] = str(previous.as_p())
+    return JsonResponse(context)
+
+def Candidatesupdate(request):
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        candidate_id = request.POST.get('id')
+        candidate = Candidate.objects.get(id=candidate_id)
+        form = CandidateForm(request.POST or None,
+                             request.FILES or None, instance=candidate)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Candidate Data Updated")
+        else:
+            messages.error(request, "Form has errors")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+
+    return redirect(reverse('Candidateview'))
+
+
+def Candidatesdelete(request):
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        pos = Candidate.objects.get(id=request.POST.get('id'))
+        pos.delete()
+        messages.success(request, "Candidate Has Been Deleted")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+
+    return redirect(reverse('Candidateview'))
+
+
+
+
+
+
+def viewVote(request):
+    votes = Votes.objects.all()
+    context = {
+        'votes': votes,
+        'page_title': 'Votes'
+    }
     return render(request, "votesview.html", context)
+
+
+def ResetVote(request):
+    Votes.objects.all().delete()
+    Voter.objects.all().update(voted=False, verified=False, otp=None)
+    messages.success(request, "All votes has been reset")
+    return redirect(reverse('viewVotes'))
 
 
 from django.shortcuts import render
@@ -366,5 +460,53 @@ def view_senate_member_by_id(request):
     return render(request, "senatemembers.html", {'senate_members': senate_members})
 
 
+from administrator.views import find_n_winners
+
+
 def result(request):
+    # Assuming you have candidate data available in your view, replace `candidate_data` with your actual candidate data
+    # candidate_data = [
+    #     {'name': 'Candidate 1', 'votes': 100},
+    #     {'name': 'Candidate 2', 'votes': 90},
+    #     {'name': 'Candidate 3', 'votes': 80},
+    #     # Add more candidate data as needed
+    # ]
+    
+    # # Define the number of winners you want to find
+    # num_winners = 1  # Change this to the desired number of winners
+    
+    # # Call the find_n_winners function to find the top `num_winners` winners
+    # winners = find_n_winners(candidate_data, num_winners)
+
+
+    # # Pass the winners data to the template
+    # context = {
+    #     'winners': winners,
+    # }
+    
+    # Render the template with the winners data
     return render(request, "AnnounceResult.html")
+
+from django.http import JsonResponse
+from .models import ElectionResult
+
+def announce_election(request):
+    if request.method == 'POST':
+        try:
+            is_announced = request.POST.get('is_announced', None)
+            if is_announced is not None:
+                # Convert the string value to boolean
+                is_announced = is_announced.lower() == 'true'
+                
+                # Get or create the ElectionResult object
+                election_result, created = ElectionResult.objects.get_or_create(pk=1)  # Assuming there's only one instance
+                election_result.isposted = is_announced
+                election_result.save()
+                
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid request. Missing is_announced parameter.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)

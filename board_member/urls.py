@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name="board_member_dashboard"),
 
-    path('dashboard/', views.dashboard, name='Dashboard'),  # Updated the name to match the template
+    # path('dashboard/', views.dashboard, name='Dashboard'),  # Updated the name to match the template
     
     path('nominationposts/', views.nominationposts, name='nominationposts'),  # Updated the name to match the template
    
@@ -15,11 +15,20 @@ urlpatterns = [
     path('voters/', views.view_voters_list, name='voters'),  # Updated the name to match the template
     path('NominatedCandidates/', views.viewnominatedcandidate, name='viewnominatedcandidate'),
     path('approve_nomination/<int:nominee_id>/', views.approve_nomination, name='approve_nomination'),
-    path('candidates/', views.candidates, name='Candidate'),  # Updated the name to match the template
-    path('votes/', views.votes, name='votes'),  # Updated the name to match the template
-    path('votes/print/', views.PrintView.as_view(), name='printResult'), 
+    # path('candidates/', views.candidates, name='viewCandidates'),  # Updated the name to match the template
+    
+    # * Candidate
+    path('candidates/', views.Candidateview, name='Candidateview'),
+    path('candidates/view', views.candidate_view, name='candidate_view'),
+    path('candidates/update', views.Candidatesupdate, name="updateCandidates"),
+    path('candidates/delete', views.Candidatesdelete, name='deleteCandidates'),
+    
+    path('votes/view', views.viewVote, name='viewVote'),
+    path('votes/reset/', views.ResetVote, name='ResetVote'),
+    path('votes/print/', views.PrintView.as_view(), name='printResult'),
     path('senate-member/', views.view_senate_member_by_id, name="viewSenateMembers"),
-    path('result/', views.result, name='result')
+    path('result/', views.result, name='result'),
+    path('board_member/announce_election/', views.announce_election, name='announce_election'),
 
 ]
 

@@ -4,7 +4,7 @@
         <!-- Sidebar menu -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
-            <li class="active"><a href="{% url 'Dashboard' %}"><i
+            <li class="active"><a href="{% url 'board_member_dashboard' %}"><i
                         class="fa fa-dashboard"></i>
                     <span>Dashboard</span></a></li>
             <li><a href="{% url 'voters' %}"><i class="fa fa-users"></i>
@@ -18,12 +18,12 @@
             <li><a href="{% url 'viewSenateMembers' %}"><i
                         class="fa fa-users"></i>
                     <span>Senate Members</span></a></li>
-            <li><a href="{% url 'Candidate' %}"><i class="fa fa-black-tie"></i>
+            <li><a href="{% url 'Candidateview' %}"><i class="fa fa-black-tie"></i>
                     <span>Candidates</span></a></li>
             <li><a href="{% url 'electionposts' %}"><i
                         class="fa fa-black-tie"></i>
                     <span>Post Election</span></a></li>
-            <li><a href="{% url 'votes' %}"><i class="fa fa-edit"></i>
+            <li><a href="{% url 'viewVote' %}"><i class="fa fa-edit"></i>
                     <span>Votes</span></a></li> 
             <li><a href="{% url 'result' %}"><i class="fa fa-edit"></i>
                         <span>Announce Result</span></a></li>

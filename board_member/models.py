@@ -23,3 +23,8 @@ class ElectionPost(models.Model):
     def __str__(self):
         return f"{self.start_date} {self.start_time} - {self.end_date} {self.end_time}"
     
+class ElectionResult(models.Model):
+    isposted = models.BooleanField('isPosted', default=False)    
+    
+    
+    

@@ -1,145 +1,70 @@
 {% extends 'bmroot.html' %}
 {% block content %}
 {% include "bmaside.html" %}
-{% load static %}
-
-    <section data-bs-version="5.1" class="pricing03 cid-ucLy5aX0oH" style="margin: 50px;"
-        id="pricing03-d">
-        <div class="container-fluid" style="border-color: black;">
-            <div class="row justify-content-center" style="padding-left: 250px;">
-                <div class="col-12 content-head">
-                    <div class="mbr-section-head mb-5">
-                        <h1
-                            class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                            <strong>Announce Result</strong>
-                        </h1>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div
-                    class="item features-without-image col-12 col-md-6 col-lg-6 item-mb active">
-                    <div class="item-wrapper">
-                        <div class="item-head">
-                            <h2
-                                class="item-title mbr-fonts-style mb-0 display-5">
-                                <strong>At Website</strong>
-                            </h2>
-                        </div>
-                        <div class="item-content">
-                            <p class="mbr-text mbr-fonts-style display-7">Each
-                                Voter Can view the result of the election.</p>
-                        </div>
-                        {% comment %} <button class="btn item-btn btn-info display-7">Announce</button> {% endcomment %}
-                   
-                        <form method="post" class="me-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="" value="">
-                            <button type="submit" class="btn btn-success me-4 approve-btn">
-                                <i class="fas fa-edit"></i> Announce
-                            </button>
-                        </form>
-                        {% comment %} <form method="post" class="me-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="" value="">
-                            <button type="submit" class="btn btn-danger me-4">
-                                <i class="fas fa-edit"></i> Announced
-                            </button>
-                        </form> {% endcomment %}
-                   
-                    </div>
-                </div>
-                <div
-                    class="item features-without-image col-12 col-md-6 col-lg-6 item-mb">
-                    <div class="item-wrapper">
-                        <div class="item-head">
-                            <h2
-                                class="item-title mbr-fonts-style mb-0 display-5">
-                                <strong>At Email</strong>
-                            </h2>
-                        </div>
-                        <div class="item-content">
-                            <p class="mbr-text mbr-fonts-style display-7">Each
-                                Voter Can view the result detail of election at
-                                their email.</p>
-                        </div>
-                        {% comment %} <button class="btn item-btn btn-info display-7">Announce</button> {% endcomment %}
-                    
-                        <form method="post" class="me-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="" value="">
-                            <button type="submit" class="btn btn-success me-4 approve-btn">
-                                <i class="fas fa-edit"></i> Announce
-                            </button>
-                        </form>
-                        {% comment %} <form method="post" class="me-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="" value="">
-                            <button type="submit" class="btn btn-danger me-4">
-                                <i class="fas fa-edit"></i> Announced
-                            </button>
-                        </form> {% endcomment %}
-                    
-                    </div>
+<section class="content">
+    <h3>Announce Election</h3>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-hover table-striped">
+                        <thead style="background-color: #222D32; color:white;">
+                            <tr>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="status">{% if is_announced %}Announced{% else %}Not Announced{% endif %}</td>
+                                <td>
+                                    <button class="btn btn-primary toggle-btn">{% if is_announced %}Already Announced{% else %}Announce{% endif %}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </section>
-
-
-
-
-
-
-
-
-
-
+    </div>
+</section>
 {% endblock content %}
-
-
-
-
 {% block custom_js %}
-<!-- Custom JavaScript code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const approveButtons = document.querySelectorAll(
-        '.approve-btn');
-        approveButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const nominatedCandidateId = this
-                    .dataset.id;
-                const buttonElement = this;
-                fetch(`/${nominatedCandidateId}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            approved: true
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            buttonElement
-                                .textContent =
-                                'Disapprove';
-                            buttonElement.classList
-                                .remove(
-                                    'btn-primary');
-                            buttonElement.classList
-                                .add('btn-danger');
-                            location.reload();
-                        } 
-                    })
-                    .catch(error => {
-                        console.error('Error:',
-                            error);
-                        alert(
-                            'An error occurred while processing the request.');
-                    });
+    $(document).ready(function() {
+        // Check if the election is announced in local storage
+        var isAnnounced = localStorage.getItem('is_announced');
+        if (isAnnounced === 'true') {
+            $('#status').text('Announced');
+            $('.toggle-btn').text('Already Announced');
+        }
+
+        $('.toggle-btn').on('click', function() {
+            var $button = $(this);
+            var isAnnounced = localStorage.getItem('is_announced');
+            var newStatus = isAnnounced === 'true' ? false : true;
+
+            $.ajax({
+                url: '{% url "announce_election" %}',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    is_announced: newStatus
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Update status in local storage
+                        localStorage.setItem('is_announced', newStatus);
+                        $('#status').text(newStatus ? 'Announced' : 'Not Announced');
+                        $button.text(newStatus ? 'Already Announced' : 'Announce');
+                    } else {
+                        alert(response.message || 'Failed to update the election status.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('An error occurred while updating the election status: ' + xhr.responseText);
+                }
             });
         });
     });

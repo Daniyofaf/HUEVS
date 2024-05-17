@@ -144,11 +144,11 @@
       });
 
       $(document).on('click', '.delete', function(e) {
-        e.preventDefault();
-        $('#delete').modal('show');
-        var id = $(this).data('id');
-        getRow(id);
-    });
+          e.preventDefault();
+          $('#delete').modal('show');
+          var id = $(this).data('id');
+          getRow(id);
+      });
 
 
   });
@@ -156,7 +156,7 @@
   function getRow(id) {
       $.ajax({
           type: 'GET',
-          url: '{% url "viewCandidate" %}',
+          url: '{% url "viewCandidates" %}',
           data: {
               id: id
           },
