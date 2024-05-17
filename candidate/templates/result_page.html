@@ -1,0 +1,42 @@
+{% extends 'croot.html' %}
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    {% include 'caside.html' %}
+    <h1 class="page-header text-center title">
+        <b>{{ TITLE }}</b>
+    </h1>
+  
+    <section class="content">
+        {% if resultpage %}
+        <section style="margin: 00 auto; max-width: 1600px; padding-left: 200px;">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <br>
+                            <!-- Add a champagne bottle emoji and a suspenseful text -->
+                            <h1 class="card-title">🎉 It's the moment of truth! 🎉<br><br> And the winner is:<br><br> <strong> {{ positions.President.winner.name }} </strong> </h1>
+                            <!-- Champagne bottle animation -->
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% else %}
+        <section style="margin: 100 auto; max-width: 1600px; padding-left: 300px; ">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h1 class="card-title">Sorry, election result
+                                not available yet.</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </section>
+    {% endblock %}

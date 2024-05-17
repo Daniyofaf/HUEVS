@@ -15,13 +15,23 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form id="messageForm" method="post" action="{% url 'post_campaign_message' %}">
+                    <form id="messageForm" method="post" action="{% url 'post_campaign_message' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="card-body">
                             <!-- Your form fields here -->
                             <div class="form-group">
                                 <label for="messageContent">Message Content</label>
                                 <textarea name="message" class="form-control" id="messageContent" rows="5" placeholder="Enter your Campaign here"></textarea>
+                            </div>
+                            <!-- Photo upload field -->
+                            <div class="form-group">
+                                <label for="photoInput">Upload Photo</label>
+                                <input type="file" name="photo" class="form-control-file" id="photoInput">
+                            </div>
+                            <!-- Video upload field -->
+                            <div class="form-group">
+                                <label for="videoInput">Upload Video</label>
+                                <input type="file" name="video" class="form-control-file" id="videoInput">
                             </div>
                         </div>
                         <!-- /.card-body -->

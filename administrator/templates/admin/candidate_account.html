@@ -42,14 +42,16 @@
                                     </div> {% endcomment %}
 
                                     <div class="form-group">
-                                        <label
-                                            for="candidate_account_fullname">Full
-                                            Name:</label>
-                                        <input type="text"
-                                            id="candidate_account_fullname"
-                                            name="fullname"
-                                            class="form-control"
-                                            placeholder="Full Name" required>
+                                        <label for="board_member_first_name">First Name:</label>
+                                        <input type="text" id="board_member_first_name" name="first_name" class="form-control" placeholder="First Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="board_member_middle_name">Middle Name:</label>
+                                        <input type="text" id="board_member_middle_name" name="middle_name" class="form-control" placeholder="Middle Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="board_member_last_name">Last Name:</label>
+                                        <input type="text" id="board_member_last_name" name="last_name" class="form-control" placeholder="Last Name" required>
                                     </div>
                                     
                                     <div class="form-group">
@@ -85,7 +87,7 @@
                                             name="password" class="form-control"
                                             placeholder="Password" required>
                                     </div>
-                                    <div class="form-group">
+                                    {% comment %} <div class="form-group">
                                         <label
                                             for="candidate_account_image">Upload
                                             Image:</label>
@@ -93,7 +95,7 @@
                                             id="candidate_account_image"
                                             name="photo"
                                             class="form-control-file" required>
-                                    </div>
+                                    </div> {% endcomment %}
                                     <button type="submit"
                                         class="btn btn-success">Submit</button>
                                 </form>

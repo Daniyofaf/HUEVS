@@ -20,4 +20,6 @@ urlpatterns = [
     path('resultpage/', views.resultpage, name='resultpage'),
 
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

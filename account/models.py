@@ -61,13 +61,13 @@ class CustomUser(AbstractUser):
 class AdminCandidateCreation(models.Model):
     # Define your fields here
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    # first_name = models.CharField(max_length=50)
-    # middle_name = models.CharField(max_length=50)
-    # last_name = models.CharField(max_length=50)
-    # id_number = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    id_number = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)  
-    photo = models.ImageField(upload_to='Candidate_Photo/')
+    # photo = models.ImageField(upload_to='Candidate_Photo/')
     def __str__(self):
         return f"{self.admin.last_name}, {self.admin.first_name}"
 

@@ -124,7 +124,7 @@
                     text-shadow: 1px 1px 5px black;
                     font-size: 3rem;
                     border-radius: 35px;
-                    width: 1100px;
+                    width: 900px;
                     margin-left: 70px;
                 }
                 .custom-card {
@@ -133,14 +133,11 @@
                 }
                 #candidateForm {
                     padding-left: 100px;
-                    padding-right: 100px;
-                    border: black;
-                    boarder-size: 10px;
+                 
                 }
             </style>
             </head>
             <!-- Your original content -->
-            <br>
             <section class="content">
                 <h2 class="page-header text-center title"><b>Vote Your
                         Choice</b></h2><br>
@@ -183,14 +180,13 @@
                             {% for sew in sewoch %}
                             <div class="col-md-4 mb-4">
                                 <div class="card custom-card">
-                                    {% comment %} <img
+                                    <img
                                         src="{% static 'images/userplaceholder.png' %}"
                                         class="card-img-top"
                                         alt="{{ sew.photo }}"
-                                        style="height: 300px; width: 250px;">
-                                    {% endcomment %}
-                                    <img src="{{ candidate.photo.url }}"
-                                        alt="{{ candidate.fullname }}'s photo">
+                                        style="height: 350px; width: 350px;">
+                                    {% comment %} <img src="{% get_media_prefix %}candidates/6fbabea3-33d5-4f2f-9dc3-d4ffeb8fe838.jpeg" alt="{{ candidate.fullname }}'s photo"> {% endcomment %}
+
                                     <div class="card-body">
                                         <input type="radio"
                                             name="selected_candidate"
@@ -201,11 +197,15 @@
                                         <br>
                                         <br>
                                         <p class="card-text">{{ sew.bio }}</p>
+                                        <button class="btn btn-secondary">View Campaign</button>
                                     </div>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
+                        <br><br><br>
+                        <br><br><br>
+                        <br><br><br>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary"
                                 style="padding-left: -80px;">Submit
