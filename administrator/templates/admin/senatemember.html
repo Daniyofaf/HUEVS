@@ -1,17 +1,15 @@
 {% extends 'root.html' %}
+
 {% block content %}
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <a href="#addnew" data-toggle="modal"
-                        class="btn btn-success btn-sm btn-flat"><i
-                            class="fa fa-plus"></i> Add New</a>
+                    <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> Add New</a>
                 </div>
                 <div class="box-body">
-                    <table id="example1"
-                        class="table table-bordered table-hover table-striped">
+                    <table id="example1" class="table table-bordered table-hover table-striped">
                         <thead style="background-color: #222D32; color:white;">
                             <th>Id Number</th>
                             <th>Firstname</th>
@@ -33,16 +31,8 @@
                                 <td>{{ senate_member.email }}</td>
                                 <td>{{ senate_member.phone_number }}</td>
                                 <td>
-                                    <button
-                                        class='btn btn-primary btn-sm edit btn-flat'
-                                        data-id='{{ senate_member.id }}'><i
-                                            class='fa fa-edit'></i>
-                                        Edit</button>
-                                    <button
-                                        class='btn btn-danger btn-sm delete btn-flat'
-                                        data-id='{{ senate_member.id }}'><i
-                                            class='fa fa-trash'></i>
-                                        Delete</button>
+                                    <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ senate_member.id }}'><i class='fa fa-edit'></i> Edit</button>
+                                    <button class='btn btn-danger btn-sm delete btn-flat' data-id='{{ senate_member.id }}'><i class='fa fa-trash'></i> Delete</button>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -54,126 +44,82 @@
     </div>
 </section>
 {% endblock content %}
+
 {% block modal %}
+<!-- Add New Senate Member Modal -->
 <div class="modal fade" id="addnew">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><b>Add New Senate Member</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" method="POST"
-                    action="{% url 'adminViewSenateMembers' %}">
+                <form class="form-horizontal" method="POST" action="{% url 'adminViewSenateMembers' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                        {{ senatemembersForm.as_p }}
-                        <!-- Render all form fields -->
+                        {% for field in senatemembersForm %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}" class="col-sm-3 control-label">{{ field.label }}</label>
+                            <div class="col-sm-9">
+                                {{ field }}
+                                <span class="text-danger">{{ field.errors }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                     <div class="modal-footer">
-                        <button type="button"
-                            class="btn btn-danger btn-flat pull-left"
-                            data-dismiss="modal"><i class="fa fa-close"></i>
-                            Close</button>
-                        <button type="submit" class="btn btn-success btn-flat"
-                            name="add"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-success btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Edit -->
+
+<!-- Edit Senate Member Modal -->
 <div class="modal fade" id="edit">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><b>Edit Senate Member</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" method="POST"
-                    action="{% url 'updateSenateMember' %}">
+                <form class="form-horizontal" method="POST" action="{% url 'updateSenateMember' %}">
                     {% csrf_token %}
-                    <label for="edit_id_number"
-                        class="col-sm-3 control-label">Id Number</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control"
-                            id="edit_id_number" name="id_number">
+                    {% for field in senatemembersForm %}
+                    <div class="form-group">
+                        <label for="edit_{{ field.name }}" class="col-sm-3 control-label">{{ field.label }}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="edit_{{ field.name }}" name="{{ field.name }}">
+                        </div>
                     </div>
-                    <br><br>
-                    <label for="edit_first_name"
-                        class="col-sm-3 control-label">Firstname</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control"
-                            id="edit_first_name" name="first_name">
-                    </div>
-                    <br><br>
-                    <label for="edit_middle_name"
-                        class="col-sm-3 control-label">Middlename</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control"
-                            id="edit_middle_name" name="middle_name">
-                    </div>
-                    <br><br>
-                    <label for="edit_last_name"
-                        class="col-sm-3 control-label">Lastname</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control"
-                            id="edit_last_name" name="last_name">
-                    </div>
-                    <br><br>
-                    <label for="edit_cgpa"
-                        class="col-sm-3 control-label">Cgpa</label>
-                    <div class="col-sm-9">
-                        <input type="cgpa" class="form-control" id="edit_cgpa"
-                            name="cgpa">
-                    </div>
-                    <br><br>
-                    <label for="edit_phone_number"
-                        class="col-sm-3 control-label">Phone</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control"
-                            id="edit_phone_number" name="phone_number">
-                    </div>
-                    <br><br>
-                    <label for="edit_email"
-                        class="col-sm-3 control-label">Email</label>
-                    <div class="col-sm-9">
-                        <input type="email" class="form-control" id="edit_email"
-                            name="email">
-                    </div>
+                    {% endfor %}
             </div>
-            <br><br>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-flat pull-left"
-                    data-dismiss="modal"><i class="fa fa-close"></i>
-                    Close</button>
-                <button type="submit" class="btn btn-success btn-flat"
-                    name="edit"><i class="fa fa-check-square-o"></i>
-                    Update</button>
+                <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                <button type="submit" class="btn btn-success btn-flat" name="edit"><i class="fa fa-check-square-o"></i> Update</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Delete -->
+
+<!-- Delete Senate Member Modal -->
 <div class="modal fade" id="delete">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><b>Deleting...</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" method="POST"
-                    action="{% url 'deleteSenateMember' %}">
+                <form class="form-horizontal" method="POST" action="{% url 'deleteSenateMember' %}">
                     <input type="hidden" class="id" name="id">
                     {% csrf_token %}
                     <div class="text-center">
@@ -182,17 +128,15 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-flat pull-left"
-                    data-dismiss="modal"><i class="fa fa-close"></i>
-                    Close</button>
-                <button type="submit" class="btn btn-danger btn-flat"
-                    name="delete"><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                <button type="submit" class="btn btn-danger btn-flat" name="delete"><i class="fa fa-trash"></i> Delete</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 {% endblock modal %}
+
 {% block custom_js %}
 <script>
     $(function() {
@@ -209,6 +153,7 @@
             getRow(id);
         });
     });
+
     function getRow(id) {
         $.ajax({
             type: 'GET',
@@ -222,12 +167,11 @@
                 $('#edit_first_name').val(response.first_name);
                 $('#edit_middle_name').val(response.middle_name);
                 $('#edit_last_name').val(response.last_name);
-                $('#edit_phone_number').val(response.phone_number);
-                $('#edit_email').val(response.email);
                 $('#edit_id_number').val(response.id_number);
                 $('#edit_cgpa').val(response.cgpa);
-                $('.fullname').html(response.first_name + ' ' +
-                    response.last_name);
+                $('#edit_phone_number').val(response.phone_number);
+                $('#edit_email').val(response.email);
+                $('.fullname').html(response.first_name + ' ' + response.last_name);
             }
         });
     }

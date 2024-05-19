@@ -6,12 +6,7 @@ class SenateMembersForm(forms.ModelForm):
         model = SenateMembers
         fields = ['first_name', 'middle_name', 'last_name', 'id_number', 'email', 'phone_number', 'cgpa']
 
-
-# from django import forms
-# from .models import BoardMember
-
-# class BoardMemberAccountForm(forms.ModelForm):
-#     class Meta:
-#         model = BoardMember
-#         fields = ['username', 'password', 'email', 'cgpa']
-
+    def __init__(self, *args, **kwargs):
+        super(SenateMembersForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'

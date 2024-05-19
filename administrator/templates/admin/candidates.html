@@ -15,7 +15,8 @@
           <th>Id Number</th>
           <th>Position</th>
           <th>Bio</th>
-          <th>Avatar</th>
+          <th>Photo</th>
+          <th>Video</th>
           <th>Action</th>
       </thead>
       <tbody>
@@ -26,8 +27,20 @@
       <td>{{ candidate.id_number }}</td>
       <td>{{ candidate.position }}</td>
       <td>{{ candidate.bio }}</td>
-      <td><img src="/media/{{ candidate.photo }}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
-      
+      <td><img src="/media/{{ candidate.photo }}"
+        width="80" height="80"
+        alt="{{ candidate.fullname }}'s Avatar"
+        class="img img-fluid"></td>
+<td>
+    {% if candidate.video %}
+    <video width="160" height="120" controls>
+        <source src="/media/{{ candidate.video }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    {% else %}
+    No Video
+    {% endif %}
+</td>
       <td>
         <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-edit'></i> Edit</button>
         <button class='btn btn-danger btn-sm delete btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-trash'></i> Delete</button>

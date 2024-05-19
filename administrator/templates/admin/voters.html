@@ -63,8 +63,7 @@
                 <h4 class="modal-title"><b>Add New Voter</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" method="POST"
-                    action="{% url 'adminViewVoters' %}">
+                <form class="form-horizontal" method="POST" action="{% url 'adminViewVoters' %}">
                     {% csrf_token %}
                     <div class="modal-body">
                         {% for field in form1 %}
@@ -74,38 +73,23 @@
                             {{field}}
                         </div>
                         {% endfor %}
-                        {% for field in form2 %}
-                        <div class="form-group has-feedback">
-                            <span class="text-danger">{{field.errors}}</span>
-                            {{field.label_tag}}
-                            {{field}}
-                        </div>
-                        {% endfor %}
                     </div>
                     <!-- Button for File Upload -->
-                   <div class="form-group">
+                    {% comment %} <div class="form-group">
                         <label for="file_upload">Upload File:</label>
-                        <input type="file" id="file_upload" name="file_upload"
-                            class="hidden"
-                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                            required>
-                        <button type="button" class="btn btn-info btn-sm"
-                            onclick="document.getElementById('file_upload').click();"><i
-                                class="fa fa-upload"></i> Upload</button>
-                    </div> 
+                        <input type="file" id="file_upload" name="file_upload" class="hidden" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                        <button type="button" class="btn btn-info btn-sm" onclick="document.getElementById('file_upload').click();"><i class="fa fa-upload"></i> Upload</button>
+                    </div>  {% endcomment %}
                     <div class="modal-footer">
-                        <button type="button"
-                            class="btn btn-danger btn-flat pull-left"
-                            data-dismiss="modal"><i class="fa fa-close"></i>
-                            Close</button>
-                        <button type="submit" class="btn btn-success btn-flat"
-                            name="add"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-success btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Edit -->
 <div class="modal fade" id="edit">
     <div class="modal-dialog">
