@@ -40,6 +40,10 @@
         <link rel="stylesheet"
             href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}"
             type="text/css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+        </script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
@@ -48,7 +52,7 @@
                 <a class="navbar-brand" href="#">
                     <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
                         alt="HUEVS Logo" width="30" height="50"
-                        class="d-inline-block align-top"> 
+                        class="d-inline-block align-top">
                     <a href="" style="color:black;"> HUEVS </a>
                 </a>
                 <!-- Add the toggle button for small screens -->
@@ -66,53 +70,42 @@
                     </ul>
                     <!-- Add the buttons -->
                     <div class="navbar-buttons mbr-section-btn">
-                        {% comment %} <a class="btn btn-primary"
-                            href="{% url 'electionpage' %}"
-                            style="border-radius: 15px;">Home</a> {% endcomment %}
+                        <button class="btn btn-primary dropdown-toggle"
+                            type="button" id="profileDropdown"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Profile
+                        </button>
+                        <div class="dropdown-menu"
+                            aria-labelledby="profileDropdown">
+                            <!-- Check if user is authenticated -->
+                            <!-- If authenticated, show profile and logout options -->
+                            <a class="dropdown-item" href="#">Edit Profile</a>
+                            <!-- If not authenticated, show login and register options -->
+                            <a class="dropdown-item"
+                                href="{% url 'account_logout' %}">Logout</a>
+                        </div>
                         <a class="btn btn-primary"
                             href="{% url 'nominate_candidate' %}"
                             style="border-radius: 15px;">Nominate</a>
                         <a class="btn btn-primary"
                             href="{% url 'show_ballot' %}"
                             style="border-radius: 15px;">Vote</a>
-                            <a class="btn btn-primary" href="{% url 'resultpage' %}"
+                        <a class="btn btn-primary" href="{% url 'resultpage' %}"
                             style="border-radius: 15px;">Result</a>
-                        <a class="btn btn-primary"
+                        {% comment %} <a class="btn btn-primary"
                             href="{% url 'account_logout' %}"
                             style="border-radius: 15px;">Logout</a>
-                        {% comment %} <li class="dropdown"> {% endcomment %}
-                            {% comment %} <a href="" class="dropdown-toggle"
-                                data-toggle="dropdown">
-                                <span>Profile</span> <i
-                                    class="bi bi-chevron-down"></i>
-                            </a> {% endcomment %}
-                            {% comment %} <ul class="dropdown-menu">
-                                {% if user.is_authenticated %}
-                                <li><a href="">Profile</a></li>
-                                <li><a href="{% url 'account_logout' %}">Log
-                                        Out</a>
-                                </li>
-                                {% else %}
-                                <li><a href="{% url 'account_login' %}">Log
-                                        In</a>
-                                </li>
-                                <li><a
-                                        href="{% url 'account_register' %}">Register</a>
-                                </li>
-                                {% endif %}
-                            </ul> {% endcomment %}
-                        </li>
+                        {% endcomment %}
                     </div>
                 </div>
             </div>
         </nav>
         <br> <br>
         <br> <br>
-
-
         {%if nominationposts %}
-        <h1 class="page-header text-center title"><b>Haramaya University Student Union President Nomination</b></h1>
-
+        <h1 class="page-header text-center title"><b>Haramaya University Student
+                Union President Nomination</b></h1>
         <section class="content">
             <br>
             <style>
@@ -137,7 +130,8 @@
                 }
             </style>
             </head>
-            {% comment %} <body>
+            {% comment %}
+            <body>
                 <div id="the-final-countdown">
                     <p></p>
                 </div>
@@ -165,23 +159,29 @@
             </html> {% endcomment %}
             <section
                 style="margin: 0 auto; height: 500px; max-width: 900px; padding-left: 30px; padding-right: 30px; border: 2px solid #ccc; border-radius: 30px;">
-               <br> <h1 class="page-header text-center title"><b>Nominate a
+                <br>
+                <h1 class="page-header text-center title"><b>Nominate a
                         Candidate</b></h1>
-                        <form method="post" class="form-group">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="id_fullname" class="form-label">Full Name</label>
-                                <input type="text" name="fullname" id="id_fullname" class="form-control" placeholder="Enter full name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_bio" class="form-label">Bio</label>
-                                <textarea name="bio" id="id_bio" class="form-control" placeholder="Enter bio" rows="5" required></textarea>
-                            </div>
-                            <div style="padding-left: 260px;">
-                            <button type="submit" class="btn btn-primary">Submit Nomination</button>
-                            </div>
-                        </form>
-                        
+                <form id="nomination-form" method="post" class="form-group">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_fullname" class="form-label">Full
+                            Name</label>
+                        <input type="text" name="fullname" id="id_fullname"
+                            class="form-control" placeholder="Enter full name"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_bio" class="form-label">Bio</label>
+                        <textarea name="bio" id="id_bio" class="form-control"
+                            placeholder="Enter bio" rows="5"
+                            required></textarea>
+                    </div>
+                    <div style="padding-left: 260px;">
+                        <button id="submit-btn" type="submit"
+                            class="btn btn-primary">Submit Nomination</button>
+                    </div>
+                </form>
             </section>
             {%else%}
             <section
@@ -198,5 +198,41 @@
                 </div>
             </section>
             {%endif%}
-            {% endblock content %}
         </section>
+        <script>
+            $(document).ready(function() {
+                $('#nomination-form').submit(function(e) {
+                    e.preventDefault();
+                    // Disable the submit button to prevent multiple submissions
+                    $('#submit-btn').prop('disabled', true);
+                    // Perform form submission via AJAX
+                    $.ajax({
+                        type: $(this).attr('method'),
+                        url: $(this).attr('action'),
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            // Display success message using Sweet Alert
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Nomination Submitted!',
+                                text: 'Thank you for your nomination.',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                position: 'top-end' // Set position to top right corner
+                            });
+                        },
+                        error: function(xhr, errmsg,
+                            err) {
+                            // Display error message using Sweet Alert
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'An error occurred while submitting the nomination.',
+                                position: 'top-end' // Set position to top right corner
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+        {% endblock content %}

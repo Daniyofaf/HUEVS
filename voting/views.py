@@ -27,7 +27,7 @@ def dashboard(request):
         context = {
             "my_votes": Votes.objects.filter(voter=user.voter),
         }
-        return redirect(reverse("vote"))
+        return render(request, "voting/voter/myvote.html")
     else:
         return redirect(reverse("electionpage"))
 
@@ -217,7 +217,7 @@ def submit_ballot(request):
             except Nominee.DoesNotExist:
                 messages.error(request, 'Selected candidate does not exist.')
         else:
-            messages.error(request, 'No candidate selected.')
+            messages.error(request, '') #   No candidate selected.
         return redirect('electionpage')
     else:
         return redirect('electionpage')
@@ -238,6 +238,40 @@ def resultpage(request):
 
     # Render the template with the context data
     return render(request, "voting/voter/ResultPage.html", context)
+
+
+# def candidate_platform(request, candidate_id):
+#     try:
+#         candidate = Candidate.objects.get(pk=candidate_id)
+#         data = {
+#             'fullname': candidate.fullname,
+#             'bio': candidate.bio,
+#         }
+#         return JsonResponse(data)
+#     except Candidate.DoesNotExist:
+#         return JsonResponse({'error': 'Candidate does not exist'}, status=404)
+
+
+
+
+# from .models import CampaignMessage
+# from .models import Ballot
+
+# def match_names_and_link():
+#     campaign_messages = CampaignMessage.objects.all()
+#     ballots = Ballot.objects.all()
+
+#     for message in campaign_messages:
+#         for ballot in ballots:
+#             if message.candidate_name == ballot.candidate_name:
+#                 message.ballot_id = ballot.id
+#                 message.save()
+#                 break  # Once a match is found, break out of the inner loop
+
+
+
+
+
 
     
 # def submit_ballot(request):
@@ -300,5 +334,23 @@ def nominate_candidate(request):
         "voting/voter/nomination_form.html",
         {"form": form, "nominationposts": nominationposts},
     )
+
+
+# views.py
+# from django.shortcuts import get_object_or_404, redirect
+# from django.http import JsonResponse
+# from .models import Candidate
+# from django.views.decorators.csrf import csrf_exempt
+
+# @csrf_exempt
+# def update_candidate_bio(request):
+#     if request.method == 'POST':
+#         candidate_id = request.POST.get('candidate_id')
+#         new_bio = request.POST.get('bio')
+#         candidate = get_object_or_404(Candidate, id=candidate_id)
+#         candidate.bio = new_bio
+#         candidate.save()
+#         return JsonResponse({'status': 'success', 'message': 'Bio updated successfully.'})
+#     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 

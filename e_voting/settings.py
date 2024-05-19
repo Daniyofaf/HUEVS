@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'voting.apps.VotingConfig',
     'administrator.apps.AdministratorConfig',
     'board_member.apps.BoardMemberConfig',
-    'candidate.apps.CandidateConfig',
+    'candidate',
     # 'Face_Detection.apps.FaceDetectionConfig',
     
     'django.contrib.admin',

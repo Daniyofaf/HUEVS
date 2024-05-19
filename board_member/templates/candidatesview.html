@@ -65,7 +65,7 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" enctype="multipart/form-data"
-                    method="POST" action="{% url 'viewCandidate' %}">
+                    method="POST" action="{% url 'Candidateview' %}">
                     {% csrf_token %}
                     <div class="modal-body">
                         {% for field in form1  %}

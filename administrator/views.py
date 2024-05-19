@@ -167,19 +167,6 @@ def view_voter_by_id(request):
     return JsonResponse(context)
 
 
-def view_position_by_id(request):
-    pos_id = request.GET.get('id', None)
-    pos = Position.objects.filter(id=pos_id)
-    context = {}
-    if not pos.exists():
-        context['code'] = 404
-    else:
-        context['code'] = 200
-        pos = pos[0]
-        context['name'] = pos.name
-        context['max_vote'] = pos.max_vote
-        context['id'] = pos.id
-    return JsonResponse(context)
 
 
 def updateVoter(request):
@@ -209,6 +196,22 @@ def deleteVoter(request):
         messages.error(request, "Access To This Resource Denied")
 
     return redirect(reverse('adminViewVoters'))
+
+
+
+def view_position_by_id(request):
+    pos_id = request.GET.get('id', None)
+    pos = Position.objects.filter(id=pos_id)
+    context = {}
+    if not pos.exists():
+        context['code'] = 404
+    else:
+        context['code'] = 200
+        pos = pos[0]
+        context['name'] = pos.name
+        context['max_vote'] = pos.max_vote
+        context['id'] = pos.id
+    return JsonResponse(context)
 
 
 def viewPositions(request):

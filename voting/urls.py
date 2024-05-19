@@ -19,7 +19,11 @@ urlpatterns = [
 
     path('resultpage/', views.resultpage, name='resultpage'),
 
-    
+    # path('candidate/platform/<int:candidate_id>/', views.candidate_platform, name='candidate_platform'),
+
+    # path('update_candidate_bio/', views.update_candidate_bio, name='update_candidate_bio'),
+
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -18,7 +18,7 @@ class PositionForm(FormSettings):
 class CandidateForm(FormSettings):
     class Meta:
         model = Candidate
-        fields = ['fullname', 'bio', 'position', 'photo']
+        fields = ['fullname', 'id_number', 'bio', 'position', 'photo']
 
 class NomineeForm(FormSettings):
     class Meta:

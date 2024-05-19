@@ -12,6 +12,7 @@
   <table id="example1" class="table table-bordered table-hover table-striped">
     <thead style="background-color: #222D32; color:white;">
           <th>Full Name</th>
+          <th>Id Number</th>
           <th>Position</th>
           <th>Bio</th>
           <th>Avatar</th>
@@ -22,6 +23,7 @@
       
     <tr>
       <td>{{ candidate.fullname }}</td>
+      <td>{{ candidate.id_number }}</td>
       <td>{{ candidate.position }}</td>
       <td>{{ candidate.bio }}</td>
       <td><img src="/media/{{ candidate.photo }}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>

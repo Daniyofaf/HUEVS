@@ -7,7 +7,7 @@ from django.urls import reverse
 from administrator.models import SenateMembers
 from administrator.views import senate_members
 from e_voting import settings
-from voting.forms import CandidateForm
+from voting.forms import CandidateForm, PositionForm
 from voting.models import Candidate, Position, Voter, Votes
 from .models import ElectionPost, ElectionResult, NominationPost
 from datetime import datetime, time
@@ -106,18 +106,18 @@ def viewnominatedcandidate(request):
         if candidate_approved:
             approved_candidate = Nominee.objects.get(pk=candidate_approved)
             approved_candidate.is_approved = True
-            try:
-                approved_nominee = Candidate.objects.create(
-                    fullname=approved_candidate.fullname,
-                    bio=approved_candidate.bio,
-                    position_id = approved_candidate.id
-                )
-                # Optionally, you might need to save the image if it's uploaded
-                # approved_nominee.photo = nominated_candidate.photo
-                approved_nominee.save()
-                print("Candidate created successfully:", approved_nominee)
-            except Exception as e:
-                print("Error creating candidate:", e)
+            # try:
+            #     approved_nominee = Candidate.objects.create(
+            #         fullname=approved_candidate.fullname,
+            #         bio=approved_candidate.bio,
+            #         position_id = approved_candidate.id
+            #     )
+            #     # Optionally, you might need to save the image if it's uploaded
+            #     # approved_nominee.photo = nominated_candidate.photo
+            #     approved_nominee.save()
+            #     print("Candidate created successfully:", approved_nominee)
+            # except Exception as e:
+            #     print("Error creating candidate:", e)
             
             approved_candidate.save()
         elif candidate_dispproved:
@@ -237,18 +237,18 @@ def approve_nomination(request, nominated_candidate_id):
         nominated_candidate.is_approved = approved
         nominated_candidate.save()
         
-        if approved:
-            try:
-                candidate = Candidate.objects.create(
-                    fullname=nominated_candidate.fullname,
-                    bio=nominated_candidate.bio,
-                    position=nominated_candidate.position
-                )
-                return JsonResponse({"status": "success"})
-            except Exception as e:
-                return JsonResponse({"status": "error", "message": str(e)})
-        else:
-            return JsonResponse({"status": "success", "message": "Nomination not approved"})
+        # if approved:
+        #     try:
+        #         candidate = Candidate.objects.create(
+        #             fullname=nominated_candidate.fullname,
+        #             bio=nominated_candidate.bio,
+        #             position=nominated_candidate.position
+        #         )
+        #         return JsonResponse({"status": "success"})
+        #     except Exception as e:
+        #         return JsonResponse({"status": "error", "message": str(e)})
+        # else:
+        #     return JsonResponse({"status": "success", "message": "Nomination not approved"})
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
 
@@ -510,3 +510,68 @@ def announce_election(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+
+
+
+
+
+
+def viewpositionbyid(request):
+    pos_id = request.GET.get('id', None)
+    pos = Position.objects.filter(id=pos_id)
+    context = {}
+    if not pos.exists():
+        context['code'] = 404
+    else:
+        context['code'] = 200
+        pos = pos[0]
+        context['name'] = pos.name
+        context['max_vote'] = pos.max_vote
+        context['id'] = pos.id
+    return JsonResponse(context)
+
+
+def view_Position(request):
+    positions = Position.objects.order_by('-priority').all()
+    form = PositionForm(request.POST or None)
+    context = {
+        'positions': positions,
+        'form1': form,
+        'page_title': "Positions"
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.priority = positions.count() + 1  # Just in case it is empty.
+            form.save()
+            messages.success(request, "New Position Created")
+        else:
+            messages.error(request, "Form errors")
+    return render(request, "positions.html", context)
+
+
+def update_Position(request):
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        instance = Position.objects.get(id=request.POST.get('id'))
+        pos = PositionForm(request.POST or None, instance=instance)
+        pos.save()
+        messages.success(request, "Position has been updated")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+
+    return redirect(reverse('view_Position'))
+
+
+def delete_Position(request):
+    if request.method != 'POST':
+        messages.error(request, "Access Denied")
+    try:
+        pos = Position.objects.get(id=request.POST.get('id'))
+        pos.delete()
+        messages.success(request, "Position Has Been Deleted")
+    except:
+        messages.error(request, "Access To This Resource Denied")
+
+    return redirect(reverse('view_Position'))

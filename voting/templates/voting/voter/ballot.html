@@ -39,6 +39,10 @@
         <link rel="stylesheet"
             href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}"
             type="text/css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+        </script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
@@ -65,6 +69,21 @@
                     </ul>
                     <!-- Add the buttons -->
                     <div class="navbar-buttons mbr-section-btn">
+                        <button class="btn btn-primary dropdown-toggle"
+                            type="button" id="profileDropdown"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Profile
+                        </button>
+                        <div class="dropdown-menu"
+                            aria-labelledby="profileDropdown">
+                            <!-- Check if user is authenticated -->
+                            <!-- If authenticated, show profile and logout options -->
+                            <a class="dropdown-item" href="#">Edit Profile</a>
+                            <!-- If not authenticated, show login and register options -->
+                            <a class="dropdown-item"
+                                href="{% url 'account_logout' %}">Logout</a>
+                        </div>
                         <a class="btn btn-primary"
                             href="{% url 'nominate_candidate' %}"
                             style="border-radius: 15px;">Nominate</a>
@@ -73,31 +92,9 @@
                             style="border-radius: 15px;">Vote</a>
                         <a class="btn btn-primary" href="{% url 'resultpage' %}"
                             style="border-radius: 15px;">Result</a>
-                        <a class="btn btn-primary"
+                        {% comment %} <a class="btn btn-primary"
                             href="{% url 'account_logout' %}"
-                            style="border-radius: 15px;">Logout</a>
-                        {% comment %} <li class="dropdown"> {% endcomment %}
-                            {% comment %} <a href="" class="dropdown-toggle"
-                                data-toggle="dropdown">
-                                <span>Profile</span> <i
-                                    class="bi bi-chevron-down"></i>
-                            </a> {% endcomment %}
-                            {% comment %} <ul class="dropdown-menu">
-                                {% if user.is_authenticated %}
-                                <li><a href="">Profile</a></li>
-                                <li><a href="{% url 'account_logout' %}">Log
-                                        Out</a>
-                                </li>
-                                {% else %}
-                                <li><a href="{% url 'account_login' %}">Log
-                                        In</a>
-                                </li>
-                                <li><a
-                                        href="{% url 'account_register' %}">Register</a>
-                                </li>
-                                {% endif %}
-                            </ul> {% endcomment %}
-                        </li>
+                            style="border-radius: 15px;">Logout</a> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -107,93 +104,45 @@
         <br> <br>
         <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
         <section class="content">
+            <!-- Your original content -->
             <style>
-                @import url(https://fonts.googleapis.com/css?family=Lato:100,400);
-                #the-final-countdown {
-                        {
-                        % comment %
-                    }
-                    background: blue;
-                        {
-                        % endcomment %
-                    }
-                    font-family: 'Lato',
-                    sans-serif;
-                    text-align: center;
-                    color: black;
-                    text-shadow: 1px 1px 5px black;
-                    font-size: 3rem;
-                    border-radius: 35px;
-                    width: 900px;
-                    margin-left: 70px;
-                }
+                /* Custom CSS styles */
                 .custom-card {
-                    height: 300px;
-                    /* Adjust the height as needed */
+                    margin: 30px;
+                    height: auto;
+                    border-radius: 25px;
+                    border: 2px solid #007bff; /* Blue border color */
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+                    {% comment %} margin-bottom: 20px; /* Margin between cards */ {% endcomment %}
+                    padding-top: 20px;
+                    padding-left: 50px; /* Padding inside cards */
+                    background-color: #f8f9fa; /* Card background color */
                 }
-                #candidateForm {
-                    padding-left: 100px;
-                 
+                .custom-card img {
+                    height: 200px; /* Adjust image height */
+                    width: 75%; /* Full width */
+                    object-fit: cover; /* Cover the image */
+                    {% comment %} border-radius: 10px; /* Rounded corners for image */ {% endcomment %}
+                    {% comment %} margin-bottom: 10px; /* Margin bottom */ {% endcomment %}
+                }
+                .custom-card .card-body {
+                    {% comment %} padding: 20px; /* Padding inside card body */ {% endcomment %}
                 }
             </style>
-            </head>
-            <!-- Your original content -->
+            <!-- Your candidate display section -->
             <section class="content">
-                <h2 class="page-header text-center title"><b>Vote Your
-                        Choice</b></h2><br>
-                {% comment %} <div class="row">
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <div class="alert alert-danger alert-dismissible"
-                            id="alert" style="display:none;">
-                            <button type="button" class="close"
-                                data-dismiss="alert"
-                                aria-hidden="true">&times;</button>
-                            <span class="message"></span>
-                        </div>
-                        <form method="POST" id="ballotForm"
-                            action="{% url 'submit_ballot' %}"
-                            style="margin-left: 500px;">
-                            {% csrf_token %}
-                            <!-- Render the ballot form -->
-                            {{ ballot|safe }}
-                            <div class="text-center"
-                                style="margin-left: -400px;">
-                                <button type="button"
-                                    class="btn btn-success btn-flat"
-                                    id="preview"><i class="fa fa-file-text"></i>
-                                    Preview</button>
-                                <button type="submit"
-                                    class="btn btn-primary btn-flat"
-                                    name="submit_vote"><i
-                                        class="fa fa-check-square-o"></i>
-                                    Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div> {% endcomment %}
-                <!-- Display candidates -->
+                <h2 class="page-header text-center title"><b>Vote Your Choice</b></h2>
                 <div class="row">
-                    <form method="POST" id="candidateForm"
-                        action="{% url 'submit_ballot' %}">
+                    <form method="POST" id="candidateForm" action="{% url 'submit_ballot' %}">
                         {% csrf_token %}
                         <div class="row">
                             {% for sew in sewoch %}
                             <div class="col-md-4 mb-4">
                                 <div class="card custom-card">
-                                    <img
-                                        src="{% static 'images/userplaceholder.png' %}"
-                                        class="card-img-top"
-                                        alt="{{ sew.photo }}"
-                                        style="height: 350px; width: 350px;">
-                                    {% comment %} <img src="{% get_media_prefix %}candidates/6fbabea3-33d5-4f2f-9dc3-d4ffeb8fe838.jpeg" alt="{{ candidate.fullname }}'s photo"> {% endcomment %}
-
+                                    <img src="{% static 'images/userplaceholder.png' %}" class="card-img-top" alt="{{ sew.photo }}">
                                     <div class="card-body">
-                                        <input type="radio"
-                                            name="selected_candidate"
-                                            id="candidate{{ sew.id }}"
-                                            value="{{ sew.id }}">
-                                        <label for="candidate{{ sew.id }}"
-                                            class="form-check-label fw-bold">{{ sew.fullname }}</label>
+                                        <input type="radio" name="selected_candidate" id="candidate{{ sew.id }}" value="{{ sew.id }}">
+                                        <label for="candidate{{ sew.id }}" class="form-check-label fw-bold">{{ sew.fullname }}</label>
                                         <br>
                                         <br>
                                         <p class="card-text">{{ sew.bio }}</p>
@@ -203,17 +152,14 @@
                             </div>
                             {% endfor %}
                         </div>
-                        <br><br><br>
-                        <br><br><br>
-                        <br><br><br>
+                  
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary"
-                                style="padding-left: -80px;">Submit
-                                Vote</button>
+                            <button type="submit" class="btn btn-primary" style="padding-left: -50px;">Submit Vote</button>
                         </div>
                     </form>
                 </div>
             </section>
+        </section>
             {%else%}
             <br><br>
             <section
@@ -231,23 +177,25 @@
             </section>
             {%endif%}
             {% endblock content %}
-
-            
             <!-- Add a JavaScript function for encryption -->
-<script>
-    function encryptAndSubmit() {
-        // Get the selected candidate ID
-        var selectedCandidateId = document.querySelector('input[name="selected_candidate"]:checked').value;
-
-        // Encrypt the candidate ID (replace this with your encryption logic)
-        var encryptedCandidateId = 'encrypted'; // Replace with actual encryption logic
-
-        // Assign the encrypted candidate ID to a hidden input field
-        document.getElementById('encrypted_candidate_id').value = encryptedCandidateId;
-
-        // Submit the form
-        document.getElementById('candidateForm').submit();
-    }
-</script>
-
-
+            {% comment %} <script
+                src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+            </script>
+            <!-- Include JavaScript for handling AJAX requests -->
+            <script>
+                function encryptAndSubmit() {
+                    // Get the selected candidate ID
+                    var selectedCandidateId = document.querySelector(
+                        'input[name="selected_candidate"]:checked').value;
+                    // Encrypt the candidate ID (replace this with your encryption logic)
+                    var encryptedCandidateId =
+                    'encrypted'; // Replace with actual encryption logic
+                    // Assign the encrypted candidate ID to a hidden input field
+                    document.getElementById('encrypted_candidate_id').value =
+                        encryptedCandidateId;
+                    // Submit the form
+                    document.getElementById('candidateForm').submit();
+                }
+            </script> {% endcomment %}
