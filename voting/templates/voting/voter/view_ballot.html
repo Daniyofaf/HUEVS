@@ -43,6 +43,22 @@
         <script
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
         </script>
+    <style>
+       
+        
+        .card {
+            background-color: #F0F8FF; /* Change the background color code of the card to your desired color */
+            border-radius: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add box shadow for a card-like appearance */
+            transition: 0.3s; /* Add transition effect on hover */
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
+        }
+        
+    </style>
+        
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
@@ -102,31 +118,35 @@
         <br> <br>
         <br> <br>
         <br> <br>
-        <section class="content">
-            <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body" style="border-radius: 20px;">
-                                <br>
-                                <h1 class="card-title text-center">Vote Details
-                                </h1>
-                                <div class="center">
-                                    <br>
-                                    <div class="col-sm-10 offset-sm-2">
-                                        <!-- Display ballot details here -->
-                                       <h3> <p><strong>Position:</strong>
-                                            {{ vote.position }}</p> </h3>
+        <div class="page-border">
+                    <section class="content">
+                        <h1 class="page-header text-center title"><b>Haramaya University Student Union President Election</b></h1>
+                        <br>
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body" style="border-radius: 20px;">
                                             <br>
-                                    <h3>    <p><strong>Candidate:</strong>
-                                            {{ vote.candidate }}</p>  </h3>
+                                            <h1 class="card-title text-center">Vote Details</h1>
+                                            <div class="center">
+                                                <br>
+                                                <div class="col-sm-10 offset-sm-2">
+                                                    <!-- Display ballot details here -->
+                                                    <h3><p><strong>Position:</strong> {{ vote.position }}</p></h3>
+                                                    <br>
+                                                    <h3><p><strong>Candidate:</strong> {{ vote.candidate }}</p></h3>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
-            </div>
-        </section>
+                
+            </section>
+        </div>
+        
         {% endblock content %}

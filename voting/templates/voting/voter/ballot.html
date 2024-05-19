@@ -22,8 +22,8 @@
         </noscript>
         <link rel="preload" as="style" href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
         <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}" type="text/css">
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
@@ -112,7 +112,7 @@
                             {% endfor %}
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary submit-btn" style="padding-left: -50px;">Submit Vote</button>
+                            <button type="submit" class="btn btn-primary" style="padding-left: -50px;">Submit Vote</button>
                         </div>
                     </form>
                 </div>
@@ -155,25 +155,24 @@
                 </div>
             </div>
         </div>
+        <script>
+            $('#candidateModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var bio = button.data('bio');
+                var fullname = button.data('fullname');
+                var videoUrl = button.data('video');
+                var modal = $(this);
+                modal.find('.modal-title').text(fullname);
+                modal.find('.modal-body #candidateBio').text(bio);
+                if (videoUrl) {
+                    modal.find('.modal-body #candidateVideo').show();
+                    modal.find('.modal-body #candidateVideoSource').attr('src', videoUrl);
+                    modal.find('.modal-body #candidateVideo')[0].load();
+                } else {
+                    modal.find('.modal-body #candidateVideo').hide();
+                }
+            });
+        </script>
     </body>
 </section>
 {% endblock content %}
-
-{% block extra_scripts %}
-<script>
-    // Listen for the form submission
-    $(document).on('submit', '#candidateForm', function(event) {
-        // Check if no candidate is selected
-        if (!$("input[name='selected_candidate']:checked").val()) {
-            event.preventDefault(); // Prevent the default form submission
-
-            // Display SweetAlert for validation error
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Please select a candidate.',
-            });
-        }
-    });
-</script>
-{% endblock %}
