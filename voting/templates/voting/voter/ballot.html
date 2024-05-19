@@ -4,198 +4,176 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1, minimum-scale=1">
-        <link rel="shortcut icon"
-            href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
-            type="image/x-icon">
-        <meta name="description"
-            content="Revolutionizing the voting experience with cutting-edge technology. Say goodbye to long queues and hello to convenience.">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        <link rel="shortcut icon" href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}" type="image/x-icon">
+        <meta name="description" content="Revolutionizing the voting experience with cutting-edge technology. Say goodbye to long queues and hello to convenience.">
         <title>Haramaya University Student Union Election</title>
-        <link rel="stylesheet"
-            href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'assets/parallax/jarallax.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'assets/dropdown/css/style.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'assets/socicon/css/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/parallax/jarallax.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/socicon/css/styles.css' %}">
         <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
-        <link rel="preload"
-            href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap"
-            as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript>
-            <link rel="stylesheet"
-                href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
         </noscript>
-        <link rel="preload" as="style"
-            href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
-        <link rel="stylesheet"
-            href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}"
-            type="text/css">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script
-            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
-        </script>
+        <link rel="preload" as="style" href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
+        <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}" type="text/css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container-fluid">
-                <!-- Add the logo and text -->
                 <a class="navbar-brand" href="#">
-                    <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
-                        alt="HUEVS Logo" width="30" height="50"
-                        class="d-inline-block align-top">
+                    <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}" alt="HUEVS Logo" width="30" height="50" class="d-inline-block align-top">
                     <a href="" style="color:black;"> HUEVS </a>
                 </a>
-                <!-- Add the toggle button for small screens -->
-                <button class="navbar-toggler" type="button"
-                    data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <!-- Add the navigation links -->
-                <div class="collapse navbar-collapse justify-content-between"
-                    id="navbarSupportedContent">
+                <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                     <ul class="navbar-nav">
                         <!-- Navigation items -->
                     </ul>
-                    <!-- Add the buttons -->
                     <div class="navbar-buttons mbr-section-btn">
-                        <button class="btn btn-primary dropdown-toggle"
-                            type="button" id="profileDropdown"
-                            data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            Profile
-                        </button>
-                        <div class="dropdown-menu"
-                            aria-labelledby="profileDropdown">
-                            <!-- Check if user is authenticated -->
-                            <!-- If authenticated, show profile and logout options -->
+                        {% comment %} <button class="btn btn-primary dropdown-toggle" type="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</button>
+                        <div class="dropdown-menu" aria-labelledby="profileDropdown">
                             <a class="dropdown-item" href="#">Edit Profile</a>
-                            <!-- If not authenticated, show login and register options -->
-                            <a class="dropdown-item"
-                                href="{% url 'account_logout' %}">Logout</a>
-                        </div>
-                        <a class="btn btn-primary"
-                            href="{% url 'nominate_candidate' %}"
-                            style="border-radius: 15px;">Nominate</a>
-                        <a class="btn btn-primary"
-                            href="{% url 'show_ballot' %}"
-                            style="border-radius: 15px;">Vote</a>
-                        <a class="btn btn-primary" href="{% url 'resultpage' %}"
-                            style="border-radius: 15px;">Result</a>
-                        {% comment %} <a class="btn btn-primary"
-                            href="{% url 'account_logout' %}"
-                            style="border-radius: 15px;">Logout</a> {% endcomment %}
+                            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                        </div> {% endcomment %}
+                        <a class="btn btn-primary" href="{% url 'nominate_candidate' %}" style="border-radius: 15px;">Nominate</a>
+                        <a class="btn btn-primary" href="{% url 'show_ballot' %}" style="border-radius: 15px;">Vote</a>
+                        <a class="btn btn-primary" href="{% url 'resultpage' %}" style="border-radius: 15px;">Result</a>
+                        <a class="btn btn-primary" href="{% url 'account_logout' %}" style="border-radius: 15px;">Logout</a>
                     </div>
                 </div>
             </div>
         </nav>
-        <br> <br>
-        {%if electionposts %}
-        <br> <br>
+        <br><br>
+        {% if electionposts %}
+        <br><br>
         <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
         <section class="content">
-            <!-- Your original content -->
             <style>
-                /* Custom CSS styles */
                 .custom-card {
                     margin: 30px;
                     height: auto;
                     border-radius: 25px;
-                    border: 2px solid #007bff; /* Blue border color */
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
-                    {% comment %} margin-bottom: 20px; /* Margin between cards */ {% endcomment %}
-                    padding-top: 20px;
-                    padding-left: 50px; /* Padding inside cards */
-                    background-color: #f8f9fa; /* Card background color */
+                    border: 2px solid #007bff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    background-color: #f8f9fa;
                 }
                 .custom-card img {
-                    height: 200px; /* Adjust image height */
-                    width: 75%; /* Full width */
-                    object-fit: cover; /* Cover the image */
-                    {% comment %} border-radius: 10px; /* Rounded corners for image */ {% endcomment %}
-                    {% comment %} margin-bottom: 10px; /* Margin bottom */ {% endcomment %}
+                    height: 200px;
+                    width: 75%;
+                    object-fit: cover;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
+                    margin-left: 50px;
+                }
+                .custom-card video {
+                    width: 100%;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
                 }
                 .custom-card .card-body {
-                    {% comment %} padding: 20px; /* Padding inside card body */ {% endcomment %}
+                    padding: 20px;
                 }
             </style>
-            <!-- Your candidate display section -->
             <section class="content">
                 <h2 class="page-header text-center title"><b>Vote Your Choice</b></h2>
                 <div class="row">
                     <form method="POST" id="candidateForm" action="{% url 'submit_ballot' %}">
                         {% csrf_token %}
                         <div class="row">
-                            {% for sew in sewoch %}
+                            {% for candidate in candidates %}
                             <div class="col-md-4 mb-4">
                                 <div class="card custom-card">
-                                    <img src="{% static 'images/userplaceholder.png' %}" class="card-img-top" alt="{{ sew.photo }}">
+                                    <img src="/media/{{ candidate.photo }}" class="card-img-top" alt="{{ candidate.fullname }}" style="height:400px;">
                                     <div class="card-body">
-                                        <input type="radio" name="selected_candidate" id="candidate{{ sew.id }}" value="{{ sew.id }}">
-                                        <label for="candidate{{ sew.id }}" class="form-check-label fw-bold">{{ sew.fullname }}</label>
-                                        <br>
-                                        <br>
-                                        <p class="card-text">{{ sew.bio }}</p>
-                                        <button class="btn btn-secondary">View Campaign</button>
+                                        <input type="radio" name="selected_candidate" id="candidate{{ candidate.id }}" value="{{ candidate.id }}">
+                                        <label for="candidate{{ candidate.id }}" class="form-check-label fw-bold">{{ candidate.fullname }}</label>
+                                        <br><br>
+                                        {% comment %} <p class="card-text">{{ candidate.bio }}</p>
+                                        {% if candidate.video %}
+                                        <video controls>
+                                            <source src="/media/{{ candidate.video }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        {% endif %} {% endcomment %}
+                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#candidateModal" data-bio="{{ candidate.bio }}" data-fullname="{{ candidate.fullname }}" data-video="/media/{{ candidate.video }}">View Campaign</button>
                                     </div>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
-                  
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="padding-left: -50px;">Submit Vote</button>
+                            <button type="submit" class="btn btn-primary submit-btn" style="padding-left: -50px;">Submit Vote</button>
                         </div>
                     </form>
                 </div>
             </section>
         </section>
-            {%else%}
-            <br><br>
-            <section
-                style="margin: 100 auto; max-width: 1600px; padding: 20px; ">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h1 class="card-title">Sorry, It's Not
-                                    Election Time</h1>
-                            </div>
+        {% else %}
+        <br><br>
+        <section style="margin: 100 auto; max-width: 1600px; padding: 20px;">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h1 class="card-title">Sorry, It's Not Election Time</h1>
                         </div>
                     </div>
                 </div>
-            </section>
-            {%endif%}
-            {% endblock content %}
-            <!-- Add a JavaScript function for encryption -->
-            {% comment %} <script
-                src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script
-                src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
-            </script>
-            <!-- Include JavaScript for handling AJAX requests -->
-            <script>
-                function encryptAndSubmit() {
-                    // Get the selected candidate ID
-                    var selectedCandidateId = document.querySelector(
-                        'input[name="selected_candidate"]:checked').value;
-                    // Encrypt the candidate ID (replace this with your encryption logic)
-                    var encryptedCandidateId =
-                    'encrypted'; // Replace with actual encryption logic
-                    // Assign the encrypted candidate ID to a hidden input field
-                    document.getElementById('encrypted_candidate_id').value =
-                        encryptedCandidateId;
-                    // Submit the form
-                    document.getElementById('candidateForm').submit();
-                }
-            </script> {% endcomment %}
+            </div>
+        </section>
+        {% endif %}
+        <!-- Modal for candidate bio and video -->
+        <div class="modal fade" id="candidateModal" tabindex="-1" role="dialog" aria-labelledby="candidateModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="candidateModalLabel">Candidate Campaign</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="candidateBio"></p>
+                        <video id="candidateVideo" controls style="width: 100%; display: none;">
+                            <source id="candidateVideoSource" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</section>
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+    // Listen for the form submission
+    $(document).on('submit', '#candidateForm', function(event) {
+        // Check if no candidate is selected
+        if (!$("input[name='selected_candidate']:checked").val()) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Display SweetAlert for validation error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Please select a candidate.',
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -140,15 +140,21 @@ def fetch_ballot(request):
     return JsonResponse(output, safe=False)
 
 
+
+
 def show_ballot(request):
     electionposts = ElectionPost.objects.filter(is_posted=True)
     falseelectionposts = ElectionPost.objects.filter(is_posted=False)
-    sewoch = Nominee.objects.filter(is_approved=True)
+    candidates = Candidate.objects.all()  # Using a more intuitive variable name
     if request.user.voter.voted:
         messages.error(request, "You have voted already")
         return redirect(reverse("voterDashboard"))
     ballot = generate_ballot(display_controls=False)
-    context = {"ballot": ballot, 'electionposts' : electionposts,'sewoch':sewoch}
+    context = {
+        "ballot": ballot,
+        'electionposts': electionposts,
+        'candidates': candidates,  # Updated variable name
+    }
     return render(request, "voting/voter/ballot.html", context)
 
 

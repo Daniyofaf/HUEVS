@@ -18,7 +18,10 @@ class PositionForm(FormSettings):
 class CandidateForm(FormSettings):
     class Meta:
         model = Candidate
-        fields = ['fullname', 'id_number', 'bio', 'position', 'photo']
+        fields = ['fullname', 'id_number', 'bio', 'position', 'photo', 'video']
+        widgets = {
+            'video': forms.ClearableFileInput(attrs={'accept': 'video/*'}),
+        }
 
 class NomineeForm(FormSettings):
     class Meta:

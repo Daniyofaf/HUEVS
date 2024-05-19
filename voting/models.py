@@ -27,6 +27,7 @@ class Candidate(models.Model):
     id_number = models.CharField(max_length=20, unique=True)
     photo = models.ImageField(upload_to="candidates")
     bio = models.TextField()
+    video = models.FileField(upload_to='candidate_videos/', null=True, blank=True)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
     
     # POSITIONS = (
@@ -85,7 +86,6 @@ class Nominee(models.Model):
     bio = models.TextField()
     position = models.CharField(max_length=50, choices=POSITIONS, default='President')
     is_approved = models.BooleanField('Approved', default=False)
-    # voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.fullname
