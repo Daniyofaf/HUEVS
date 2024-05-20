@@ -196,7 +196,6 @@ from django.contrib import messages
 
 from .models import Voter, Votes, Nominee
 
-from .models import Position, Votes
 
 def submit_ballot(request):
     if request.method == 'POST':

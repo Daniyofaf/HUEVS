@@ -44,37 +44,12 @@ class Candidate(models.Model):
 
 
 
-# Define a function to encrypt and decrypt data
-# def encrypt_data(data):
-#     # Replace 'YOUR_ENCRYPTION_KEY' with your own encryption key
-#     key = b'YOUR_ENCRYPTION_KEY'
-#     cipher_suite = Fernet(key)
-#     encrypted_data = cipher_suite.encrypt(data.encode())
-#     return encrypted_data.decode()
-
-# def decrypt_data(encrypted_data):
-#     key = b'YOUR_ENCRYPTION_KEY'
-#     cipher_suite = Fernet(key)
-#     decrypted_data = cipher_suite.decrypt(encrypted_data.encode())
-#     return decrypted_data.decode()
-
-# Define the Votes model with encrypted fields
 class Votes(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
     candidate = models.CharField(max_length=100)  # Assuming max length for candidate names
 
-    # encrypted_candidate = models.BinaryField()  # Field to store encrypted candidate data
-
-    # def set_candidate(self, candidate):
-    #     # Encrypt the candidate name before saving to the database
-    #     self.encrypted_candidate = encrypt_data(candidate)
-
-    # def get_candidate(self):
-    #     # Decrypt the encrypted candidate name when retrieving from the database
-    #     return decrypt_data(self.encrypted_candidate)
-
-    # Define other fields and methods as needed
+   
 
 class Nominee(models.Model):
     POSITIONS = (

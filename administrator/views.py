@@ -160,9 +160,10 @@ def view_voter_by_id(request):
         context['code'] = 200
         voter = voter[0]
         context['first_name'] = voter.admin.first_name
+        context['middle_name'] = voter.admin.middle_name
         context['last_name'] = voter.admin.last_name
-        context['phone'] = voter.phone
-        context['id'] = voter.id
+        context['phone_number'] = voter.admin.phone_number
+        context['id_number'] = voter.admin.id_number
         context['email'] = voter.admin.email
     return JsonResponse(context)
 

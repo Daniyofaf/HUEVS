@@ -9,6 +9,9 @@ urlpatterns = [
     # path('dashboard/', views.dashboard, name='Dashboard'),  # Updated the name to match the template
     
     path('nominationposts/', views.nominationposts, name='nominationposts'),  # Updated the name to match the template
+    
+    path('nominationposts/update', views.nomination_post_update, name='nomination_post_update'),  # Updated the name to match the template
+    path('nominationposts/delete', views.nomination_post_delete, name='nomination_post_delete'),  # Updated the name to match the template
    
     path('electionposts/', views.electionposts, name='electionposts'),  # Updated the name to match the template
     

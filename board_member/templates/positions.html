@@ -126,7 +126,6 @@
     </div>
 </div>
 {% endblock modal %}
-
 {% block custom_js %}
 <script>
     $(function() {
@@ -148,15 +147,19 @@
     function getRow(id) {
         $.ajax({
             type: 'GET',
-            url: '{% url "view_Position" %}',
+            url: '{% url "view_Position_byid" %}', // URL to fetch the position data
             data: {
                 id: id
             },
             dataType: 'json',
             success: function(response) {
-                $('.id').val(response.id);
-                $('#name').val(response.name);
-                $('.fullname').html(response.name);
+                if (response.code === 200) {
+                    $('.id').val(response.id);
+                    $('#edit #name').val(response.name);
+                    $('.fullname').html(response.name);
+                } else {
+                    alert("Failed to fetch data");
+                }
             }
         });
     }

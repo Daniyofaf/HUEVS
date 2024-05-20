@@ -48,6 +48,11 @@ def dashboard(request):
     return render(request, "home.html", context)
 
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import NominationPost
+from .forms import NominationPostForm
+
 def nominationposts(request):
     nominationposts = NominationPost.objects.all()
 
@@ -65,14 +70,46 @@ def nominationposts(request):
             unposted_nomination.save()
         if form.is_valid():
             form.save()  # This will save the form data to the database
-            # messages.success(request,"success!")
-            # print("added")
-            return redirect(
-                "nominationposts"
-            )  # Redirect to a success page or any other page
+            messages.success(request, "Success!")
+            return redirect("nominationposts")  # Redirect to a success page or any other page
     else:
         form = NominationPostForm()
-        
+
+    context = {
+        'nominationposts': nominationposts,
+        'form': form
+    }
+    return render(request, 'NominationPost.html', context)  # Replace 'your_template.html' with the actual template name
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse
+from .forms import NominationPostForm
+from .models import NominationPost
+
+def nomination_post_update(request):
+    post_id = request.GET.get('post_id')
+    post = get_object_or_404(NominationPost, pk=post_id)
+    form = NominationPostForm(request.POST or None, instance=post)
+    if request.method == 'POST':
+        form = NominationPostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    return render(request, 'NominationPost.html', {'form': form})
+
+def nomination_post_delete(request):
+    post_id = request.POST.get('post_id')
+    post = get_object_or_404(NominationPost, pk=post_id)
+    if request.method == 'POST':
+        post.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+
 
 # Calculate remaining time for each nomination post
     # now = timezone.localtime(timezone.now())  # Make now timezone-aware
@@ -526,7 +563,6 @@ def viewpositionbyid(request):
         context['code'] = 200
         pos = pos[0]
         context['name'] = pos.name
-        context['max_vote'] = pos.max_vote
         context['id'] = pos.id
     return JsonResponse(context)
 
