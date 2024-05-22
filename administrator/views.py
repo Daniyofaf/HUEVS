@@ -93,6 +93,7 @@ class PrintView(PDFView):
 
 
 
+
 def dashboard(request):
     positions = Position.objects.all().order_by('priority')
     candidates = Candidate.objects.all()

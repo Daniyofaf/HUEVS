@@ -355,19 +355,21 @@ def approve_nomination(request, nominated_candidate_id):
 #     )
 
 
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 from voting.models import Candidate
 from voting.forms import CandidateForm
 
 def Candidateview(request):
+    """View to display and create candidates."""
     candidatesview = Candidate.objects.all()
     form = CandidateForm(request.POST or None, request.FILES or None)
     if request.method == 'POST':
         if form.is_valid():
             form.save()
             messages.success(request, "New Candidate Created")
+            return redirect('Candidateview')  # Redirect to avoid form resubmission
         else:
             messages.error(request, "Form errors")
 
@@ -379,7 +381,8 @@ def Candidateview(request):
     return render(request, "candidatesview.html", context)
 
 def candidate_view(request):
-    candidate_id = request.GET.get('id', None)
+    """AJAX view to get candidate details."""
+    candidate_id = request.GET.get('id')
     candidate = Candidate.objects.filter(id=candidate_id).first()
     context = {}
     if not candidate:
@@ -393,33 +396,37 @@ def candidate_view(request):
     return JsonResponse(context)
 
 def Candidatesupdate(request):
+    """View to update a candidate."""
     if request.method != 'POST':
         messages.error(request, "Access Denied")
         return redirect('Candidateview')
-    try:
-        candidate_id = request.POST.get('id')
-        candidate = Candidate.objects.get(id=candidate_id)
-        form = CandidateForm(request.POST, request.FILES, instance=candidate)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Candidate Data Updated")
-        else:
-            messages.error(request, "Form has errors")
-    except Candidate.DoesNotExist:
+    candidate_id = request.POST.get('id')
+    candidate = Candidate.objects.filter(id=candidate_id).first()
+    if not candidate:
         messages.error(request, "Candidate not found")
+        return redirect('Candidateview')
+    form = CandidateForm(request.POST, request.FILES, instance=candidate)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Candidate Data Updated")
+    else:
+        messages.error(request, "Form has errors")
     return redirect('Candidateview')
 
 def Candidatesdelete(request):
+    """View to delete a candidate."""
     if request.method != 'POST':
         messages.error(request, "Access Denied")
         return redirect('Candidateview')
-    try:
-        candidate = Candidate.objects.get(id=request.POST.get('id'))
+    candidate_id = request.POST.get('id')
+    candidate = Candidate.objects.filter(id=candidate_id).first()
+    if not candidate:
+        messages.error(request, "Candidate not found")
+    else:
         candidate.delete()
         messages.success(request, "Candidate Has Been Deleted")
-    except Candidate.DoesNotExist:
-        messages.error(request, "Candidate not found")
     return redirect('Candidateview')
+
 
 
 
