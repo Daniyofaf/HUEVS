@@ -47,29 +47,40 @@ def dashboard(request):
     }
     return render(request, "home.html", context)
 
+
+from django.core.mail import send_mail
+from django.conf import settings
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
 from django.contrib import messages
 from .models import NominationPost
+from account.models import CustomUser
 from .forms import NominationPostForm
 
 def nominationposts(request):
     nominationposts = NominationPost.objects.all()
     form = NominationPostForm(request.POST or None)
+    
     if request.method == 'POST':
         if 'post' in request.POST:
             id = request.POST.get('post')
             nomination_post = NominationPost.objects.get(id=id)
             nomination_post.is_posted = True
             nomination_post.save()
+            # Send email notification to voters
+            send_notification_email_to_voters(nomination_post)
+            messages.success(request, "Nomination post has been posted and notifications sent to voters.")
+            return redirect('nominationposts')  # Redirect after POST to avoid resubmission
         elif 'unpost' in request.POST:
             id = request.POST.get('unpost')
             nomination_post = NominationPost.objects.get(id=id)
             nomination_post.is_posted = False
             nomination_post.save()
+            messages.success(request, "Nomination post has been unposted.")
+            return redirect('nominationposts')  # Redirect after POST to avoid resubmission
         elif form.is_valid():
             form.save()
             messages.success(request, "New Nomination Post Created")
+            return redirect('nominationposts')  # Redirect after POST to avoid resubmission
         else:
             messages.error(request, "Form errors")
 
@@ -79,6 +90,17 @@ def nominationposts(request):
         'page_title': "Nomination Posts"
     }
     return render(request, "NominationPost.html", context)
+
+def send_notification_email_to_voters(nomination_post):
+    voters = CustomUser.objects.filter(user_type=2)
+    subject = 'New Nomination Post Posted'
+    message = f'Nomination post has been posted you can check here http://127.0.0.1:8000/login/'
+
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = [voter.email for voter in voters]
+    
+    send_mail(subject, message, from_email, recipient_list)
+
 
 def nomination_post_by_id(request):
     post_id = request.GET.get('id', None)
@@ -179,28 +201,37 @@ from .forms import ElectionPostForm, NominationPostForm
 #     return render(request, 'NominationPost.html', {'form': form})
 
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
 from django.contrib import messages
+from django.conf import settings
+from django.core.mail import send_mail
 from .models import ElectionPost
 from .forms import ElectionPostForm
 
 def electionposts(request):
     electionposts = ElectionPost.objects.all()
     form = ElectionPostForm(request.POST or None)
+    
     if request.method == 'POST':
         if 'post' in request.POST:
             id = request.POST.get('post')
             election_post = ElectionPost.objects.get(id=id)
             election_post.is_posted = True
             election_post.save()
+            # Send email notification to voters
+            send_notification_email_to_voters(election_post)
+            messages.success(request, "Election post has been posted and notifications sent to voters.")
+            return redirect('electionposts')  # Redirect after POST to avoid resubmission
         elif 'unpost' in request.POST:
             id = request.POST.get('unpost')
             election_post = ElectionPost.objects.get(id=id)
             election_post.is_posted = False
             election_post.save()
+            messages.success(request, "Election post has been unposted.")
+            return redirect('electionposts')  # Redirect after POST to avoid resubmission
         elif form.is_valid():
             form.save()
             messages.success(request, "New Election Post Created")
+            return redirect('electionposts')  # Redirect after POST to avoid resubmission
         else:
             messages.error(request, "Form errors")
 
@@ -210,6 +241,17 @@ def electionposts(request):
         'page_title': "Election Posts"
     }
     return render(request, "ElectionPost.html", context)
+
+def send_notification_email_to_voters(election_post):
+    voters = CustomUser.objects.filter(user_type=2)
+    subject = 'New Election Post Posted'
+    message = f'Election post has been posted you can check here http://127.0.0.1:8000/login/'
+
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = [voter.email for voter in voters]
+    
+    send_mail(subject, message, from_email, recipient_list)
+
 
 def election_post_by_id(request):
     post_id = request.GET.get('id', None)
@@ -570,6 +612,10 @@ def result(request):
 
 from django.http import JsonResponse
 from .models import ElectionResult
+from django.core.mail import send_mail
+from django.conf import settings
+from django.http import JsonResponse
+from account.models import CustomUser  # Adjust the import based on your app structure
 
 def announce_election(request):
     if request.method == 'POST':
@@ -583,8 +629,13 @@ def announce_election(request):
                 election_result, created = ElectionResult.objects.get_or_create(pk=1)  # Assuming there's only one instance
                 election_result.isposted = is_announced
                 election_result.save()
-                
+
+                # Send notification email if the election is announced
+                if is_announced:
+                    send_notification_email_to_voters()
+              
                 return JsonResponse({'status': 'success'})
+            
             else:
                 return JsonResponse({'status': 'error', 'message': 'Invalid request. Missing is_announced parameter.'}, status=400)
         except Exception as e:
@@ -592,10 +643,15 @@ def announce_election(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
-
-
-
-
+def send_notification_email_to_voters():
+    voters = CustomUser.objects.filter(user_type=2)
+    subject = 'Election Results Announced'
+    message = 'The election results have been announced. You can check the details here: http://127.0.0.1:8000/login/'
+    
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = [voter.email for voter in voters]
+    
+    send_mail(subject, message, from_email, recipient_list)
 
 def viewpositionbyid(request):
     pos_id = request.GET.get('id', None)
@@ -655,3 +711,16 @@ def delete_Position(request):
         messages.error(request, "Access To This Resource Denied")
 
     return redirect(reverse('view_Position'))
+
+
+
+from candidate.models import Complaint
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def view_complaints(request):
+    if not request.user:
+        messages.error(request, 'You are not authorized to view this page.')
+        return redirect('send_complaint')
+    complaints = Complaint.objects.all()
+    return render(request, 'view_complaints.html', {'complaints': complaints})

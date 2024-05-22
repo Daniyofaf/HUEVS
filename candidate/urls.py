@@ -15,6 +15,8 @@ urlpatterns = [
     # path('candidateview', views.viewcandidatebyid, name='viewcandidatebyid'),
     
     path('result_page/', views.result_page, name='result_page'),
+        path('send_complaint/', views.send_complaint, name='send_complaint'),
+
 
 ]
 

@@ -1,3 +1,4 @@
+import re
 from django import forms
 from .models import *
 from django.contrib.auth.hashers import make_password
@@ -75,6 +76,37 @@ class CustomUserForm(FormSettings):
 
         return make_password(password)
 
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        if not first_name.isalpha():
+            raise forms.ValidationError("First name should only contain letters")
+        return first_name
+
+    def clean_middle_name(self):
+        middle_name = self.cleaned_data['middle_name']
+        if not middle_name.isalpha():
+            raise forms.ValidationError("Middle name should only contain letters")
+        return middle_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        if not last_name.isalpha():
+            raise forms.ValidationError("Last name should only contain letters")
+        return last_name
+
+    def clean_id_number(self):
+        id_number = self.cleaned_data['id_number']
+        if not re.match(r'^\d{4}/\d{2}$', id_number):
+            raise forms.ValidationError("ID number must be in the format XXXX/YY")
+        return id_number
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data['phone_number']
+        if not re.match(r'^0[79]\d{8}$', phone_number):
+            raise forms.ValidationError("Phone number must start with 09 or 07 and be 10 digits long")
+        return phone_number
+    
     class Meta:
         model = CustomUser
         fields = ['first_name', 'middle_name', 'last_name', 'id_number', 'email', 'password', 'phone_number'] # , 'live_camera_photo' , 'finger_data'

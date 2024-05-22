@@ -18,7 +18,8 @@
                             <tr>
                                 <td id="status">{% if is_announced %}Announced{% else %}Not Announced{% endif %}</td>
                                 <td>
-                                    <button class="btn btn-primary toggle-btn">{% if is_announced %}Already Announced{% else %}Announce{% endif %}</button>
+                                    <button class="btn btn-primary toggle-btn">{% if is_announced %}Announced{% else %}Announce{% endif %}</button>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
                                 </td>
                             </tr>
                         </tbody>
@@ -37,11 +38,15 @@
         var isAnnounced = localStorage.getItem('is_announced');
         if (isAnnounced === 'true') {
             $('#status').text('Announced');
-            $('.toggle-btn').text('Already Announced');
+            $('.toggle-btn').text('Announced');
         }
 
         $('.toggle-btn').on('click', function() {
             var $button = $(this);
+            var $spinner = $button.next('.spinner-border');
+            $button.prop('disabled', true);
+            $spinner.show();
+
             var isAnnounced = localStorage.getItem('is_announced');
             var newStatus = isAnnounced === 'true' ? false : true;
 
@@ -57,13 +62,17 @@
                         // Update status in local storage
                         localStorage.setItem('is_announced', newStatus);
                         $('#status').text(newStatus ? 'Announced' : 'Not Announced');
-                        $button.text(newStatus ? 'Already Announced' : 'Announce');
+                        $button.text(newStatus ? 'Announced' : 'Announce');
                     } else {
                         alert(response.message || 'Failed to update the election status.');
                     }
                 },
                 error: function(xhr, status, error) {
                     alert('An error occurred while updating the election status: ' + xhr.responseText);
+                },
+                complete: function() {
+                    $button.prop('disabled', false);
+                    $spinner.hide();
                 }
             });
         });

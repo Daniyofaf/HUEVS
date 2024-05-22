@@ -1,0 +1,35 @@
+{% extends 'croot.html' %}
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    {% include 'caside.html' %}
+    <h1 class="page-header text-center title">
+        <b>Submit Your Complaint</b>
+    </h1>
+  
+    <section class="content">
+        <section style="margin: 0 auto; max-width: 1600px; padding-left: 300px;">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post" action="{% url 'send_complaint' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="complaint_subject">Subject</label>
+                                    <input type="text" class="form-control" id="complaint_subject" name="subject" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="complaint_message">Message</label>
+                                    <textarea class="form-control" id="complaint_message" name="message" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+{% endblock %}

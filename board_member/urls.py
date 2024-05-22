@@ -46,6 +46,11 @@ urlpatterns = [
     path('position/update', views.update_Position, name="update_Position"),
     path('position/delete', views.delete_Position, name='delete_Position'),
     path('positions/view', views.view_Position, name='view_Position'),
+    
+    
+    
+    path('view_complaints/', views.view_complaints, name='view_complaints'),
+
 
 ]
 

@@ -172,6 +172,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'daniyoman2016@gmail.com'  # Enter your Gmail address
-EMAIL_HOST_PASSWORD = 'etej afpg pasn rimr'  # Enter your Gmail password or app-specific password
+EMAIL_HOST_PASSWORD = 'etejafpgpasnrimr'  # Enter your Gmail password or app-specific password
 
 

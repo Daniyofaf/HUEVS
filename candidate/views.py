@@ -121,3 +121,18 @@ def result_page(request):
 
     # Render the template with the context data
     return render(request, "result_page.html", context)
+
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Complaint
+
+@login_required
+def send_complaint(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        complaint = Complaint(subject=subject, message=message, candidate=request.user)
+        complaint.save()
+        messages.success(request, 'Your complaint has been submitted successfully.')
+        return redirect('send_complaint')
+    return render(request, 'send_complaint.html')

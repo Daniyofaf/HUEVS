@@ -1,0 +1,40 @@
+{% extends 'bmroot.html' %}
+
+{% block content %}
+<section class="content">
+  {% include "bmaside.html" %}
+  <h3>Senate Members List</h3>
+  <section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="example1"
+                        class="table table-bordered table-hover table-striped">
+                        <thead style="background-color: #222D32; color:white;">
+                            <tr>
+                                <th>ID</th>
+                                <th>Candidate</th>
+                                <th>Subject</th>
+                                <th>Message</th>
+                                <th>Submitted At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for complaint in complaints %}
+                            <tr>
+                                <td>{{ complaint.id }}</td>
+                                <td>{{ complaint.candidate.get_full_name }}</td>
+                                <td>{{ complaint.subject }}</td>
+                                <td>{{ complaint.message }}</td>
+                                <td>{{ complaint.created_at }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
