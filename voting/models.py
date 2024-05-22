@@ -24,7 +24,6 @@ class Position(models.Model):
 
 class Candidate(models.Model):
     fullname = models.CharField(max_length=50)
-    id_number = models.CharField(max_length=20, unique=True)
     photo = models.ImageField(upload_to="candidates")
     bio = models.TextField()
     video = models.FileField(upload_to='candidate_videos/', null=True, blank=True)
@@ -44,6 +43,21 @@ class Candidate(models.Model):
 
 
 
+# Define a function to encrypt and decrypt data
+# def encrypt_data(data):
+#     # Replace 'YOUR_ENCRYPTION_KEY' with your own encryption key
+#     key = b'YOUR_ENCRYPTION_KEY'
+#     cipher_suite = Fernet(key)
+#     encrypted_data = cipher_suite.encrypt(data.encode())
+#     return encrypted_data.decode()
+
+# def decrypt_data(encrypted_data):
+#     key = b'YOUR_ENCRYPTION_KEY'
+#     cipher_suite = Fernet(key)
+#     decrypted_data = cipher_suite.decrypt(encrypted_data.encode())
+#     return decrypted_data.decode()
+
+# Define the Votes model with encrypted fields
 class Votes(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)

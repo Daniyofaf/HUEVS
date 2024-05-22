@@ -202,7 +202,7 @@ def submit_ballot(request):
         selected_candidate_id = request.POST.get('selected_candidate')
         if selected_candidate_id:
             try:
-                selected_candidate = Nominee.objects.get(pk=selected_candidate_id)
+                selected_candidate = Candidate.objects.get(pk=selected_candidate_id)
                 candidate_name = selected_candidate.fullname
                 
                 if request.user.is_authenticated:
@@ -331,7 +331,7 @@ def nominate_candidate(request):
         form = NomineeForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Nomination Successful!")
+            # messages.success(request, "Nomination Successful!")
             return redirect("nominate_candidate")
     else:
         form = NomineeForm()

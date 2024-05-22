@@ -2,15 +2,12 @@
 {% block content %}
 {% include "bmaside.html" %}
 <section class="content">
-    <h3>Nomination Post</h3>
+    {% comment %} <h3>Nomination Post</h3> {% endcomment %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-                <br>
                 <div class="box-header with-border">
-                    <button type="button" class="btn btn-success btn-sm btn-flat" data-toggle="modal" data-target="#addnewNominationPost">
-                        <i class="fa fa-plus"></i> Add New
-                    </button>
+                    <a href="#addnewNominationPost" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> Add New</a>
                 </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-hover table-striped">
@@ -25,7 +22,7 @@
                         <tbody>
                             {% for nomination_post in nominationposts %}
                             <tr>
-                                <td>{{ nomination_post.start_time}}</td>
+                                <td>{{ nomination_post.start_time }}</td>
                                 <td>{{ nomination_post.start_date }}</td>
                                 <td>{{ nomination_post.end_time }}</td>
                                 <td>{{ nomination_post.end_date }}</td>
@@ -61,7 +58,10 @@
         </div>
     </div>
 </section>
+{% endblock content %}
 
+{% block modal %}
+<!-- Add New Modal -->
 <div class="modal fade" id="addnewNominationPost">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -72,78 +72,151 @@
                 <h4 class="modal-title"><b>Add a Nomination Post</b></h4>
             </div>
             <div class="modal-body">
-                <form id="addnewNominationPost" method="POST" action="{% url 'nominationposts' %}">
+                <form class="form-horizontal" method="POST" action="{% url 'nominationposts' %}">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="modal-body">
+                        {{ form.as_p }}
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for field in form %}
+                                {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-success btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
+                    </div>
                 </form>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal">
-                        <i class="fa fa-close"></i> Close
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-{% endblock content %}
+<!-- Edit Modal -->
+<div class="modal fade" id="edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"><b>Edit Nomination Post</b></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" method="POST" action="{% url 'nomination_post_update' %}">
+                    {% csrf_token %}
+                    <input type="hidden" class="id" name="id">
+                    <div class="form-group">
+                        <label for="start_time" class="col-sm-3 control-label">Start Time</label>
+                        <div class="col-sm-9">
+                            <input type="time" class="form-control" id="start_time" name="start_time">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date" class="col-sm-3 control-label">Start Date</label>
+                        <div class="col-sm-9">
+                            <input type="date" class="form-control" id="start_date" name="start_date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_time" class="col-sm-3 control-label">End Time</label>
+                        <div class="col-sm-9">
+                            <input type="time" class="form-control" id="end_time" name="end_time">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date" class="col-sm-3 control-label">End Date</label>
+                        <div class="col-sm-9">
+                            <input type="date" class="form-control" id="end_date" name="end_date">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button type="submit" class="btn btn-success btn-flat" name="edit"><i class="fa fa-check-square-o"></i> Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"><b>Deleting...</b></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" method="POST" action="{% url 'nomination_post_delete' %}">
+                    <input type="hidden" class="id" name="id">
+                    {% csrf_token %}
+                    <div class="text-center">
+                        <p>DELETE Nomination Post</p>
+                        <h2 class="bold fullname"></h2>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button type="submit" class="btn btn-danger btn-flat" name="delete"><i class="fa fa-trash"></i> Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock modal %}
 
 {% block custom_js %}
 <script>
-// Set up CSRF token for AJAX requests
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
+    $(function() {
+        $(document).on('click', '.edit', function(e) {
+            e.preventDefault();
+            $('#edit').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
 
-function csrfSafeMethod(method) {
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
-
-// Edit button click event handler
-$('.edit').on('click', function() {
-    var postId = $(this).data('id');
-    $.get('{% url "nomination_post_update" %}?post_id=' + postId, function(data) {
-        $('#editModalContent').html(data);
-        $('#editModal').modal('show');
+        $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+            $('#delete').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
     });
-});
 
-// Delete button click event handler
-$('.delete').on('click', function() {
-    var postId = $(this).data('id');
-    if (confirm('Are you sure you want to delete this nomination post?')) {
-        $.post("{% url 'nomination_post_delete' %}", {
-            post_id: postId,
-            csrfmiddlewaretoken: csrftoken
-        }, function(data) {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Failed to delete the nomination post.');
+    function getRow(id) {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "nomination_post_by_id" %}', // URL to fetch the nomination post data
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.code === 200) {
+                    $('.id').val(response.id);
+                    $('#edit #start_time').val(response.start_time);
+                    $('#edit #start_date').val(response.start_date);
+                    $('#edit #end_time').val(response.end_time);
+                    $('#edit #end_date').val(response.end_date);
+                    $('.fullname').html(response.start_date + ' - ' + response.end_date);
+                } else {
+                    alert("Failed to fetch data");
+                }
             }
         });
     }
-});
 </script>
 {% endblock custom_js %}

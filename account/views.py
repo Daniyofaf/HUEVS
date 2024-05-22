@@ -126,11 +126,11 @@ def account_register(request):
         #     if face_id:
         #         addFace(face_id)  # Add the face data to the system
 
-        #     messages.success(request, "Account created. You can login now!")
-        #     return redirect(reverse("account_login"))
-        # else:
-        #     messages.error(request,
-        #                    "Failed to create account. Please check your input.")  # Provided data failed validation
+            messages.success(request, "Account created. You can login now!")
+            return redirect(reverse("account_login"))
+        else:
+            messages.error(request,
+                           "Failed to create account. Please check your input.")  # Provided data failed validation
 
     else:
         userForm = CustomUserForm()

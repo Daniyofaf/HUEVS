@@ -7,13 +7,10 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <a href="#addnew" data-toggle="modal"
-                        class="btn btn-success btn-sm btn-flat"><i
-                            class="fa fa-plus"></i> Add New</a>
+                    <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> Add New</a>
                 </div>
                 <div class="box-body">
-                    <table id="example1"
-                        class="table table-bordered table-hover table-striped">
+                    <table id="example1" class="table table-bordered table-hover table-striped">
                         <thead style="background-color: #222D32; color:white;">
                             <th>Full Name</th>
                             <th>Position</th>
@@ -28,10 +25,7 @@
                                 <td>{{ candidate.fullname }}</td>
                                 <td>{{ candidate.position }}</td>
                                 <td>{{ candidate.bio }}</td>
-                                <td><img src="/media/{{ candidate.photo }}"
-                                        width="80" height="80"
-                                        alt="{{ candidate.fullname }}'s Avatar"
-                                        class="img img-fluid"></td>
+                                <td><img src="/media/{{ candidate.photo }}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
                                 <td>
                                     {% if candidate.video %}
                                     <video width="160" height="120" controls>
@@ -43,16 +37,8 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button
-                                        class='btn btn-primary btn-sm edit btn-flat'
-                                        data-id='{{ candidate.id }}'><i
-                                            class='fa fa-edit'></i>
-                                        Edit</button>
-                                    <button
-                                        class='btn btn-danger btn-sm delete btn-flat'
-                                        data-id='{{ candidate.id }}'><i
-                                            class='fa fa-trash'></i>
-                                        Delete</button>
+                                    <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-edit'></i> Edit</button>
+                                    <button class='btn btn-danger btn-sm delete btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-trash'></i> Delete</button>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -64,85 +50,82 @@
     </div>
 </section>
 {% endblock content %}
+
 {% block modal %}
+<!-- Add New Modal -->
 <div class="modal fade" id="addnew">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><b>Add New Candidate</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" enctype="multipart/form-data"
-                    method="POST" action="{% url 'Candidateview' %}">
+                <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{% url 'Candidateview' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                        {% for field in form1  %}
-                        <div class="form-group has-feedback">
-                            <span class="text-danger">{{field.errors}}</span>
-                            {{field.label_tag}}
-                            {{field}}
+                        {{ form1.as_p }}
+                        {% if form1.errors %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for field in form1 %}
+                                {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                                {% endfor %}
+                                {% for error in form1.non_field_errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                        {% endfor %}
+                        {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <button type="button"
-                            class="btn btn-danger btn-flat pull-left"
-                            data-dismiss="modal"><i class="fa fa-close"></i>
-                            Close</button>
-                        <button type="submit" class="btn btn-success btn-flat"
-                            name="add"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-success btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Edit -->
+
+<!-- Edit Modal -->
 <div class="modal fade" id="edit">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><b>Edit Candidate</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" enctype="multipart/form-data"
-                    method="POST" action="{% url 'updateCandidates' %}">
+                <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{% url 'updateCandidates' %}">
                     {% csrf_token %}
                     <input type="hidden" class="id" name="id">
-                    <p class="display_form">
-                    </p>
+                    <div class="display_form"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-flat pull-left"
-                    data-dismiss="modal"><i class="fa fa-close"></i>
-                    Close</button>
-                <button type="submit" class="btn btn-success btn-flat"
-                    name="edit"><i class="fa fa-check-square-o"></i>
-                    Update</button>
+                <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                <button type="submit" class="btn btn-success btn-flat" name="edit"><i class="fa fa-check-square-o"></i> Update</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Delete -->
+
+<!-- Delete Modal -->
 <div class="modal fade" id="delete">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><b>Deleting...</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" method="POST"
-                    action="{% url 'deleteCandidates' %}">
+                <form class="form-horizontal" method="POST" action="{% url 'deleteCandidates' %}">
                     <input type="hidden" class="id" name="id">
                     {% csrf_token %}
                     <div class="text-center">
@@ -151,17 +134,15 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-flat pull-left"
-                    data-dismiss="modal"><i class="fa fa-close"></i>
-                    Close</button>
-                <button type="submit" class="btn btn-danger btn-flat"
-                    name="delete"><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                <button type="submit" class="btn btn-danger btn-flat" name="delete"><i class="fa fa-trash"></i> Delete</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 {% endblock modal %}
+
 {% block custom_js %}
 <script>
     $(function() {
@@ -171,6 +152,7 @@
             var id = $(this).data('id');
             getRow(id);
         });
+
         $(document).on('click', '.delete', function(e) {
             e.preventDefault();
             $('#delete').modal('show');
@@ -178,19 +160,24 @@
             getRow(id);
         });
     });
+
     function getRow(id) {
         $.ajax({
             type: 'GET',
-            url: '{% url "viewCandidate" %}',
+            url: '{% url "candidate_view" %}',
             data: {
                 id: id
             },
             dataType: 'json',
             success: function(response) {
-                $('.id').val(id),
+                if (response.code === 200) {
+                    $('.id').val(response.id);
                     $('.display_form').html(response.form);
-                $('.fullname').html(response.fullname);
-            },
+                    $('.fullname').html(response.fullname);
+                } else {
+                    alert("Failed to fetch data");
+                }
+            }
         });
     }
 </script>

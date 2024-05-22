@@ -7,13 +7,18 @@ urlpatterns = [
     path('', views.dashboard, name="board_member_dashboard"),
 
     # path('dashboard/', views.dashboard, name='Dashboard'),  # Updated the name to match the template
-    
-    path('nominationposts/', views.nominationposts, name='nominationposts'),  # Updated the name to match the template
-    
-    path('nominationposts/update', views.nomination_post_update, name='nomination_post_update'),  # Updated the name to match the template
-    path('nominationposts/delete', views.nomination_post_delete, name='nomination_post_delete'),  # Updated the name to match the template
-   
-    path('electionposts/', views.electionposts, name='electionposts'),  # Updated the name to match the template
+    path('nominationposts/', views.nominationposts, name='nominationposts'),
+    path('nomination_post_update/', views.update_nomination_post, name='nomination_post_update'),
+    path('nomination_post_delete/', views.delete_nomination_post, name='nomination_post_delete'),
+    path('nomination_post_by_id/', views.nomination_post_by_id, name='nomination_post_by_id'),
+
+    path('electionposts/', views.electionposts, name='electionposts'),
+    # URL for updating an election post
+    path('electionpost/update/', views.update_election_post, name='update_election_post'),
+    # URL for deleting an election post
+    path('electionpost/delete/', views.delete_election_post, name='delete_election_post'),
+    # URL for fetching election post details by ID
+    path('electionpost/by_id/', views.election_post_by_id, name='election_post_by_id'),
     
     path('voters/', views.view_voters_list, name='voters'),  # Updated the name to match the template
     path('NominatedCandidates/', views.viewnominatedcandidate, name='viewnominatedcandidate'),
@@ -23,13 +28,16 @@ urlpatterns = [
     # * Candidate
     path('candidates/', views.Candidateview, name='Candidateview'),
     path('candidates/view', views.candidate_view, name='candidate_view'),
-    path('candidates/update', views.Candidatesupdate, name="updateCandidates"),
+    path('candidates/update', views.Candidatesupdate, name='updateCandidates'),
     path('candidates/delete', views.Candidatesdelete, name='deleteCandidates'),
-    
-    path('votes/view', views.viewVote, name='view_Vote'),
-    path('votes/reset/', views.ResetVote, name='ResetVote'),
+
+
+    path('votes/view', views.ViewVotes, name='View_Vote'),
+    path('votes/reset/', views.ResetVote, name='Reset_Vote'),
     path('votes/print/', views.PrintView.as_view(), name='printResult'),
+    
     path('senate-member/', views.view_senate_member_by_id, name="viewSenateMembers"),
+    
     path('result/', views.result, name='result'),
     path('board_member/announce_election/', views.announce_election, name='announce_election'),
     

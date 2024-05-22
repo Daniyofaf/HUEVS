@@ -47,87 +47,83 @@ def dashboard(request):
     }
     return render(request, "home.html", context)
 
-
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.contrib import messages
 from .models import NominationPost
 from .forms import NominationPostForm
 
 def nominationposts(request):
     nominationposts = NominationPost.objects.all()
-
-    if request.method == "POST":
-        form = NominationPostForm(request.POST)
-        posted = request.POST.get("post")
-        unpost = request.POST.get("unpost")
-        if posted:
-            posted_nomination = NominationPost.objects.get(pk=posted)
-            posted_nomination.is_posted = True
-            posted_nomination.save()
-        elif unpost:
-            unposted_nomination = NominationPost.objects.get(pk=unpost)
-            unposted_nomination.is_posted = False
-            unposted_nomination.save()
-        if form.is_valid():
-            form.save()  # This will save the form data to the database
-            messages.success(request, "Success!")
-            return redirect("nominationposts")  # Redirect to a success page or any other page
-    else:
-        form = NominationPostForm()
+    form = NominationPostForm(request.POST or None)
+    if request.method == 'POST':
+        if 'post' in request.POST:
+            id = request.POST.get('post')
+            nomination_post = NominationPost.objects.get(id=id)
+            nomination_post.is_posted = True
+            nomination_post.save()
+        elif 'unpost' in request.POST:
+            id = request.POST.get('unpost')
+            nomination_post = NominationPost.objects.get(id=id)
+            nomination_post.is_posted = False
+            nomination_post.save()
+        elif form.is_valid():
+            form.save()
+            messages.success(request, "New Nomination Post Created")
+        else:
+            messages.error(request, "Form errors")
 
     context = {
         'nominationposts': nominationposts,
-        'form': form
+        'form': form,
+        'page_title': "Nomination Posts"
     }
-    return render(request, 'NominationPost.html', context)  # Replace 'your_template.html' with the actual template name
-
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
-from .forms import NominationPostForm
-from .models import NominationPost
-
-def nomination_post_update(request):
-    post_id = request.GET.get('post_id')
-    post = get_object_or_404(NominationPost, pk=post_id)
-    form = NominationPostForm(request.POST or None, instance=post)
-    if request.method == 'POST':
-        form = NominationPostForm(request.POST, instance=post)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors})
-    return render(request, 'NominationPost.html', {'form': form})
-
-def nomination_post_delete(request):
-    post_id = request.POST.get('post_id')
-    post = get_object_or_404(NominationPost, pk=post_id)
-    if request.method == 'POST':
-        post.delete()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False})
-
-
-
-# Calculate remaining time for each nomination post
-    # now = timezone.localtime(timezone.now())  # Make now timezone-aware
-    # for nomination_post in nominationposts:
-    #     # If the nomination post is not posted yet, calculate the remaining time
-    #     if not nomination_post.is_posted:
-    #         end_time = nomination_post.end_time
-    #         # Create a datetime object combining the date portion of now with the time portion of end_time
-    #         end_datetime = timezone.make_aware(datetime.combine(now.date(), end_time))
-    #         remaining_time = end_datetime - now
-    #         nomination_post.remaining_time = remaining_time
-
-    context = {
-        "form": form,
-        "nominationposts": nominationposts,
-    }
-
     return render(request, "NominationPost.html", context)
+
+def nomination_post_by_id(request):
+    post_id = request.GET.get('id', None)
+    nomination_post = NominationPost.objects.filter(id=post_id).first()
+    context = {}
+    if not nomination_post:
+        context['code'] = 404
+    else:
+        context['code'] = 200
+        context['id'] = nomination_post.id
+        context['start_time'] = nomination_post.start_time
+        context['start_date'] = nomination_post.start_date
+        context['end_time'] = nomination_post.end_time
+        context['end_date'] = nomination_post.end_date
+    return JsonResponse(context)
+
+def update_nomination_post(request):
+    if request.method == 'POST':
+        try:
+            instance = NominationPost.objects.get(id=request.POST.get('id'))
+            form = NominationPostForm(request.POST, instance=instance)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Nomination Post has been updated")
+            else:
+                messages.error(request, "Form errors")
+        except NominationPost.DoesNotExist:
+            messages.error(request, "Nomination Post not found")
+    else:
+        messages.error(request, "Invalid request method")
+    return redirect('nominationposts')
+
+def delete_nomination_post(request):
+    if request.method == 'POST':
+        try:
+            nomination_post = NominationPost.objects.get(id=request.POST.get('id'))
+            nomination_post.delete()
+            messages.success(request, "Nomination Post has been deleted")
+        except NominationPost.DoesNotExist:
+            messages.error(request, "Nomination Post not found")
+    else:
+        messages.error(request, "Invalid request method")
+    return redirect('nominationposts')
+
+
 
 
 from django.shortcuts import render
@@ -182,54 +178,89 @@ from .forms import ElectionPostForm, NominationPostForm
 #         form = NominationPostForm()
 #     return render(request, 'NominationPost.html', {'form': form})
 
-
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .forms import ElectionPostForm
+from django.http import JsonResponse
+from django.contrib import messages
 from .models import ElectionPost
-import datetime
-from django.utils import timezone
+from .forms import ElectionPostForm
 
 def electionposts(request):
-    # Fetch all election posts
     electionposts = ElectionPost.objects.all()
-
-    if request.method == "POST":
-        form = ElectionPostForm(request.POST)
-        if form.is_valid():
-            form.save()  # This will save the form data to the database
-            return redirect("electionposts")
-
-        # Check if a post or unpost action was submitted
-        posted = request.POST.get("post")
-        unpost = request.POST.get("unpost")
-        if posted:
-            posted_election = ElectionPost.objects.get(pk=posted)
-            posted_election.is_posted = True
-            posted_election.save()
-        elif unpost:
-            unposted_election = ElectionPost.objects.get(pk=unpost)
-            unposted_election.is_posted = False
-            unposted_election.save()
-    else:
-        form = ElectionPostForm()
-    
-    # Calculate the remaining time for each election post
-    now = timezone.now()
-    for post in electionposts:
-        end_datetime = timezone.make_aware(datetime.datetime.combine(post.end_date, post.end_time))
-        if now < end_datetime:
-            time_diff = end_datetime - now
-            post.remaining_time = time_diff
+    form = ElectionPostForm(request.POST or None)
+    if request.method == 'POST':
+        if 'post' in request.POST:
+            id = request.POST.get('post')
+            election_post = ElectionPost.objects.get(id=id)
+            election_post.is_posted = True
+            election_post.save()
+        elif 'unpost' in request.POST:
+            id = request.POST.get('unpost')
+            election_post = ElectionPost.objects.get(id=id)
+            election_post.is_posted = False
+            election_post.save()
+        elif form.is_valid():
+            form.save()
+            messages.success(request, "New Election Post Created")
         else:
-            post.remaining_time = datetime.timedelta(seconds=0)
+            messages.error(request, "Form errors")
 
-    return render(request, 'ElectionPost.html', {'form': form, 'electionposts': electionposts})
+    context = {
+        'electionposts': electionposts,
+        'form': form,
+        'page_title': "Election Posts"
+    }
+    return render(request, "ElectionPost.html", context)
 
-    # else:
-        # Handle GET requests or other cases
-        # You may want to render a template or return a different response
-        # return HttpResponse("Method not allowed or invalid request.")
+def election_post_by_id(request):
+    post_id = request.GET.get('id', None)
+    election_post = ElectionPost.objects.filter(id=post_id).first()
+    context = {}
+    if not election_post:
+        context['code'] = 404
+    else:
+        context['code'] = 200
+        context['id'] = election_post.id
+        context['start_time'] = election_post.start_time
+        context['start_date'] = election_post.start_date
+        context['end_time'] = election_post.end_time
+        context['end_date'] = election_post.end_date
+    return JsonResponse(context)
+
+def update_election_post(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        if id:
+            try:
+                instance = ElectionPost.objects.get(id=id)
+                form = ElectionPostForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, "Election Post has been updated")
+                    return redirect('electionposts')
+                else:
+                    messages.error(request, "Form errors")
+            except ElectionPost.DoesNotExist:
+                messages.error(request, "Election Post not found")
+        else:
+            messages.error(request, "ID field is required")
+    else:
+        messages.error(request, "Invalid request method")
+    return redirect('electionposts')
+
+
+
+def delete_election_post(request):
+    if request.method == 'POST':
+        try:
+            election_post = ElectionPost.objects.get(id=request.POST.get('id'))
+            election_post.delete()
+            messages.success(request, "Election Post has been deleted")
+        except ElectionPost.DoesNotExist:
+            messages.error(request, "Election Post not found")
+    else:
+        messages.error(request, "Invalid request method")
+    return redirect('electionposts')
+
 
 
 
@@ -324,74 +355,79 @@ def approve_nomination(request, nominated_candidate_id):
 #     )
 
 
+from django.shortcuts import render, redirect, reverse
+from django.http import JsonResponse
+from django.contrib import messages
+from voting.models import Candidate
+from voting.forms import CandidateForm
 
 def Candidateview(request):
     candidatesview = Candidate.objects.all()
     form = CandidateForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New Candidate Created")
+        else:
+            messages.error(request, "Form errors")
+
     context = {
         'candidatesview': candidatesview,
         'form1': form,
         'page_title': 'Candidates'
     }
-    if request.method == 'POST':
-        if form.is_valid():
-            form = form.save()
-            messages.success(request, "New Candidate Created")
-        else:
-            messages.error(request, "Form errors")
     return render(request, "candidatesview.html", context)
 
 def candidate_view(request):
     candidate_id = request.GET.get('id', None)
-    candidate = Candidate.objects.filter(id=candidate_id)
+    candidate = Candidate.objects.filter(id=candidate_id).first()
     context = {}
-    if not candidate.exists():
+    if not candidate:
         context['code'] = 404
     else:
-        candidate = candidate[0]
         context['code'] = 200
+        context['id'] = candidate.id
         context['fullname'] = candidate.fullname
-        previous = CandidateForm(instance=candidate)
-        context['form'] = str(previous.as_p())
+        form = CandidateForm(instance=candidate)
+        context['form'] = form.as_p()
     return JsonResponse(context)
 
 def Candidatesupdate(request):
     if request.method != 'POST':
         messages.error(request, "Access Denied")
+        return redirect('Candidateview')
     try:
         candidate_id = request.POST.get('id')
         candidate = Candidate.objects.get(id=candidate_id)
-        form = CandidateForm(request.POST or None,
-                             request.FILES or None, instance=candidate)
+        form = CandidateForm(request.POST, request.FILES, instance=candidate)
         if form.is_valid():
             form.save()
             messages.success(request, "Candidate Data Updated")
         else:
             messages.error(request, "Form has errors")
-    except:
-        messages.error(request, "Access To This Resource Denied")
-
-    return redirect(reverse('Candidateview'))
-
+    except Candidate.DoesNotExist:
+        messages.error(request, "Candidate not found")
+    return redirect('Candidateview')
 
 def Candidatesdelete(request):
     if request.method != 'POST':
         messages.error(request, "Access Denied")
+        return redirect('Candidateview')
     try:
-        pos = Candidate.objects.get(id=request.POST.get('id'))
-        pos.delete()
+        candidate = Candidate.objects.get(id=request.POST.get('id'))
+        candidate.delete()
         messages.success(request, "Candidate Has Been Deleted")
-    except:
-        messages.error(request, "Access To This Resource Denied")
-
-    return redirect(reverse('Candidateview'))
-
+    except Candidate.DoesNotExist:
+        messages.error(request, "Candidate not found")
+    return redirect('Candidateview')
 
 
 
 
 
-def viewVote(request):
+
+
+def ViewVotes(request):
     votes = Votes.objects.all()
     context = {
         'votes': votes,
@@ -402,9 +438,10 @@ def viewVote(request):
 
 def ResetVote(request):
     Votes.objects.all().delete()
-    Voter.objects.all().update(voted=False, verified=False, otp=None)
+    Voter.objects.all().update(voted=False)
     messages.success(request, "All votes has been reset")
     return redirect(reverse('viewVotes'))
+
 
 
 from django.shortcuts import render

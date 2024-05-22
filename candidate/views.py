@@ -29,7 +29,7 @@ def dashboard(request):
         'positions': positions,
         'page_title': "Dashboard"
     }
-    return render(request, "candidatedashboard.html", context)
+    return render(request, "result_page.html", context)
 
 def post_campaign_message(request):
     try:

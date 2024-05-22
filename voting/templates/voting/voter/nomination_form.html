@@ -161,8 +161,8 @@
                 <br>
                 <h1 class="page-header text-center title"><b>Nominate a
                         Candidate</b></h1>
-                <form id="nomination-form" method="post" class="form-group">
-                    {% csrf_token %}
+                        <form id="nomination-form" method="post" class="form-group">
+                            {% csrf_token %}
                     <div class="form-group">
                         <label for="id_fullname" class="form-label">Full
                             Name</label>
@@ -198,40 +198,46 @@
             </section>
             {%endif%}
         </section>
-        <script>
-            $(document).ready(function() {
-                $('#nomination-form').submit(function(e) {
-                    e.preventDefault();
-                    // Disable the submit button to prevent multiple submissions
-                    $('#submit-btn').prop('disabled', true);
-                    // Perform form submission via AJAX
-                    $.ajax({
-                        type: $(this).attr('method'),
-                        url: $(this).attr('action'),
-                        data: $(this).serialize(),
-                        success: function(response) {
-                            // Display success message using Sweet Alert
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Nomination Submitted!',
-                                text: 'Thank you for your nomination.',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                position: 'top-end' // Set position to top right corner
-                            });
-                        },
-                        error: function(xhr, errmsg,
-                            err) {
-                            // Display error message using Sweet Alert
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'An error occurred while submitting the nomination.',
-                                position: 'top-end' // Set position to top right corner
-                            });
-                        }
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    $(document).ready(function() {
+        $('#nomination-form').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            // Disable the submit button to prevent multiple submissions
+            $('#submit-btn').prop('disabled', true);
+            // Perform form submission via AJAX
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response) {
+                    // Display success message using Sweet Alert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Nomination Submitted!',
+                        text: 'Thank you for your nomination.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        position: 'top-end' // Set position to top right corner
                     });
-                });
+                    // Clear form fields
+                    form.trigger('reset');
+                },
+                error: function(xhr, errmsg, err) {
+                    // Enable the submit button
+                    $('#submit-btn').prop('disabled', false);
+                    // Display error message using Sweet Alert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'An error occurred while submitting the nomination. Please check your inputs.',
+                        position: 'top-end' // Set position to top right corner
+                    });
+                }
             });
-        </script>
-        {% endblock content %}
+        });
+    });
+</script>
+{% endblock content %}

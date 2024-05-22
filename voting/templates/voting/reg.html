@@ -162,69 +162,20 @@
                 Homepage</a>
         </div>
     </div>
-    {% comment %} <script>
-        // Get references to HTML elements
-        const video = document.querySelector('video');
-        const cameraViewContainer = document.querySelector('.camera-view-container');
-        const captureImageButton = document.querySelector('#capture-image-button');
-        const signUpForm = document.querySelector('#signup-form');
-    
-        // Function to toggle camera view
-        function toggleCameraView() {
-            cameraViewContainer.style.display = cameraViewContainer.style.display === 'none' ? 'block' : 'none';
-        }
-    
-        // Add event listener to the capture image button to toggle camera view
-        captureImageButton.addEventListener('click', toggleCameraView);
-    
-        // Add event listener to start the camera when the button is clicked
-        captureImageButton.addEventListener('click', function() {
-            if (cameraViewContainer.style.display === 'block') {
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(function(stream) {
-                            video.srcObject = stream;
-                        })
-                        .catch(function(error) {
-                            console.error('Error accessing the webcam:', error);
-                        });
-                } else {
-                    console.error('getUserMedia is not supported');
-                }
-            }
-        });
-    
-        // Add event listener to the form submission
-        signUpForm.addEventListener('submit', function(event) {
-            // Prevent default form submission
-            event.preventDefault();
-    
-            // Get the current frame from the video stream (could be enhanced for better image quality)
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = canvas.toDataURL('image/jpeg');
-    
-            // Send captured image data to the backend for face recognition and registration
-            fetch('/path/to/face_recognition_endpoint/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ image_data: imageData })
-            })
-            .then(response => {
-                // Handle response from the backend (e.g., show success/error message)
-                console.log(response);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    </script> {% endcomment %}
 </body>
 </html>
+<script>
+    document.getElementById('signup-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        
+        // Show the alert for successful registration
+        alert('Successfully registered');
+        
+        // Submit the form after the alert is closed
+        setTimeout(() => {
+            this.submit();
+        }, 100); // Delay to allow alert to be shown before form submission
+    });
+</script>
+
 {% endblock content %}

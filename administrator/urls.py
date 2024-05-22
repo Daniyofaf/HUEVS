@@ -19,13 +19,19 @@ urlpatterns = [
     path('positions/view', views.viewPositions, name='viewPositions'),
 
     # Nominated Candidates
-    path('nominatedcandidate/', views.viewNominatedCandidates, name='viewNominatedCandidates'),
+ 
+    path('view-nominated-candidates/', views.view_nominated_candidates, name='view_nominated_candidates'),
+    path('fetch-candidate-data/', views.fetch_candidate_data, name='fetch_candidate_data'),
+    path('update-candidate/', views.update_candidate, name='update_candidate'),
+    path('delete-candidate/', views.delete_candidate, name='delete_candidate'),
     
-    # * Candidate
-    path('candidate/', views.viewCandidates, name='viewCandidates'),
-    path('candidate/view', views.view_candidate_by_id, name='view_candidate_by_id'),
-    path('candidate/update', views.updateCandidate, name="updateCandidate"),
-    path('candidate/delete', views.deleteCandidate, name='deleteCandidate'),
+        # * Candidate
+    path('candidates_other/', views.Candidateviewother, name='Candidateview_other'),
+    path('candidates_other/view', views.candidate_viewother, name='candidate_view_other'),
+    path('candidates_other/update', views.Candidatesupdateother, name='updateCandidates_other'),
+    path('candidates_other/delete', views.Candidatesdeleteother, name='deleteCandidates_other'),
+
+
 
     # * Settings (Ballot Position and Election Title)
     path("settings/ballot/position", views.ballot_position, name='ballot_position'),
@@ -50,8 +56,9 @@ urlpatterns = [
    # Board Members
     path('board-members/', views.board_members, name="adminViewBoardMembers"),
     path('board-members/view/', views.view_board_member_by_id, name="viewBoardMember"),
-    path('board-members/delete/', views.delete_board_member, name='deleteBoardMember'),
     path('board-members/update/', views.update_board_member, name="updateBoardMember"),
+    path('board-members/delete/', views.delete_board_member, name="deleteBoardMember"),
+
     
     # Senate Members
     path('senate-members/', views.senate_members, name="adminViewSenateMembers"),

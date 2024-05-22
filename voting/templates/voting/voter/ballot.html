@@ -4,51 +4,106 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-        <link rel="shortcut icon" href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}" type="image/x-icon">
-        <meta name="description" content="Revolutionizing the voting experience with cutting-edge technology. Say goodbye to long queues and hello to convenience.">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1, minimum-scale=1">
+        <link rel="shortcut icon"
+            href="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+            type="image/x-icon">
+        <meta name="description"
+            content="Revolutionizing the voting experience with cutting-edge technology. Say goodbye to long queues and hello to convenience.">
         <title>Haramaya University Student Union Election</title>
-        <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
-        <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
-        <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
-        <link rel="stylesheet" href="{% static 'assets/parallax/jarallax.css' %}">
-        <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'assets/socicon/css/styles.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/parallax/jarallax.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/dropdown/css/style.css' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/socicon/css/styles.css' %}">
         <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap"
+            as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
+            <link rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
         </noscript>
-        <link rel="preload" as="style" href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
-        <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}" type="text/css">
+        <link rel="preload" as="style"
+            href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}">
+        <link rel="stylesheet"
+            href="{% static 'assets/mobirise/css/mbr-additional.css?v=BlP0Wv' %}"
+            type="text/css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+        </script>
+            <!-- jQuery 3 -->
+<script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- iCheck 1.0.1 -->
+<script src="{% static 'plugins/iCheck/icheck.min.js' %}"></script>
+<!-- DataTables -->
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<!-- SlimScroll -->
+<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+<!-- Data Table Initialize -->
+<script src="{% static 'toastr/toastr.min.js' %}"></script>
+
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                    <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}" alt="HUEVS Logo" width="30" height="50" class="d-inline-block align-top">
+                    <img src="{% static 'assets/images/logo.png-1-120x126.jpeg' %}"
+                        alt="HUEVS Logo" width="30" height="50"
+                        class="d-inline-block align-top">
                     <a href="" style="color:black;"> HUEVS </a>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button"
+                    data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse justify-content-between"
+                    id="navbarSupportedContent">
                     <ul class="navbar-nav">
                         <!-- Navigation items -->
                     </ul>
                     <div class="navbar-buttons mbr-section-btn">
-                        {% comment %} <button class="btn btn-primary dropdown-toggle" type="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</button>
-                        <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                        {% comment %} <button
+                            class="btn btn-primary dropdown-toggle"
+                            type="button" id="profileDropdown"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">Profile</button>
+                        <div class="dropdown-menu"
+                            aria-labelledby="profileDropdown">
                             <a class="dropdown-item" href="#">Edit Profile</a>
-                            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                            <a class="dropdown-item"
+                                href="{% url 'account_logout' %}">Logout</a>
                         </div> {% endcomment %}
-                        <a class="btn btn-primary" href="{% url 'nominate_candidate' %}" style="border-radius: 15px;">Nominate</a>
-                        <a class="btn btn-primary" href="{% url 'show_ballot' %}" style="border-radius: 15px;">Vote</a>
-                        <a class="btn btn-primary" href="{% url 'resultpage' %}" style="border-radius: 15px;">Result</a>
-                        <a class="btn btn-primary" href="{% url 'account_logout' %}" style="border-radius: 15px;">Logout</a>
+                        <a class="btn btn-primary"
+                            href="{% url 'nominate_candidate' %}"
+                            style="border-radius: 15px;">Nominate</a>
+                        <a class="btn btn-primary"
+                            href="{% url 'show_ballot' %}"
+                            style="border-radius: 15px;">Vote</a>
+                        <a class="btn btn-primary" href="{% url 'resultpage' %}"
+                            style="border-radius: 15px;">Result</a>
+                        <a class="btn btn-primary"
+                            href="{% url 'account_logout' %}">Logout</a>
                     </div>
                 </div>
             </div>
@@ -84,35 +139,72 @@
                     padding: 20px;
                 }
             </style>
+
+            {% if messages %}
+            {% for message in messages  %}
+        
+            <!-- <script>
+                swal("{{ message.tags|title }}", "{{ message }}", "{{ message.tags }}");
+            </script> -->
+        
+            <script>
+                toastr.{{ message.tags }}('{{ message }}', '{{ message.tags|title }}');
+            </script>
+            {% endfor %}
+            {% endif %}
+
+
             <section class="content">
-                <h2 class="page-header text-center title"><b>Vote Your Choice</b></h2>
+                <h2 class="page-header text-center title"><b>Vote Your
+                        Choice</b></h2>
                 <div class="row">
-                    <form method="POST" id="candidateForm" action="{% url 'submit_ballot' %}">
+                    <form method="POST" id="candidateForm"
+                        action="{% url 'submit_ballot' %}">
                         {% csrf_token %}
                         <div class="row">
                             {% for candidate in candidates %}
                             <div class="col-md-4 mb-4">
                                 <div class="card custom-card">
-                                    <img src="/media/{{ candidate.photo }}" class="card-img-top" alt="{{ candidate.fullname }}" style="height:400px;">
+                                    <img src="/media/{{ candidate.photo }}"
+                                        class="card-img-top"
+                                        alt="{{ candidate.fullname }}"
+                                        style="height:400px;">
                                     <div class="card-body">
-                                        <input type="radio" name="selected_candidate" id="candidate{{ candidate.id }}" value="{{ candidate.id }}">
-                                        <label for="candidate{{ candidate.id }}" class="form-check-label fw-bold">{{ candidate.fullname }}</label>
+                                        <input type="radio"
+                                            name="selected_candidate"
+                                            id="candidate{{ candidate.id }}"
+                                            value="{{ candidate.id }}">
+                                        <label for="candidate{{ candidate.id }}"
+                                            class="form-check-label fw-bold">{{ candidate.fullname }}</label>
                                         <br><br>
-                                        {% comment %} <p class="card-text">{{ candidate.bio }}</p>
+                                        {% comment %} <p class="card-text">
+                                            {{ candidate.bio }}</p>
                                         {% if candidate.video %}
                                         <video controls>
-                                            <source src="/media/{{ candidate.video }}" type="video/mp4">
-                                            Your browser does not support the video tag.
+                                            <source
+                                                src="/media/{{ candidate.video }}"
+                                                type="video/mp4">
+                                            Your browser does not support the
+                                            video tag.
                                         </video>
                                         {% endif %} {% endcomment %}
-                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#candidateModal" data-bio="{{ candidate.bio }}" data-fullname="{{ candidate.fullname }}" data-video="/media/{{ candidate.video }}">View Campaign</button>
+                                        <button type="button"
+                                            class="btn btn-secondary"
+                                            data-toggle="modal"
+                                            data-target="#candidateModal"
+                                            data-bio="{{ candidate.bio }}"
+                                            data-fullname="{{ candidate.fullname }}"
+                                            data-video="/media/{{ candidate.video }}">View
+                                            Campaign</button>
                                     </div>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="padding-left: -50px;">Submit Vote</button>
+                            <button type="submit" class="btn btn-primary"
+                                style="padding-left: -50px;">Submit
+                                Vote</button>
                         </div>
                     </form>
                 </div>
@@ -125,7 +217,8 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body text-center">
-                            <h1 class="card-title">Sorry, It's Not Election Time</h1>
+                            <h1 class="card-title">Sorry, It's Not Election Time
+                            </h1>
                         </div>
                     </div>
                 </div>
@@ -133,24 +226,29 @@
         </section>
         {% endif %}
         <!-- Modal for candidate bio and video -->
-        <div class="modal fade" id="candidateModal" tabindex="-1" role="dialog" aria-labelledby="candidateModalLabel" aria-hidden="true">
+        <div class="modal fade" id="candidateModal" tabindex="-1" role="dialog"
+            aria-labelledby="candidateModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="candidateModalLabel">Candidate Campaign</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title" id="candidateModalLabel">
+                            Candidate Campaign</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <p id="candidateBio"></p>
-                        <video id="candidateVideo" controls style="width: 100%; display: none;">
+                        <video id="candidateVideo" controls
+                            style="width: 100%; display: none;">
                             <source id="candidateVideoSource" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

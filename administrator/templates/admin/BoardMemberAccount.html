@@ -19,6 +19,7 @@
                             <th>Firstname</th>
                             <th>MiddleName</th>
                             <th>Lastname</th>
+                            <th>Id Number</th> 
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Action</th>
@@ -26,11 +27,12 @@
                         <tbody>
                             {% for board_member in board_members %}
                             <tr>
-                                <td>{{ board_member.first_name }}</td>
-                                <td>{{ board_member.middle_name }}</td>
-                                <td>{{ board_member.last_name }}</td>
-                                <td>{{ board_member.email }}</td>
-                                <td>{{ board_member.phone_number }}</td>
+                                <td>{{ board_member.admin.first_name }}</td>
+                                <td>{{ board_member.admin.middle_name }}</td>
+                                <td>{{ board_member.admin.last_name }}</td>
+                                <td>{{ board_member.admin.id_number }}</td>
+                                <td>{{ board_member.admin.email }}</td>
+                                <td>{{ board_member.admin.phone_number }}</td>
                                 <td>
                                     <button
                                         class='btn btn-primary btn-sm editBoardMember btn-flat'
