@@ -10,7 +10,7 @@ class AccountCheckMiddleWare(MiddlewareMixin):
 
         if user.is_authenticated:
             if user.user_type == 1:  # Admin
-                if modulename.startswith('voting'):
+                if modulename.startswith(('voting', 'board_member', 'candidate')):
                     if request.path != reverse('fetch_ballot'):
                         messages.error(request, "You do not have access to this resource")
                         return redirect(reverse('adminDashboard'))

@@ -47,7 +47,7 @@
             </div> <!-- ./col -->
         </div>
     </section> {% endcomment %}
-    <section style="margin-top: 50px; max-width: 2600px; padding-left: 130px; ">
+    <section style="margin-top: 50px; width: 1800px; padding-left: 130px; ">
         {% for position in positions %}
         {% if not forloop.counter|divisibleby:2 %}
         <div class='row'>
@@ -60,7 +60,7 @@
                     <div class='box-body'>
                         <div class='chart'>
                             <canvas id='{{ position.name|slugify }}'
-                                style='height:250px'></canvas>
+                                style='height:350px'></canvas>
                         </div>
                     </div>
                 </div>
