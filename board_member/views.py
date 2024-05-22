@@ -47,7 +47,6 @@ def dashboard(request):
     }
     return render(request, "home.html", context)
 
-
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -66,21 +65,20 @@ def nominationposts(request):
             nomination_post = NominationPost.objects.get(id=id)
             nomination_post.is_posted = True
             nomination_post.save()
-            # Send email notification to voters
-            send_notification_email_to_voters(nomination_post)
-            messages.success(request, "Nomination post has been posted and notifications sent to voters.")
-            return redirect('nominationposts')  # Redirect after POST to avoid resubmission
+            # send_notification_email_to_voters(nomination_post)  # Correct function call
+            messages.success(request, "Nomination post has been posted.")
+            return redirect('nominationposts')
         elif 'unpost' in request.POST:
             id = request.POST.get('unpost')
             nomination_post = NominationPost.objects.get(id=id)
             nomination_post.is_posted = False
             nomination_post.save()
             messages.success(request, "Nomination post has been unposted.")
-            return redirect('nominationposts')  # Redirect after POST to avoid resubmission
+            return redirect('nominationposts')
         elif form.is_valid():
             form.save()
             messages.success(request, "New Nomination Post Created")
-            return redirect('nominationposts')  # Redirect after POST to avoid resubmission
+            return redirect('nominationposts')
         else:
             messages.error(request, "Form errors")
 
@@ -91,15 +89,15 @@ def nominationposts(request):
     }
     return render(request, "NominationPost.html", context)
 
-def send_notification_email_to_voters(nomination_post):
-    voters = CustomUser.objects.filter(user_type=2)
-    subject = 'New Nomination Post Posted'
-    message = f'Nomination post has been posted you can check here http://127.0.0.1:8000/login/'
+# def send_notification_email_to_voters(nomination_post):
+#     voters = CustomUser.objects.filter(user_type=2)
+#     subject = 'New Nomination Post Posted'
+#     message = f'Nomination post "{nomination_post.title}" has been posted. You can check it here: http://127.0.0.1:8000/login/'
+#     from_email = settings.DEFAULT_FROM_EMAIL
+#     recipient_list = [voter.email for voter in voters]
+#     send_mail(subject, message, from_email, recipient_list)
 
-    from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [voter.email for voter in voters]
-    
-    send_mail(subject, message, from_email, recipient_list)
+
 
 
 def nomination_post_by_id(request):
@@ -218,8 +216,8 @@ def electionposts(request):
             election_post.is_posted = True
             election_post.save()
             # Send email notification to voters
-            send_notification_email_to_voters(election_post)
-            messages.success(request, "Election post has been posted and notifications sent to voters.")
+            # send_notification_email_to_voters(election_post)
+            messages.success(request, "Election post has been posted.")
             return redirect('electionposts')  # Redirect after POST to avoid resubmission
         elif 'unpost' in request.POST:
             id = request.POST.get('unpost')
@@ -242,15 +240,15 @@ def electionposts(request):
     }
     return render(request, "ElectionPost.html", context)
 
-def send_notification_email_to_voters(election_post):
-    voters = CustomUser.objects.filter(user_type=2)
-    subject = 'New Election Post Posted'
-    message = f'Election post has been posted you can check here http://127.0.0.1:8000/login/'
+# def send_notification_email_to_voters(election_post):
+#     voters = CustomUser.objects.filter(user_type=2)
+#     subject = 'New Election Post Posted'
+#     message = f'Election post has been posted you can check here http://127.0.0.1:8000/login/'
 
-    from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [voter.email for voter in voters]
+#     from_email = settings.DEFAULT_FROM_EMAIL
+#     recipient_list = [voter.email for voter in voters]
     
-    send_mail(subject, message, from_email, recipient_list)
+#     send_mail(subject, message, from_email, recipient_list)
 
 
 def election_post_by_id(request):
@@ -468,12 +466,6 @@ def Candidatesdelete(request):
         candidate.delete()
         messages.success(request, "Candidate Has Been Deleted")
     return redirect('Candidateview')
-
-
-
-
-
-
 
 
 def ViewVotes(request):

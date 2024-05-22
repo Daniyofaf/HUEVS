@@ -119,8 +119,8 @@ class BoardMemberForm(FormSettings):
         fields = ['phone_number', 'email']
         
         
-class AdminCandidateCreationform(FormSettings):
+class AdminCandidateCreationform(forms.ModelForm):
     class Meta:
         model = AdminCandidateCreation
-        fields = ['phone_number', 'email']
+        fields = ['first_name', 'middle_name', 'last_name', 'id_number', 'email', 'password', 'phone_number']
         

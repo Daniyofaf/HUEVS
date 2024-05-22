@@ -483,29 +483,31 @@ def update_candidate_account(request):
         candidate_account_id = request.POST.get("id")
         candidate_account = AdminCandidateCreation.objects.get(id=candidate_account_id)
         candidate_account.first_name = request.POST.get("first_name")
+        candidate_account.middle_name = request.POST.get("middle_name")
         candidate_account.last_name = request.POST.get("last_name")
         candidate_account.email = request.POST.get("email")
-        candidate_account.phone_number = request.POST.get("phone")
+        candidate_account.phone_number = request.POST.get("phone_number")
         candidate_account.save()
+        messages.success(request, "Candidate account updated successfully")
+        return redirect("adminViewCandidates")
+    else:
+        messages.error(request, "Invalid request method")
         return redirect("adminViewCandidates")
 
-
 def delete_candidate_account(request):
-    if request.method != "POST":
-        messages.error(request, "Access Denied")
-    try:
-        # candidate_account = AdminCandidateCreation.objects.get(
-        #     id=request.POST.get("id")
-        # )
-
-        admin = AdminCandidateCreation.objects.get("id").admin
-        admin.delete()
-
-        # candidate_account.delete()
-        messages.success(request, "candidate account has been deleted")
-    except:
-        messages.error(request, "Access To This Resource Denied")
-    return redirect(reverse("adminViewCandidates"))
+    if request.method == "POST":
+        candidate_account_id = request.POST.get("id")
+        candidate_account = AdminCandidateCreation.objects.filter(id=candidate_account_id).first()
+        if not candidate_account:
+            messages.error(request, "Candidate account not found")
+            return redirect("adminViewCandidates")
+        
+        candidate_account.delete()
+        messages.success(request, "Candidate account deleted successfully")
+        return redirect("adminViewCandidates")
+    else:
+        messages.error(request, "Invalid request method")
+        return redirect("adminViewCandidates")
 
 
 

@@ -126,12 +126,12 @@
                         <tbody>
                             {% for candidate_account in candidate_accounts %}
                             <tr>
-                                <td>{{ candidate_account.admin.first_name }}</td>
-                                <td>{{ candidate_account.admin.middle_name }}</td>
-                                <td>{{ candidate_account.admin.last_name }}</td>
-                                <td>{{ candidate_account.admin.id_number }}</td>
-                                <td>{{ candidate_account.admin.email }}</td>
-                                <td>{{ candidate_account.admin.phone_number }}</td>
+                                <td>{{ candidate_account.first_name }}</td>
+                                <td>{{ candidate_account.middle_name }}</td>
+                                <td>{{ candidate_account.last_name }}</td>
+                                <td>{{ candidate_account.id_number }}</td>
+                                <td>{{ candidate_account.email }}</td>
+                                <td>{{ candidate_account.phone_number }}</td>
                                 <td>
                                     <button
                                         class='btn btn-primary btn-sm edit btn-flat'
@@ -160,36 +160,42 @@
     $(function() {
         $(document).on('click', '.edit', function(e) {
             e.preventDefault();
-            $('#edit').modal('show');
             var id = $(this).data('id');
-            getRow(id);
+            getRow(id, 'edit');
         });
         $(document).on('click', '.delete', function(e) {
             e.preventDefault();
-            $('#delete').modal('show');
             var id = $(this).data('id');
-            getRow(id);
+            getRow(id, 'delete');
         });
     });
-    function getRow(id) {
+    function getRow(id, action) {
         $.ajax({
             type: 'GET',
-            url: '{% url "adminViewCandidates" %}',
+            url: '{% url "viewCandidate" %}',
             data: {
                 id: id
             },
             dataType: 'json',
             success: function(response) {
-                $('.id').val(response.id);
-                $('#edit_first_name').val(response.first_name);
-                $('#edit_middle_name').val(response.middle_name);
-                $('#edit_last_name').val(response.last_name);
-                $('#edit_phone_number').val(response.phone_number);
-                $('#edit_email').val(response.email);
-                $('.fullname').html(response.first_name + ' ' +
-                    response.last_name);
+                if (action === 'edit') {
+                    // Populate the edit modal fields with the fetched data
+                    $('#edit').modal('show');
+                    $('.id').val(response.id);
+                    $('#edit_first_name').val(response.first_name);
+                    $('#edit_middle_name').val(response.middle_name);
+                    $('#edit_last_name').val(response.last_name);
+                    $('#edit_phone_number').val(response.phone_number);
+                    $('#edit_email').val(response.email);
+                    $('.fullname').html(response.first_name + ' ' + response.last_name);
+                } else if (action === 'delete') {
+                    // Perform delete action
+                    $('#delete').modal('show');
+                    $('.id').val(response.id); // Assuming you have a hidden input field with class 'id' in your delete modal
+                }
             }
         });
     }
 </script>
+
 {% endblock custom_js %}
