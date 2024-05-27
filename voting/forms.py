@@ -13,6 +13,12 @@ class PositionForm(FormSettings):
     class Meta:
         model = Position
         fields = ['name']
+        
+    def clean_name(self):
+        first_name = self.cleaned_data['name']
+        if not first_name.isalpha():
+            raise forms.ValidationError("Position name should only contain letters")
+        return first_name
 
 
 from django import forms
